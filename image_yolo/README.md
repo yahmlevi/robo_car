@@ -1,0 +1,1 @@
+projet without yolov3.weights.  to run code, add yolov3.weights file from C/project/yolo_files/yolov3.weights
