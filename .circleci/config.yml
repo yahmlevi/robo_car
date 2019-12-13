@@ -15,6 +15,12 @@ jobs:
     steps:
       - checkout
       - run: echo YAHM
+     
+       # Install via apk on alpine based images
+      - run:
+          name: Install Docker client
+          command: apk add docker-cli
+          
       - run:
           name: install dependencies
           command: |
@@ -22,22 +28,7 @@ jobs:
             . venv/bin/activate
             pip install -r requirements.txt
 
-      - save_cache:
-          paths:
-            - ./venv
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
-
-      # run tests!
-      # this example uses Django's built-in test-runner
-      # other common Python testing frameworks include pytest and nose
-      # https://pytest.org
-      # https://nose.readthedocs.io
       - run:
-          name: run tests
+          name: Build docker image
           command: |
-            . venv/bin/activate
-            python manage.py test
-
-      - store_artifacts:
-          path: test-reports
-          destination: test-reports
+            echo Building docker image
