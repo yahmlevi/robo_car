@@ -8,25 +8,31 @@ jobs:
     docker:
       # specify the version you desire here
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
-      - image: circleci/python:3.6.1
+      # - image: circleci/python:3.6.1
+      - image: circleci/golang:1.13-alpine
 
     working_directory: ~/repo
 
     steps:
       - checkout
+       - setup_remote_docker:
+          docker_layer_caching: true
+          
       - run: echo YAHM
      
-       # Install via apk on alpine based images
-      - run:
-          name: Install Docker client
-          command: apk add docker-cli
+       # build and push Docker image
+      - run: |
+          TAG=0.1.$CIRCLE_BUILD_NUM
+          docker build -t yahmlevi/python:$TAG .
+          # echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+          docker push yahmlevi/python:$TAG
           
-      - run:
-          name: install dependencies
-          command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
+      #- run:
+      #    name: install dependencies
+      #    command: |
+      #      python3 -m venv venv
+      #      . venv/bin/activate
+      #      pip install -r requirements.txt
 
       - run:
           name: Build docker image
