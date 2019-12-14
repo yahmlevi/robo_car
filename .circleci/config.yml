@@ -17,14 +17,14 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: false
-          
+
       - run: echo YAHM
-     
+
        # build and push Docker image
       - run: |
           TAG=0.1.$CIRCLE_BUILD_NUM
           docker build -t yahmlevi/python:$TAG .
-          # echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+          echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
           docker push yahmlevi/python:$TAG
           
       #- run:
