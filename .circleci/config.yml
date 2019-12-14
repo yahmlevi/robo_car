@@ -18,16 +18,17 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: false
        
-      - run: |
+      - run: 
           name: Build Docker Image and Push to DockerHub
           command: |
-            TAG=0.1.$CIRCLE_BUILD_NUM
+            TAG=$CIRCLE_BUILD_NUM
+            IMAGE_NAME="yahmlevi/python"
 
             # build docker image
-            docker build -t yahmlevi/python:$TAG .
+            docker build -t $IMAGE_NAME:$TAG .
 
             # tag with "latest"
-            docker tag yahmlevi/python:$TAG yahmlevi/python:latest
+            docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest
 
             # login to DockerHub            
             echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
