@@ -98,8 +98,11 @@ def analyze_video():
     print ("Finished")
 
 def capture_video_from_camera():
+    print ("Running 'capture_video_from_camera")
     cap = cv2.VideoCapture(0)
-    while(True):
+    while(cap.isOpened()):
+        print ("Camera is open")
+
         # Capture frame-by-frame
         ret, frame = cap.read()
         # Our operations on the frame come here
@@ -112,11 +115,18 @@ def capture_video_from_camera():
     cap.release()
     cv2.destroyAllWindows()
 
+
+def check_camera():
+    print("check if camera is open")
+    cap = cv2.VideoCapture(0)
+    print (cap.isOpened())
+    return cap.isOpened()
+
 def main():
-    # analyze_image()
-    # analyze_video()
-    capture_video_from_camera()
-
-
+    if check_camera():
+        # analyze_image()
+        # analyze_video()
+        capture_video_from_camera()
+    
 # run main
 main()
