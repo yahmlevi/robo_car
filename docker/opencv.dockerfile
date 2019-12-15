@@ -1,6 +1,9 @@
 FROM schickling/opencv:latest
 WORKDIR /source
 
+RUN apt-get update && \
+    apt-get install -y nano
+
 # copy the contents of local `source` directory to the image `source` directory
 COPY /source /source
 

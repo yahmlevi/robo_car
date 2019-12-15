@@ -112,11 +112,10 @@ def capture_video_from_cemra():
     cap.release()
     cv2.destroyAllWindows()
 
-
 def main():
     # analyze_image()
     analyze_video()
-    #capture_video_from_cemra()
+    # capture_video_from_cemra()
 
 
 # run main
