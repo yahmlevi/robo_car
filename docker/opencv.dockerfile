@@ -11,5 +11,6 @@ COPY /source /source
 #
 # CMD sh -c 'ln -s /dev/null /dev/raw1394'; npm start
  
-CMD ["sh", "-c", "ln -s /dev/null /dev/raw1394", "bash"]
+# CMD ["sh", "-c", "ln -s /dev/null /dev/raw1394", "bash"]
+ENTRYPOINT ln -s /dev/null /dev/raw1394 && /bin/bash
 
