@@ -42,9 +42,10 @@ jobs:
           command: |
             TAG=$CIRCLE_BUILD_NUM
             IMAGE_NAME="yahmlevi/opencv"
+            DOCKERFILE="./docker/opencv.dockerfile"
 
             # build docker image
-            docker build -t $IMAGE_NAME:$TAG .
+            docker build -t $IMAGE_NAME:$TAG -f $DOCKERFILE .
 
             # tag with "latest"
             docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest
