@@ -10,7 +10,6 @@ COPY /source /source
 # https://stackoverflow.com/questions/29274638/opencv-libdc1394-error-failed-to-initialize-libdc1394
 #
 # CMD sh -c 'ln -s /dev/null /dev/raw1394'; npm start
-RUN ln -s /dev/null /dev/raw1394
-
-CMD ["bash"]
+ 
+CMD ["sh", "-c", "ln -s /dev/null /dev/raw1394", "bash"]
 
