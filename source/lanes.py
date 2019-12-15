@@ -73,9 +73,10 @@ def analyze_video():
     print ("Starting ...")
 
     file_name = "test2.mp4"
-    file_path = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(file_name)))
+    #file_path = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(file_name)))
 
-    cap = cv2.VideoCapture(file_path)
+    # cap = cv2.VideoCapture(file_path)
+    cap = cv2.VideoCapture(0)
     print ("after cap ...")
     while(cap.isOpened()):
         print ("reading ...")
@@ -86,7 +87,7 @@ def analyze_video():
         averaged_lines = averaged_slope_intercept(frame, lines)
         line_image = display_lines(frame, averaged_lines)
         combo_image = cv2.addWeighted(frame, 0.8, line_image, 1, 1)
-        
+
         cv2.imshow("result", combo_image)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
@@ -96,10 +97,27 @@ def analyze_video():
 
     print ("Finished")
 
+def capture_video_from_cemra():
+    cap = cv2.VideoCapture(0)
+    while(True):
+        # Capture frame-by-frame
+        ret, frame = cap.read()
+        # Our operations on the frame come here
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        # Display the resulting frame
+        cv2.imshow('frame',gray)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+            # When everything done, release the capture
+    cap.release()
+    cv2.destroyAllWindows()
+
+
 def main():
     # analyze_image()
     analyze_video()
+    #capture_video_from_cemra()
+
 
 # run main
 main()
-
