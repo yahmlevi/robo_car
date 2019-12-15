@@ -97,7 +97,7 @@ def analyze_video():
 
     print ("Finished")
 
-def capture_video_from_cemra():
+def capture_video_from_camera():
     cap = cv2.VideoCapture(0)
     while(True):
         # Capture frame-by-frame
@@ -114,8 +114,8 @@ def capture_video_from_cemra():
 
 def main():
     # analyze_image()
-    analyze_video()
-    # capture_video_from_cemra()
+    # analyze_video()
+    capture_video_from_camera()
 
 
 # run main
