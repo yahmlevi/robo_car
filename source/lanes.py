@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import os
 
 def make_coordinates(image, line_parameters):
     slope, intercept = line_parameters
@@ -53,7 +54,10 @@ def region_of_interest(image):
     return mask_image
 
 def analyze_image():
-    image = cv2.imread('test_image.jpg')
+    file_name = "test_image.jpg"
+    file_path = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(file_name)))
+
+    image = cv2.imread(file_path)
     lane_image = np.copy(image)
     canny_image = canny(lane_image)
     cropped_image = region_of_interest(canny_image)
@@ -68,8 +72,13 @@ def analyze_image():
 def analyze_video():
     print ("Starting ...")
 
-    cap = cv2.VideoCapture("test2.mp4")
+    file_name = "test2.mp4"
+    file_path = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(file_name)))
+
+    cap = cv2.VideoCapture(file_path)
+    print ("after cap ...")
     while(cap.isOpened()):
+        print ("reading ...")
         _, frame = cap.read()
         canny_image = canny(frame)
         cropped_image = region_of_interest(canny_image)
@@ -88,8 +97,8 @@ def analyze_video():
     print ("Finished")
 
 def main():
-    analyze_image()
-    # analyze_video()
+    # analyze_image()
+    analyze_video()
 
 # run main
 main()
