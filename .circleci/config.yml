@@ -17,8 +17,8 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: false
-       
-      - run: 
+
+      - run:
           name: Build Docker Image and Push to DockerHub
           command: |
             TAG=$CIRCLE_BUILD_NUM
@@ -30,9 +30,28 @@ jobs:
             # tag with "latest"
             docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest
 
-            # login to DockerHub            
+            # login to DockerHub
             echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-            
+
             # push to DockerHub (both with build number and latest)
-            docker push yahmlevi/python:$TAG
-            docker push yahmlevi/python:latest
+            docker push $IMAGE_NAME:$TAG
+            docker push $IMAGE_NAME:latest
+
+     - run:
+         name: Build OpenCV Docker Image and Push to DockerHub
+         command: |
+           TAG=$CIRCLE_BUILD_NUM
+           IMAGE_NAME="yahmlevi/opencv"
+
+           # build docker image
+           docker build -t $IMAGE_NAME:$TAG .
+
+           # tag with "latest"
+           docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest
+
+           # login to DockerHub
+           echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+
+           # push to DockerHub (both with build number and latest)
+           docker push $IMAGE_NAME:$TAG
+           docker push $IMAGE_NAME:latest
