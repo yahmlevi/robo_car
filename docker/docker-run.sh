@@ -10,8 +10,12 @@ IMAGE="yahmlevi/opencv"
 # docker run --rm -it --privileged --device=/dev/video0  $IMAGE:$VERSION
 
 # 2nd option
+# https://hub.docker.com/r/sgtwilko/rpi-raspbian-opencv/
+# execute 'xhost +' to allow access from the docker container to the host's display
 docker run -it --rm \
     -v `pwd`/videos:/videos \
+    -e DISPLAY=$DISPLAY \
+    -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
     --device /dev/video0 \
     $IMAGE:$VERSION \
     python ./lanes.py
