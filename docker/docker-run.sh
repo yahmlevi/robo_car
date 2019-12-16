@@ -4,7 +4,17 @@ VERSION=$1
 
 IMAGE="yahmlevi/opencv"
 # docker run --rm -it --privileged --device=//dev/video0:/dev/video0  $IMAGE:$VERSION
-docker run --rm -it --privileged --device=/dev/video0:/dev/video0  $IMAGE:$VERSION
+# docker run --rm -it --privileged --device=/dev/video0:/dev/video0  $IMAGE:$VERSION
+
+# 1st option
+# docker run --rm -it --privileged --device=/dev/video0  $IMAGE:$VERSION
+
+# 2nd option
+docker run -it --rm \
+    -v `pwd`:/videos \
+    --device /dev/video0 \
+    $IMAGE:$VERSION \
+    python ./lanes.py
 
 # -v //dev/bus/usb:/dev/bus/usb
 # -v //dev/bus/usb:/dev/bus/usb
