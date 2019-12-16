@@ -3,11 +3,12 @@
 VERSION=$1
 
 IMAGE="yahmlevi/opencv"
-docker run --rm -it --privileged --device=//dev/video0:/dev/video0  $IMAGE:$VERSION
+# docker run --rm -it --privileged --device=//dev/video0:/dev/video0  $IMAGE:$VERSION
+docker run --rm -it --privileged --device=/dev/video0:/dev/video0  $IMAGE:$VERSION
 
 # -v //dev/bus/usb:/dev/bus/usb
--v //dev/bus/usb:/dev/bus/usb
-//dev/video0:/dev/video0
+# -v //dev/bus/usb:/dev/bus/usb
+# //dev/video0:/dev/video0
 
 # -v //dev/video0:/dev/video0
 # VIDEOIO ERROR: V4L: device /dev/video0: Unable to query number of channels

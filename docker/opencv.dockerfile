@@ -1,4 +1,6 @@
-FROM schickling/opencv:latest
+# FROM schickling/opencv:latest
+FROM mohaseeb/raspberrypi3-python-opencv
+
 WORKDIR /source
 
 RUN apt-get update && \
