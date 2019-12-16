@@ -11,7 +11,7 @@ IMAGE="yahmlevi/opencv"
 
 # 2nd option
 docker run -it --rm \
-    -v `pwd`:/videos \
+    -v `pwd`/videos:/videos \
     --device /dev/video0 \
     $IMAGE:$VERSION \
     python ./lanes.py
