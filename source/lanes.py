@@ -123,6 +123,7 @@ def check_camera():
     return cap.isOpened()
 
 def save_video_file():
+    # source: https://github.com/mohaseeb/raspberrypi3-opencv-docker
     cap = cv2.VideoCapture(0)
 
     # Define the codec and create VideoWriter object
