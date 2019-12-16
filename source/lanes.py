@@ -141,15 +141,15 @@ def save_video_file():
 
     # Release everything when done
     cap.release()
-    out.release()    
+    out.release()
 
 
 def main():
     if check_camera():
         # analyze_image()
         # analyze_video()
-        save_video_file
+        save_video_file()
         # capture_video_from_camera()
-    
+
 # run main
 main()
