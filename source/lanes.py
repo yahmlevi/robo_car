@@ -53,7 +53,12 @@ def region_of_interest(image):
     mask_image = cv2.bitwise_and(image, mask)
     return mask_image
 
+
+def get_camera():
+    return cv2.VideoCapture(0, cv2.CAP_DSHOW)
+
 def analyze_image():
+    
     file_name = "test_image.jpg"
     file_path = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(file_name)))
 
@@ -76,7 +81,9 @@ def analyze_video():
     #file_path = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(file_name)))
 
     # cap = cv2.VideoCapture(file_path)
-    cap = cv2.VideoCapture(0)
+    # cap = cv2.VideoCapture(file_name)
+
+    cap = get_camera()
     print ("after cap ...")
     while(cap.isOpened()):
         print ("reading ...")
@@ -99,32 +106,48 @@ def analyze_video():
 
 def capture_video_from_camera():
     print ("Running 'capture_video_from_camera")
-    cap = cv2.VideoCapture(0)
-    while(cap.isOpened()):
-        print ("Camera is open")
+    
+    # cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+    cap = get_camera()
+    try:
+        while(cap.isOpened()):
+            print ("Camera is open")
 
-        # Capture frame-by-frame
-        ret, frame = cap.read()
-        # Our operations on the frame come here
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        # Display the resulting frame
-        cv2.imshow('frame',gray)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-            # When everything done, release the capture
-    cap.release()
-    cv2.destroyAllWindows()
+            # Capture frame-by-frame
+            ret, frame = cap.read()
+            # Our operations on the frame come here
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            # Display the resulting frame
+            cv2.imshow('frame',gray)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+                # When everything done, release the capture
+
+    except KeyboardInterrupt:
+        print ("Interrupted")
+    finally: 
+        cap.release()
+        cv2.destroyAllWindows()
 
 
 def check_camera():
     print("check if camera is open")
-    cap = cv2.VideoCapture(0)
-    print (cap.isOpened())
-    return cap.isOpened()
+
+    # https://stackoverflow.com/questions/53888878/cv2-warn0-terminating-async-callback-when-attempting-to-take-a-picture
+    # cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+    cap = get_camera()
+    result = cap.isOpened()
+
+    cap.release()
+    cv2.destroyAllWindows()
+    
+    print (result)
+    return result
 
 def save_video_file():
     # source: https://github.com/mohaseeb/raspberrypi3-opencv-docker
-    cap = cv2.VideoCapture(0)
+    # cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+    cap = get_camera()
 
     # Define the codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
@@ -144,13 +167,13 @@ def save_video_file():
     cap.release()
     out.release()
 
-
 def main():
     if check_camera():
+        print("")
         # analyze_image()
         # analyze_video()
-        save_video_file()
-        # capture_video_from_camera()
+        # save_video_file()
+        capture_video_from_camera()
 
 # run main
 main()
