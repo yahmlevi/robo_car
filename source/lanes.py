@@ -3,68 +3,45 @@ import numpy as np
 import os
 import sys
 
+def make_coordinates(image, line_parameters):
+    # if len(line_parameters) == 2:
+    slope, intercept = line_parameters
+    y1 = image.shape[0]
+    y2 = int(y1*(3/5))
+    x1 = int((y1 - intercept) / slope)
+    x2 = int((y2 - intercept) / slope)
+    return np.array([x1, y1, x2, y2])
 
-# NEW
-# https://github.com/dctian/DeepPiCar/blob/master/driver/code/hand_coded_lane_follower.py
-def make_points(frame, line):
-    height, width, _ = frame.shape
-    slope, intercept = line
-    y1 = height  # bottom of the frame
-    y2 = int(y1 * 1 / 2)  # make points from middle of the frame down
 
-    # bound the coordinates within the frame
-    x1 = max(-width, min(2 * width, int((y1 - intercept) / slope)))
-    x2 = max(-width, min(2 * width, int((y2 - intercept) / slope)))
-    return [[x1, y1, x2, y2]]
+def averaged_slope_intercept(image, lines):
+    # left_fit = [(-1,1)]
+    # right_fit = [(-1,-1)]
 
-# NEW
-# https://github.com/dctian/DeepPiCar/blob/master/driver/code/hand_coded_lane_follower.py
-def average_slope_intercept(frame, line_segments):
-    """
-    This function combines line segments into one or two lane lines
-    If all line slopes are < 0: then we only have detected left lane
-    If all line slopes are > 0: then we only have detected right lane
-    """
-    lane_lines = []
-    if line_segments is None:
-        logging.info('No line_segment segments detected')
-        return lane_lines
-
-    height, width, _ = frame.shape
     left_fit = []
     right_fit = []
 
-    boundary = 1/3
-    left_region_boundary = width * (1 - boundary)  # left lane line segment should be on left 2/3 of the screen
-    right_region_boundary = width * boundary # right lane line segment should be on left 2/3 of the screen
+    if lines is not None:
+        for line in lines:
+            x1, y1, x2, y2 = line.reshape(4)
+            parameters = np.polyfit((x1, x2), (y1, y2), 1)
 
-    for line_segment in line_segments:
-        for x1, y1, x2, y2 in line_segment:
-            if x1 == x2:
-                logging.info('skipping vertical line segment (slope=inf): %s' % line_segment)
-                continue
-            fit = np.polyfit((x1, x2), (y1, y2), 1)
-            slope = fit[0]
-            intercept = fit[1]
-            if slope < 0:
-                if x1 < left_region_boundary and x2 < left_region_boundary:
+            if parameters is not None and len(parameters) == 2:
+                slope = parameters[0]
+                intercept = parameters[1]
+                if slope < 0:
                     left_fit.append((slope, intercept))
-            else:
-                if x1 > right_region_boundary and x2 > right_region_boundary:
+                else:
                     right_fit.append((slope, intercept))
+        
 
-    left_fit_average = np.average(left_fit, axis=0)
-    if len(left_fit) > 0:
-        lane_lines.append(make_points(frame, left_fit_average))
+    # line parameters -
+    left_fit_average = np.average(left_fit, axis = 0)
+    right_fit_average = np.average(right_fit, axis = 0)
 
-    right_fit_average = np.average(right_fit, axis=0)
-    if len(right_fit) > 0:
-        lane_lines.append(make_points(frame, right_fit_average))
+    left_line = make_coordinates(image, left_fit_average)
+    right_line = make_coordinates(image, right_fit_average)
 
-    logging.debug('lane lines: %s' % lane_lines)  # [[[316, 720, 484, 432]], [[1009, 720, 718, 432]]]
-
-    return lane_lines
-
+    return np.array([left_line, right_line])
 
 def canny(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -94,6 +71,7 @@ def region_of_interest(image):
 
 def get_camera():
     return cv2.VideoCapture(0, cv2.CAP_DSHOW)
+
 
 def analyze_image():
     
@@ -214,9 +192,9 @@ def main():
     if check_camera():
         print("")
         # analyze_image()
-        analyze_video()
+        # analyze_video()
         # save_video_file()
-        # capture_video_from_camera()
+        capture_video_from_camera()
 
 # run main
 main()
