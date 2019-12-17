@@ -1,34 +1,70 @@
 import cv2
 import numpy as np
 import os
-
-def make_coordinates(image, line_parameters):
-    slope, intercept = line_parameters
-    y1 = image.shape[0]
-    y2 = int(y1*(3/5))
-    x1 = int((y1 - intercept) / slope)
-    x2 = int((y2 - intercept) / slope)
-    return np.array([x1, y1, x2, y2])
+import sys
 
 
-def averaged_slope_intercept(image, lines):
+# NEW
+# https://github.com/dctian/DeepPiCar/blob/master/driver/code/hand_coded_lane_follower.py
+def make_points(frame, line):
+    height, width, _ = frame.shape
+    slope, intercept = line
+    y1 = height  # bottom of the frame
+    y2 = int(y1 * 1 / 2)  # make points from middle of the frame down
+
+    # bound the coordinates within the frame
+    x1 = max(-width, min(2 * width, int((y1 - intercept) / slope)))
+    x2 = max(-width, min(2 * width, int((y2 - intercept) / slope)))
+    return [[x1, y1, x2, y2]]
+
+# NEW
+# https://github.com/dctian/DeepPiCar/blob/master/driver/code/hand_coded_lane_follower.py
+def average_slope_intercept(frame, line_segments):
+    """
+    This function combines line segments into one or two lane lines
+    If all line slopes are < 0: then we only have detected left lane
+    If all line slopes are > 0: then we only have detected right lane
+    """
+    lane_lines = []
+    if line_segments is None:
+        logging.info('No line_segment segments detected')
+        return lane_lines
+
+    height, width, _ = frame.shape
     left_fit = []
     right_fit = []
-    for line in lines:
-        x1, y1, x2, y2 = line.reshape(4)
-        parameters = np.polyfit((x1, x2), (y1, y2), 1)
-        slope = parameters[0]
-        intercept = parameters[1]
-        if slope < 0:
-            left_fit.append((slope, intercept))
-        else:
-            right_fit.append((slope, intercept))
 
-    left_fit_average = np.average(left_fit, axis = 0)
-    right_fit_average = np.average(right_fit, axis = 0)
-    left_line = make_coordinates(image, left_fit_average)
-    right_line = make_coordinates(image, right_fit_average)
-    return np.array([left_line, right_line])
+    boundary = 1/3
+    left_region_boundary = width * (1 - boundary)  # left lane line segment should be on left 2/3 of the screen
+    right_region_boundary = width * boundary # right lane line segment should be on left 2/3 of the screen
+
+    for line_segment in line_segments:
+        for x1, y1, x2, y2 in line_segment:
+            if x1 == x2:
+                logging.info('skipping vertical line segment (slope=inf): %s' % line_segment)
+                continue
+            fit = np.polyfit((x1, x2), (y1, y2), 1)
+            slope = fit[0]
+            intercept = fit[1]
+            if slope < 0:
+                if x1 < left_region_boundary and x2 < left_region_boundary:
+                    left_fit.append((slope, intercept))
+            else:
+                if x1 > right_region_boundary and x2 > right_region_boundary:
+                    right_fit.append((slope, intercept))
+
+    left_fit_average = np.average(left_fit, axis=0)
+    if len(left_fit) > 0:
+        lane_lines.append(make_points(frame, left_fit_average))
+
+    right_fit_average = np.average(right_fit, axis=0)
+    if len(right_fit) > 0:
+        lane_lines.append(make_points(frame, right_fit_average))
+
+    logging.debug('lane lines: %s' % lane_lines)  # [[[316, 720, 484, 432]], [[1009, 720, 718, 432]]]
+
+    return lane_lines
+
 
 def canny(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -37,10 +73,12 @@ def canny(image):
     return canny
 
 def display_lines (image, lines):
+    # return an array of zeros with the same shape and type as a given array
     line_image = np.zeros_like(image)
     if lines is not None:
         for x1, y1, x2, y2 in lines:
-            cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 10)
+            if abs(x1) < sys.maxsize and abs(y1) < sys.maxsize and abs(x2) < sys.maxsize and abs(y2) < sys.maxsize:
+                cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 10)
     return line_image
 
 def region_of_interest(image):
@@ -75,34 +113,39 @@ def analyze_image():
     cv2.destroyAllWindows()
 
 def analyze_video():
-    print ("Starting ...")
-
     file_name = "test2.mp4"
-    #file_path = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(file_name)))
-
+    # file_path = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(file_name)))
     # cap = cv2.VideoCapture(file_path)
+
     # cap = cv2.VideoCapture(file_name)
-
     cap = get_camera()
-    print ("after cap ...")
-    while(cap.isOpened()):
-        print ("reading ...")
-        _, frame = cap.read()
-        canny_image = canny(frame)
-        cropped_image = region_of_interest(canny_image)
-        lines = cv2.HoughLinesP(cropped_image, 2, np.pi/180, 100, np.array([]), minLineLength = 40, maxLineGap = 5)
-        averaged_lines = averaged_slope_intercept(frame, lines)
-        line_image = display_lines(frame, averaged_lines)
-        combo_image = cv2.addWeighted(frame, 0.8, line_image, 1, 1)
+    try: 
+        while(cap.isOpened()):
+            _, frame = cap.read()
 
-        cv2.imshow("result", combo_image)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+            canny_image = canny(frame)
+            cropped_image = region_of_interest(canny_image)
+            
+            # TODO: delete this line
+            # combo_image = cropped_image
+            
+            lines = cv2.HoughLinesP(cropped_image, 2, np.pi/180, 100, np.array([]), minLineLength = 40, maxLineGap = 5)
+            averaged_lines = averaged_slope_intercept(frame, lines)
 
-    cap.release()
-    cv2.destroyAllWindows()
+            print (averaged_lines)
+            line_image = display_lines(frame, averaged_lines)
+            combo_image = cv2.addWeighted(frame, 0.8, line_image, 1, 1)
 
-    print ("Finished")
+            cv2.imshow("result", combo_image)
+
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+    except KeyboardInterrupt:
+        print ("Interrupted")
+    finally: 
+        cap.release()
+        cv2.destroyAllWindows()
+
 
 def capture_video_from_camera():
     print ("Running 'capture_video_from_camera")
@@ -171,9 +214,9 @@ def main():
     if check_camera():
         print("")
         # analyze_image()
-        # analyze_video()
+        analyze_video()
         # save_video_file()
-        capture_video_from_camera()
+        # capture_video_from_camera()
 
 # run main
 main()
