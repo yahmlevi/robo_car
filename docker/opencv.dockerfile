@@ -8,7 +8,9 @@ WORKDIR /source
 
 # copy the contents of local `source` directory to the image `source` directory
 COPY /source /source
+COPY /imagezmq-streaming /imagezmq-streaming
 
+RUN pip install opencv-contrib-python zmq imutils
 
 # troubleshooting: "libdc1394 error: Failed to initialize libdc1394"
 # https://hub.docker.com/r/ekazakov/python-opencv

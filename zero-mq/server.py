@@ -11,8 +11,9 @@ context = zmq.Context()
 socket = context.socket(zmq.REP)
 socket.bind("tcp://*:5555")
 
-try:
-    while True:
+
+while True:
+    try:
         #  Wait for next request from client
         message = socket.recv()
         print("Received request: %s" % message)
@@ -22,5 +23,5 @@ try:
 
         #  Send reply back to client
         socket.send(b"World")
-except KeyboardInterrupt:
-    print ("Interrupted")
+    except KeyboardInterrupt:
+        print ("Interrupted")
