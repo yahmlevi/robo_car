@@ -11,14 +11,14 @@ jobs:
           docker_layer_caching: false
 
       - run:
-          name: Build Docker Image and Push to DockerHub
+          name: Build 'Python' Docker Image and Push to DockerHub
           command: |
             TAG=$CIRCLE_BUILD_NUM
             IMAGE_NAME="yahmlevi/python"
             DOCKERFILE="./docker/python.dockerfile"
 
             # build docker image
-            docker build -t $IMAGE_NAME:$TAG -f $DOCKERFILE .
+            docker build --tag $IMAGE_NAME:$TAG -f $DOCKERFILE .
 
             # tag with "latest"
             docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest
@@ -31,7 +31,7 @@ jobs:
             docker push $IMAGE_NAME:latest
 
       - run:
-          name: Build OpenCV Docker Image and Push to DockerHub
+          name: Build 'OpenCV' Docker Image and Push to DockerHub
           command: |
             TAG=$CIRCLE_BUILD_NUM
             IMAGE_NAME="yahmlevi/opencv"
