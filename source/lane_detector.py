@@ -10,9 +10,8 @@ from display_functions import show_image, display_lines
 # HandCodedLaneFollower
 class LaneDetector(object):
 
-    def __init__(self, car=None):
+    def __init__(self):
         logging.info('Creating a LaneDetector...')
-        self.car = car
 
     def detect(self, frame):
         return detect_lane(frame)
@@ -44,7 +43,7 @@ def detect_edges(frame):
     # filter for blue lane lines
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     show_image("hsv", hsv)
-    
+
     lower_blue = np.array([30, 40, 0])
     upper_blue = np.array([150, 255, 255])
     mask = cv2.inRange(hsv, lower_blue, upper_blue)

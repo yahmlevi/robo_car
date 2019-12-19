@@ -5,7 +5,7 @@ import math
 import datetime
 import sys
 
-from car_steering import RoboCarSteering
+from car_steering import CarSteering
 from display_functions import show_image, display_lines
 from lane_detector import LaneDetector
 
@@ -16,8 +16,9 @@ class LaneFollower(object):
         logging.info('Creating a LaneFollower...')
         self.car = car
 
-        self.steering = RoboCarSteering(car)
-        self.lane_detector = LaneDetector(car)
+        self.lane_detector = LaneDetector()
+        self.steering = CarSteering(car)
+        
 
     def follow_lane(self, frame):
         # Main entry point of the lane follower

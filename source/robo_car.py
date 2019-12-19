@@ -21,7 +21,6 @@ class RoboCar(object):
         """ Init camera and wheels"""
         logging.info('Creating a DeepPiCar...')
 
-
         # picar.setup()
 
         logging.debug('Set up camera')
@@ -50,6 +49,7 @@ class RoboCar(object):
         # self.front_wheels.turn(90)  # Steering Range is 45 (left) - 90 (center) - 135 (right)
 
         # HandCodedLaneFollower(self)
+
         self.lane_follower = LaneFollower(self)
         # self.traffic_sign_processor = ObjectsOnRoadProcessor(self)
         # lane_follower = DeepLearningLaneFollower()

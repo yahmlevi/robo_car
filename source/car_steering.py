@@ -7,10 +7,11 @@ import sys
 
 from display_functions import show_image, display_heading_line
 
-class RoboCarSteering(object):
+class CarSteering(object):
 
     def __init__(self, car=None):
-        logging.info('Creating a RoboCarSteering...')
+        logging.info('Creating a CarSteering...')
+
         self.car = car
         self.curr_steering_angle = 90
 
@@ -26,11 +27,12 @@ class RoboCarSteering(object):
         # if self.car is not None:
         #     self.car.front_wheels.turn(self.curr_steering_angle)
 
+        # publish self.curr_steering_angle to `steering` queue
+
         curr_heading_image = display_heading_line(frame, self.curr_steering_angle)
         show_image("heading", curr_heading_image)
 
         return curr_heading_image
-
 
 
 def compute_steering_angle( frame, lane_lines):
