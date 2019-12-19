@@ -68,6 +68,7 @@ def region_of_interest(image):
     mask_image = cv2.bitwise_and(image, mask)
     return mask_image
 
+
 def get_camera():
     return cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
@@ -192,9 +193,9 @@ def main():
     if check_camera():
         print("")
         # analyze_image()
-        analyze_video()
+        # analyze_video()
         # save_video_file()
-        # capture_video_from_camera()
+        capture_video_from_camera()
 
 # run main
 main()
