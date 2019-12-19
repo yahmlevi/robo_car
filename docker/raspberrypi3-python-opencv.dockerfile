@@ -10,7 +10,7 @@ WORKDIR /source
 COPY /source /source
 COPY /imagezmq-streaming /imagezmq-streaming
 
-# RUN pip install --upgrade pip zmq imutils 
+RUN pip install --upgrade pip zmq imutils 
 
 
 # troubleshooting: "libdc1394 error: Failed to initialize libdc1394"
