@@ -12,6 +12,7 @@ if [ $# -eq 0 ]; then
     exit 0
 fi
 
+echo "----------------------------------------------"
 DOCKERFILE="./docker/dockerfiles/$IMAGE_NAME.dockerfile"
 echo "DOCKERFILE=$DOCKERFILE"
 
@@ -21,6 +22,8 @@ if [[ $IMAGE_NAME == *"-base"* ]]; then
     TAG="base"
 fi
 echo "IMAGE_NAME=$IMAGE_NAME"
+echo "TAG=$TAG"
+echo "----------------------------------------------"
 
 function docker_login(){
     echo "Login to $DOCKER_USER"
@@ -32,14 +35,14 @@ function docker_build(){
     docker build -t $IMAGE_NAME:$TAG -f $DOCKERFILE .
 
     # tag with "latest"
-    docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest
+    # docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest
 
     # login to DockerHub
     docker_login
 
     # push to DockerHub (both with build number and latest)
     docker push $IMAGE_NAME:$TAG
-    docker push $IMAGE_NAME:latest
+    # docker push $IMAGE_NAME:latest
 }
 
 function docker_build_x(){
