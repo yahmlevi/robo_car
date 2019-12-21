@@ -7,11 +7,15 @@
 import time
 import zmq
 
+# https://stackoverflow.com/questions/4163964/python-is-it-possible-to-attach-a-console-into-a-running-process/4693529
+# import pdb
+# pdb.set_trace()
+
 context = zmq.Context()
 socket = context.socket(zmq.REP)
 socket.bind("tcp://*:5555")
 
-
+print ("Getting into endless loop ...")
 while True:
     try:
         #  Wait for next request from client

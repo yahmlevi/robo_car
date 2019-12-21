@@ -1,0 +1,48 @@
+version: '3.7'
+
+services:
+  
+  # 1st service: zmq server
+  server:
+    image: yahmlevi/python:buildx
+    stdin_open: true
+    expose: 
+      - "5555"
+    # ports:
+    # - "5555:5555"
+    hostname: server
+    working_dir: /zero-mq
+    volumes:
+    - ./server.py:/zero-mq/server.py
+    - logvolume01:/var/log
+    command: python server.py
+    # links:
+    # - redis
+    
+  
+  # 2nd service: zmq client
+  client:
+    image: yahmlevi/python:buildx
+    depends_on: 
+      - server
+    stdin_open: true
+    environment: 
+      - SERVER_HOSTNAME=server
+    working_dir: /zero-mq
+    volumes:
+    - ./client.py:/zero-mq/client.py
+    - logvolume01:/var/log
+    # command: python client.py
+
+  # 3rd service: Docker visualizer
+  # goto http://localhost:8080
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8080:8080"
+    stop_grace_period: 1m30s
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+volumes:
+  logvolume01: {}

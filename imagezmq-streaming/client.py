@@ -1,5 +1,5 @@
 # USAGE
-# python client.py --server-ip server ip
+# python client.py --server-ip server-ip
 # python client.py --server-ip localhost
 
 from imutils.video import VideoStream
