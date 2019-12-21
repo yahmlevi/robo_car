@@ -12,12 +12,15 @@ if [ $# -eq 0 ]; then
     exit 0
 fi
 
-DOCKERFILE="./docker/$IMAGE_NAME.dockerfile"
+DOCKERFILE="./docker/dockerfiles/$IMAGE_NAME.dockerfile"
 echo "DOCKERFILE=$DOCKERFILE"
 
 IMAGE_NAME="yahmlevi/$IMAGE_NAME"
+if [[ $IMAGE_NAME == *"-base"* ]]; then
+    IMAGE_NAME="${IMAGE_NAME//-base/}"
+    TAG="base"
+fi
 echo "IMAGE_NAME=$IMAGE_NAME"
-
 
 function docker_login(){
     echo "Login to $DOCKER_USER"
@@ -45,8 +48,8 @@ function docker_build_x(){
     
     # PLATFORMS="linux/amd64,linux/arm64,linux/arm/v7"
     # PLATFORMS="linux/amd64,linux/arm64"
-    # PLATFORMS="linux/amd64,linux/arm/v7"
-    PLATFORMS="linux/arm/v7"
+    PLATFORMS="linux/amd64,linux/arm/v7"
+    # PLATFORMS="linux/arm/v7"
 
     echo "First we make sure that we have a suitable builder"
     echo ""
