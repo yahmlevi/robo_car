@@ -1,16 +1,19 @@
 # FROM schickling/opencv:latest
-FROM mohaseeb/raspberrypi3-python-opencv
+# FROM mohaseeb/raspberrypi3-python-opencv
+FROM yahmlevi/opencv-base:latest
 
 WORKDIR /source
 
 RUN apt-get update && \
     apt-get install -y nano
 
+RUN pip install --upgrade pip zmq imutils 
+
 # copy the contents of local `source` directory to the image `source` directory
 COPY /source /source
 COPY /imagezmq-streaming /imagezmq-streaming
 
-RUN pip install --upgrade pip zmq imutils 
+
 
 # troubleshooting: "libdc1394 error: Failed to initialize libdc1394"
 # https://hub.docker.com/r/ekazakov/python-opencv

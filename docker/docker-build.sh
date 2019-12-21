@@ -7,14 +7,16 @@ DOCKER_PASS="211367909"
 IMAGE_NAME=$1
 TAG=$2
 
-
 if [ $# -eq 0 ]; then
     echo "No arguments supplied"
     exit 0
 fi
 
 DOCKERFILE="./docker/$IMAGE_NAME.dockerfile"
+echo "DOCKERFILE=$DOCKERFILE"
+
 IMAGE_NAME="yahmlevi/$IMAGE_NAME"
+echo "IMAGE_NAME=$IMAGE_NAME"
 
 
 function docker_login(){
@@ -43,7 +45,8 @@ function docker_build_x(){
     
     # PLATFORMS="linux/amd64,linux/arm64,linux/arm/v7"
     # PLATFORMS="linux/amd64,linux/arm64"
-    PLATFORMS="linux/amd64,linux/arm/v7"
+    # PLATFORMS="linux/amd64,linux/arm/v7"
+    PLATFORMS="linux/arm/v7"
 
     echo "First we make sure that we have a suitable builder"
     echo ""
