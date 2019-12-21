@@ -12,9 +12,14 @@ import cv2
 import argparse
 import socket
 import time
+import platform
 
 def get_camera():
-    return cv2.VideoCapture(0, cv2.CAP_DSHOW)
+	if platform.machine() == "AMD64":
+		# https://stackoverflow.com/questions/52043671/opencv-capturing-imagem-with-black-side-bars?rq=1
+		return cv2.VideoCapture(0, cv2.CAP_DSHOW)
+	else:
+		return cv2.VideoCapture(0)
 
 def main():
 	# construct the argument parser and parse the arguments
