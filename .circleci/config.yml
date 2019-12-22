@@ -141,7 +141,7 @@ jobs:
             TAG=$CIRCLE_BUILD_NUM
             DOCKERFILE="./docker/dockerfiles/node-red.dockerfile"
 
-            FILE=./ci/scripts/docker-build.sh
-            cat $FILE
+            FILE=docker-build.sh
+            cp ./ci/scripts/$FILE $FILE
 
-            chmod +x $FILE && $FILE $IMAGE_NAME $TAG $DOCKERFILE
+            chmod +x $FILE && ./$FILE $IMAGE_NAME $TAG $DOCKERFILE
