@@ -1,8 +1,11 @@
 version: 2.1
 
 orbs:
-  # docker-buildx: foodles/docker-buildx@0.0.1
-  terraform: devops-workflow/terraform@0.0.1
+#   # docker-buildx: foodles/docker-buildx@0.0.1
+#   terraform: devops-workflow/terraform@0.0.1
+  bt: circleci/build-tools@2.6.3
+  orb-tools: circleci/orb-tools@8.8.0
+  docker: circleci/docker@0.5.13
 
 jobs:
   build:
@@ -16,7 +19,28 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: false
       
-      - terraform/terraform_fmt
+      # - terraform/terraform_fmt
+      - run:
+          name: Remove old installation
+          command: |
+            sudo systemctl stop docker.service
+            sudo apt remove docker-ce docker-ce-cli containerd.io
+
+      - docker/install-docker:
+          install-dir: /usr/bin
+
+      - run:
+          name: Restart docker daemon
+          command: |
+            if [[ $EUID == 0 ]]; then export SUDO=""; else export SUDO="sudo"; fi
+            $SUDO systemctl unmask docker.service
+            $SUDO systemctl unmask docker.socket
+            $SUDO systemctl start docker.service
+
+      - run: 
+          name: Test Docker
+          command: |
+            docker run hello-world
       
       # - docker-buildx/publish:
       #     dockerfile: ./docker/dockerfiles/opencv.dockerfile
