@@ -149,4 +149,4 @@ jobs:
             chmod +x $FILE 
             ls -l
             
-            ./$FILE $IMAGE_NAME $TAG $DOCKERFILE
+            ./docker-build.sh $IMAGE_NAME $TAG $DOCKERFILE
