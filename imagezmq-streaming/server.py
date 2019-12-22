@@ -2,17 +2,23 @@
 # python server.py --prototxt MobileNetSSD_deploy.prototxt --model MobileNetSSD_deploy.caffemodel --montageW 2 --montageH 2
 # python server.py --prototxt MobileNetSSD_deploy.prototxt --model MobileNetSSD_deploy.caffemodel --montageW 1 --montageH 1
 
+# --ip 0.0.0.0 --port 8000
+
+# python server.py --prototxt MobileNetSSD_deploy.prototxt --model MobileNetSSD_deploy.caffemodel --montageW 1 --montageH 1 --ip 0.0.0.0 --port 8000
+
 # import the necessary packages
 from imutils import build_montages
 from datetime import datetime
 import numpy as np
 
-# import imagezmq
 import imagezmq.imagezmq as imagezmq
 
 import argparse
 import imutils
 import cv2
+
+import web_video_streamer
+import threading
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -21,6 +27,12 @@ ap.add_argument("-m", "--model", required=True, help="path to Caffe pre-trained 
 ap.add_argument("-c", "--confidence", type=float, default=0.2, help="minimum probability to filter weak detections")
 ap.add_argument("-mW", "--montageW", required=True, type=int, help="montage frame width")
 ap.add_argument("-mH", "--montageH", required=True, type=int, help="montage frame height")
+
+# parameters that are needed for the web-video-streamer
+ap.add_argument("-i", "--ip", type=str, required=True, help="ip address of the device")
+ap.add_argument("-o", "--port", type=int, required=True, help="ephemeral port number of the server (1024 to 65535)")
+ap.add_argument("-f", "--frame-count", type=int, default=32, help="# of frames used to construct the background model")
+
 args = vars(ap.parse_args())
 
 # initialize the ImageHub object
@@ -62,6 +74,16 @@ mW = args["montageW"]
 mH = args["montageH"]
 
 print("[INFO] detecting: {}...".format(", ".join(obj for obj in CONSIDER)))
+
+# start web video streamer
+# web_video_streamer.start(args)
+
+# start a thread that will perform motion detection
+
+# thread = threading.Thread(target=detect_motion, args=(args["frame_count"],))
+thread = threading.Thread(target=web_video_streamer.start, args=(args["ip"], args["port"]),)
+thread.daemon = True
+thread.start()
 
 # start looping over all the frames
 while True:
@@ -132,7 +154,14 @@ while True:
 
 	# display the montage(s) on the screen
 	for (i, montage) in enumerate(montages):
-		cv2.imshow("Home pet location monitor ({})".format(i), montage)
+		# stream frame
+		web_video_streamer.show_frame(frame)
+
+		# show frame locally (on host)
+		# cv2.imshow("Home pet location monitor ({})".format(i), montage)
+		
+
+
 
 	# detect any kepresses
 	key = cv2.waitKey(1) & 0xFF

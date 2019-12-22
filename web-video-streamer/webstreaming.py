@@ -1,7 +1,6 @@
 # USAGE
 # python webstreaming.py --ip 0.0.0.0 --port 8000
 
-# import the necessary packages
 from pyimagesearch.motion_detection import SingleMotionDetector
 from imutils.video import VideoStream
 from flask import Response
@@ -16,7 +15,7 @@ import cv2
 
 # initialize the output frame and a lock used to ensure thread-safe
 # exchanges of the output frames (useful for multiple browsers/tabs
-# are viewing tthe stream)
+# are viewing the stream)
 outputFrame = None
 lock = threading.Lock()
 
@@ -42,6 +41,8 @@ def detect_motion(frameCount):
 	motion_detector = SingleMotionDetector(accumWeight=0.1)
 	total = 0
 
+	flag_detect_motion = False
+
 	try:
 		# loop over frames from the video stream
 		while True:
@@ -49,30 +50,34 @@ def detect_motion(frameCount):
 			frame = vs.read()
 
 			frame = imutils.resize(frame, width=400)
-			gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-			gray = cv2.GaussianBlur(gray, (7, 7), 0)
+
+			if flag_detect_motion:
+				# convert frame to gray
+				gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+				gray = cv2.GaussianBlur(gray, (7, 7), 0)
 
 			# grab the current timestamp and draw it on the frame
 			timestamp = datetime.datetime.now()
 			cv2.putText(frame, timestamp.strftime("%A %d %B %Y %I:%M:%S%p"), (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
 
-			# if the total number of frames has reached a sufficient number 
-			# to construct a reasonable background model, then continue to process the frame
-			if total > frameCount:
-				# detect motion in the image
-				motion = motion_detector.detect(gray)
+			if flag_detect_motion:
+				# if the total number of frames has reached a sufficient number 
+				# to construct a reasonable background model, then continue to process the frame
+				if total > frameCount:
+					# detect motion in the image
+					motion = motion_detector.detect(gray)
 
-				# cehck to see if motion was found in the frame
-				if motion is not None:
-					# unpack the tuple and ...
-					(thresh, (minX, minY, maxX, maxY)) = motion
+					# cehck to see if motion was found in the frame
+					if motion is not None:
+						# unpack the tuple and ...
+						(thresh, (minX, minY, maxX, maxY)) = motion
 
-					# ... draw the box surrounding the "motion area" on the output frame
-					cv2.rectangle(frame, (minX, minY), (maxX, maxY), (0, 0, 255), 2)
-			
-			# update the background model and increment the total number of frames read thus far
-			motion_detector.update(gray)
-			total += 1
+						# ... draw the box surrounding the "motion area" on the output frame
+						cv2.rectangle(frame, (minX, minY), (maxX, maxY), (0, 0, 255), 2)
+				
+				# update the background model and increment the total number of frames read thus far
+				motion_detector.update(gray)
+				total += 1
 
 			# acquire the lock, set the output frame, and release the lock
 			with lock:

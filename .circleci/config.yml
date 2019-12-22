@@ -7,13 +7,11 @@ orbs:
   orb-tools: circleci/orb-tools@8.8.0
   docker: circleci/docker@0.5.13
 
-
-
 jobs:
   build:
     docker:
-      # - image: docker:19.03
-      - image: jonoh/docker-buildx-qemu
+      - image: docker:19.03
+      # - image: jonoh/docker-buildx-qemu
 
     working_directory: ~/repo
     environment:
@@ -135,3 +133,12 @@ jobs:
       #       # push to DockerHub (both with build number and latest)
       #       docker push $IMAGE_NAME:$TAG
       #       docker push $IMAGE_NAME:latest
+
+      - run:
+          name: Build 'node-red' Docker Image
+          command: |
+            IMAGE_NAME="yahmlevi/robo-car"
+            TAG=$CIRCLE_BUILD_NUM
+            DOCKERFILE="./docker/dockerfiles/node-red.dockerfile"
+
+            ./ci/scripts/docker-build.sh $IMAGE_NAME $TAG $DOCKERFILE
