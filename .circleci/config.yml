@@ -1,7 +1,8 @@
 version: 2.1
 
 orbs:
-  docker-buildx: foodles/docker-buildx@0.0.1
+  # docker-buildx: foodles/docker-buildx@0.0.1
+  # terraform: devops-workflow/terraform@0.0.1
 
 jobs:
   build:
@@ -14,6 +15,8 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: false
+      
+      - terraform/terraform_fmt
       
       # - docker-buildx/publish:
       #     dockerfile: ./docker/dockerfiles/opencv.dockerfile
