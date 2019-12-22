@@ -69,7 +69,10 @@ jobs:
           # Use docker-container driver to allow useful features (push/multi-platform)
 
           BUILDER_NAME="multibuilder"
-          docker buildx create --name $BUILDER_NAME
+          CONTEXT_NAME="buildx"
+
+          docker context create $CONTEXT_NAME
+          docker buildx create $CONTEXT_NAME --name $BUILDER_NAME
           docker buildx inspect $BUILDER_NAME --bootstrap
           docker buildx use $BUILDER_NAME
 
