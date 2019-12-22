@@ -117,7 +117,7 @@ jobs:
       - run:
           name: Build 'node-red' Docker Image 
           command: |
-            IMAGE_NAME="yahmlevi/opencv"
+            IMAGE_NAME="yahmlevi/robo-car"
             TAG=node-red
             DOCKERFILE="./docker/dockerfiles/node-red.dockerfile"
 
