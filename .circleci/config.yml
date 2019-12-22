@@ -60,32 +60,32 @@ jobs:
       #       # Run binfmt
       #       docker run --rm --privileged docker/binfmt:66f9012c56a8316f9244ffd7622d7c21c1f6f28d
 
-      
-      - run: |
-          # docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-          # login to DockerHub
-          echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+      # https://hub.docker.com/r/jonoh/docker-buildx-qemu
+      # - run: |
+      #     # docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+      #     # login to DockerHub
+      #     echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
           
-          # Use docker-container driver to allow useful features (push/multi-platform)
+      #     # Use docker-container driver to allow useful features (push/multi-platform)
 
-          BUILDER_NAME="multibuilder"
-          CONTEXT_NAME="buildx"
+      #     BUILDER_NAME="multibuilder"
+      #     CONTEXT_NAME="buildx"
 
-          docker context create $CONTEXT_NAME
-          docker buildx create $CONTEXT_NAME --name $BUILDER_NAME
-          docker buildx inspect $BUILDER_NAME --bootstrap
-          docker buildx use $BUILDER_NAME
+      #     docker context create $CONTEXT_NAME
+      #     docker buildx create $CONTEXT_NAME --name $BUILDER_NAME
+      #     docker buildx inspect $BUILDER_NAME --bootstrap
+      #     docker buildx use $BUILDER_NAME
 
-          # docker buildx create --driver docker-container --use
-          # docker buildx inspect --bootstrap
+      #     # docker buildx create --driver docker-container --use
+      #     # docker buildx inspect --bootstrap
       
-          update-binfmts --enable # Important: Ensures execution of other binary formats is enabled in the kernel
+      #     update-binfmts --enable # Important: Ensures execution of other binary formats is enabled in the kernel
 
-          TAG=$CIRCLE_BUILD_NUM
-          IMAGE_NAME="yahmlevi/python"
-          DOCKERFILE="./docker/dockerfiles/python.dockerfile"
+      #     TAG=$CIRCLE_BUILD_NUM
+      #     IMAGE_NAME="yahmlevi/python"
+      #     DOCKERFILE="./docker/dockerfiles/python.dockerfile"
 
-          docker buildx build --platform linux/arm/v7,local --pull -t $IMAGE_NAME:$TAG --push -f $DOCKERFILE .
+      #     docker buildx build --platform linux/arm/v7,local --pull -t $IMAGE_NAME:$TAG --push -f $DOCKERFILE .
       
       - run: 
           name: Test Docker
