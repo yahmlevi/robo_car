@@ -7,12 +7,17 @@ orbs:
   orb-tools: circleci/orb-tools@8.8.0
   docker: circleci/docker@0.5.13
 
+
+
 jobs:
   build:
     docker:
-      - image: docker:19.03
+      # - image: docker:19.03
+      - image: jonoh/docker-buildx-qemu
 
     working_directory: ~/repo
+    environment:
+      DOCKER_HOST: tcp://docker:2375/
     
     steps:
       - checkout
@@ -20,23 +25,59 @@ jobs:
           docker_layer_caching: false
       
       # - terraform/terraform_fmt
-      - run:
-          name: Remove old installation
-          command: |
-            sudo systemctl stop docker.service
-            sudo apt remove docker-ce docker-ce-cli containerd.io
+      # - run:
+      #     name: Remove old installation
+      #     command: |
+      #       sudo systemctl stop docker.service
+      #       sudo apt remove docker-ce docker-ce-cli containerd.io
 
-      - docker/install-docker:
-          install-dir: /usr/bin
+      # - docker/install-docker:
+      #     install-dir: /usr/bin
 
-      - run:
-          name: Restart docker daemon
-          command: |
-            if [[ $EUID == 0 ]]; then export SUDO=""; else export SUDO="sudo"; fi
-            $SUDO systemctl unmask docker.service
-            $SUDO systemctl unmask docker.socket
-            $SUDO systemctl start docker.service
+      # - run:
+      #     name: Restart docker daemon
+      #     command: |
+      #       if [[ $EUID == 0 ]]; then export SUDO=""; else export SUDO="sudo"; fi
+      #       $SUDO systemctl unmask docker.service
+      #       $SUDO systemctl unmask docker.socket
+      #       $SUDO systemctl start docker.service
 
+      # - run:
+      #     name: Install buildx
+      #     command: |
+      #       BUILDX_BINARY_URL="https://github.com/docker/buildx/releases/download/v0.3.1/buildx-v0.3.1.linux-amd64"
+
+      #       curl --output docker-buildx \
+      #         --silent --show-error --location --fail --retry 3 \
+      #         "$BUILDX_BINARY_URL"
+
+      #       mkdir -p ~/.docker/cli-plugins
+
+      #       mv docker-buildx ~/.docker/cli-plugins/
+      #       chmod a+x ~/.docker/cli-plugins/docker-buildx
+
+      #       docker buildx install
+      #       # Run binfmt
+      #       docker run --rm --privileged docker/binfmt:66f9012c56a8316f9244ffd7622d7c21c1f6f28d
+
+      
+      - run: |
+          # docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+          # login to DockerHub
+          echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+          
+          # Use docker-container driver to allow useful features (push/multi-platform)
+          docker buildx create --driver docker-container --use
+          docker buildx inspect --bootstrap
+      
+          update-binfmts --enable # Important: Ensures execution of other binary formats is enabled in the kernel
+
+          TAG=$CIRCLE_BUILD_NUM
+          IMAGE_NAME="yahmlevi/python"
+          DOCKERFILE="./docker/dockerfiles/python.dockerfile"
+
+          docker buildx build --platform linux/arm/v7,local --pull -t $IMAGE_NAME:$TAG --push -f $DOCKERFILE .
+      
       - run: 
           name: Test Docker
           command: |
