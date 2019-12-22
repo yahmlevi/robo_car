@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   # docker-buildx: foodles/docker-buildx@0.0.1
-  # terraform: devops-workflow/terraform@0.0.1
+  terraform: devops-workflow/terraform@0.0.1
 
 jobs:
   build:
