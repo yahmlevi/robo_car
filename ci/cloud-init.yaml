@@ -1,0 +1,18 @@
+#cloud-config
+
+write_files:
+- path: /etc/systemd/system/node-red.service
+  permissions: 0644
+  owner: root
+  content: |
+    [Unit]
+    Description=Start Node-RED
+
+    [Service]
+    ExecStart=/usr/bin/docker run --rm --name=node-red --publish=1880:1880 nodered/node-red-docker:latest
+    ExecStop=/usr/bin/docker stop node-red
+    ExecStopPost=/usr/bin/docker rm node-red
+
+runcmd:
+- systemctl daemon-reload
+- systemctl start node-red.service

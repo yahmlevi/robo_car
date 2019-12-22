@@ -132,7 +132,7 @@ jobs:
 
             # push to DockerHub (both with build number and latest)
             docker push $IMAGE_NAME:$TAG
-            # docker push $IMAGE_NAME:latest
+            #docker push $IMAGE_NAME:latest
 
       # - run:
       #     name: Build 'node-red' Docker Image

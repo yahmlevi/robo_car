@@ -1,0 +1,13 @@
+{
+    "name": "node-red-project",
+    "description": "A Node-RED Project",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "node-red-contrib-ffmpeg": "~0.1.1",
+        "node-red-contrib-multipart-stream-decoder": "0.0.4",
+        "node-red-contrib-nbrowser": "~1.1.4",
+        "node-red-contrib-pythonshell": "~1.5.4",
+        "node-red-node-base64": "~0.2.0"
+    }
+}
