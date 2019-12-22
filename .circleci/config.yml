@@ -137,8 +137,10 @@ jobs:
       - run:
           name: Build 'node-red' Docker Image
           command: |
+            # $CIRCLE_BUILD_NUM
+            
             IMAGE_NAME="yahmlevi/robo-car"
-            TAG=$CIRCLE_BUILD_NUM
+            TAG=node-red
             DOCKERFILE="./docker/dockerfiles/node-red.dockerfile"
 
             FILE=docker-build.sh

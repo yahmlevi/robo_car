@@ -1,6 +1,8 @@
 #!/bin/bach
 set -e
 
+echo "TSADOK"
+
 IMAGE_NAME=$1
 TAG=$2
 DOCKERFILE=$3
