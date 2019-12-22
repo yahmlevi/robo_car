@@ -15,9 +15,9 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: false
       
-      - docker-buildx/publish:
-          dockerfile: ./docker/opencv.dockerfile
-          image: yahmlevi/opencv:$CIRCLE_BUILD_NUM
+      # - docker-buildx/publish:
+      #     dockerfile: ./docker/opencv.dockerfile
+      #     image: yahmlevi/opencv:$CIRCLE_BUILD_NUM
 
       - run:
           name: Build 'Python' Docker Image and Push to DockerHub
