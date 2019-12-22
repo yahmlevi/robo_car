@@ -149,4 +149,4 @@ jobs:
             chmod +x $FILE 
             ls -l
             
-            # && ./$FILE $IMAGE_NAME $TAG $DOCKERFILE
+            ./$FILE $IMAGE_NAME $TAG $DOCKERFILE
