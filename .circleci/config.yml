@@ -142,5 +142,6 @@ jobs:
             DOCKERFILE="./docker/dockerfiles/node-red.dockerfile"
 
             FILE=./ci/scripts/docker-build.sh
+            cat $FILE
 
             chmod +x $FILE && $FILE $IMAGE_NAME $TAG $DOCKERFILE
