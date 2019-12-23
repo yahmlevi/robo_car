@@ -38,9 +38,11 @@ function connect_to_cluster() {
 
 function deploy_to_cluster (){
     NAMESPACE="default"
-
+    
     # we talk with the cluster using kubectl CLI
-    kubectl apply -f ./mysql.yaml -n $NAMESPACE
+    kubectl apply -f ./mysql-initdb-config.yaml -n $NAMESPACE
+    kubectl apply -f ./mysql.yaml -n $NAMESPACE 
+
 }
 
 function get_info(){
@@ -69,7 +71,8 @@ function get_info(){
     echo "Pods"
     echo "------------------------------"
     kubectl get pods -n $NAMESPACE
-
+    
+    
 }
 
 function get_node_ip_addresses(){
