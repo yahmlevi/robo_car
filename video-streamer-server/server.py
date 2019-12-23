@@ -160,9 +160,6 @@ while True:
 		# show frame locally (on host)
 		# cv2.imshow("Home pet location monitor ({})".format(i), montage)
 		
-
-
-
 	# detect any kepresses
 	key = cv2.waitKey(1) & 0xFF
 

@@ -121,3 +121,31 @@ jobs:
             cp ./ci/scripts/$FILE $FILE 
             
             chmod +x $FILE && ./$FILE $IMAGE_NAME $TAG $DOCKERFILE
+
+      - run:
+          name: Build 'video-streamer-client' Docker Image
+          command: |
+            # $CIRCLE_BUILD_NUM
+
+            IMAGE_NAME="yahmlevi/robo-car"
+            TAG=video-streamer-client
+            DOCKERFILE="./docker/dockerfiles/video-streamer-client.dockerfile"
+
+            FILE=docker-build.sh
+            cp ./ci/scripts/$FILE $FILE 
+            
+            chmod +x $FILE && ./$FILE $IMAGE_NAME $TAG $DOCKERFILE
+
+      - run:
+          name: Build 'video-streamer-server' Docker Image
+          command: |
+            # $CIRCLE_BUILD_NUM
+
+            IMAGE_NAME="yahmlevi/robo-car"
+            TAG=video-streamer-server
+            DOCKERFILE="./docker/dockerfiles/video-streamer-server.dockerfile"
+
+            FILE=docker-build.sh
+            cp ./ci/scripts/$FILE $FILE 
+            
+            chmod +x $FILE && ./$FILE $IMAGE_NAME $TAG $DOCKERFILE
