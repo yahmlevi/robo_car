@@ -48,7 +48,9 @@ case $command in
         ;;
     "connect" )
         connect_to_cluster
+        ;;
     "deploy" )
         deploy_to_cluster
+        ;;
 esac
 
