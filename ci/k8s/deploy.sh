@@ -48,7 +48,9 @@ function deploy_to_cluster (){
     kubectl apply -f ./mysql-initdb-config.yaml -n $NAMESPACE
     kubectl apply -f ./mysql.yaml -n $NAMESPACE 
 
-    kubectl apply -f ./node-red.yaml -n $NAMESPACE 
+    kubectl apply -f ./node-red.yaml -n $NAMESPACE
+
+    kubectl apply -f ./video-streamer-server.yaml -n $NAMESPACE 
 }
 
 function get_info(){
