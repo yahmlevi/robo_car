@@ -85,10 +85,10 @@ jobs:
 
       #     docker buildx build --platform linux/arm/v7,local --pull -t $IMAGE_NAME:$TAG --push -f $DOCKERFILE .
       
-      - run: 
-          name: Test Docker
-          command: |
-            docker run hello-world
+      # - run: 
+      #     name: Test Docker
+      #     command: |
+      #       docker run hello-world
       
       # - docker-buildx/publish:
       #     dockerfile: ./docker/dockerfiles/opencv.dockerfile
@@ -150,6 +150,8 @@ jobs:
             
             chmod +x $FILE 
             ls -l
+
+            head -n 1 $FILE 
             
             # /bin/bash ./docker-build.sh $IMAGE_NAME $TAG $DOCKERFILE
             ./docker-build.sh $IMAGE_NAME $TAG $DOCKERFILE
