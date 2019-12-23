@@ -6,6 +6,7 @@ DOCKER_PASS="211367909"
 
 IMAGE_NAME=$1
 TAG=$2
+DOCKERFILE_PREFIX=$3
 
 if [ $# -eq 0 ]; then
     echo "No arguments supplied"
@@ -13,7 +14,7 @@ if [ $# -eq 0 ]; then
 fi
 
 echo "----------------------------------------------"
-DOCKERFILE="./docker/dockerfiles/$IMAGE_NAME.dockerfile"
+DOCKERFILE="./docker/dockerfiles/$DOCKERFILE_PREFIX.dockerfile"
 echo "DOCKERFILE=$DOCKERFILE"
 
 IMAGE_NAME="yahmlevi/$IMAGE_NAME"
@@ -78,4 +79,5 @@ function docker_build_x(){
 }
 
 # Attention - using buildx
-docker_build_x
+# docker_build_x
+docker_build

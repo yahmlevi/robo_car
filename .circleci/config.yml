@@ -95,6 +95,20 @@ jobs:
       #     image: yahmlevi/opencv:$CIRCLE_BUILD_NUM
 
       - run:
+          name: Build 'base' Docker Image
+          command: |
+            # $CIRCLE_BUILD_NUM
+
+            IMAGE_NAME="yahmlevi/robo-car"
+            TAG=base
+            DOCKERFILE="./docker/dockerfiles/base.dockerfile"
+
+            FILE=docker-build.sh
+            cp ./ci/scripts/$FILE $FILE 
+            
+            chmod +x $FILE && ./$FILE $IMAGE_NAME $TAG $DOCKERFILE
+
+      - run:
           name: Build 'node-red' Docker Image
           command: |
             # $CIRCLE_BUILD_NUM
@@ -122,19 +136,20 @@ jobs:
             
             chmod +x $FILE && ./$FILE $IMAGE_NAME $TAG $DOCKERFILE
 
-      - run:
-          name: Build 'video-streamer-client' Docker Image
-          command: |
-            # $CIRCLE_BUILD_NUM
+      
+      # - run:
+      #     name: Build 'video-streamer-client' Docker Image
+      #     command: |
+      #       # $CIRCLE_BUILD_NUM
 
-            IMAGE_NAME="yahmlevi/robo-car"
-            TAG=video-streamer-client
-            DOCKERFILE="./docker/dockerfiles/video-streamer-client.dockerfile"
+      #       IMAGE_NAME="yahmlevi/robo-car"
+      #       TAG=video-streamer-client
+      #       DOCKERFILE="./docker/dockerfiles/video-streamer-client.dockerfile"
 
-            FILE=docker-build.sh
-            cp ./ci/scripts/$FILE $FILE 
+      #       FILE=docker-build.sh
+      #       cp ./ci/scripts/$FILE $FILE 
             
-            chmod +x $FILE && ./$FILE $IMAGE_NAME $TAG $DOCKERFILE
+      #       chmod +x $FILE && ./$FILE $IMAGE_NAME $TAG $DOCKERFILE
 
       - run:
           name: Build 'video-streamer-server' Docker Image

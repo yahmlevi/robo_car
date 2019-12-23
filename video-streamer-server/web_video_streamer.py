@@ -127,10 +127,12 @@ def generate():
 				continue
 
 		# yield the output frame in the byte format
-		# yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(encodedImage) + b'\r\n')
-		yield(b'--frame\r\n' b'Content-Type: multipart/x-mixed-replace; boundary=--jpgboundary\r\n\r\n' + bytearray(encodedImage) + b'\r\n')
+		yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(encodedImage) + b'\r\n')
+
+		# THIS ONE WORKED!!!
+		# yield(b'--frame\r\n' b'Content-Type: multipart/x-mixed-replace; boundary=--jpgboundary\r\n\r\n' + bytearray(encodedImage) + b'\r\n')
 		
-		# self.send_header('Content-type', 'multipart/x-mixed-replace; boundary=--jpgboundary')
+		
 
 @app.route("/video_feed")
 def video_feed():
