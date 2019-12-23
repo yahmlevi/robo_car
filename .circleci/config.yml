@@ -107,3 +107,17 @@ jobs:
             cp ./ci/scripts/$FILE $FILE 
             
             chmod +x $FILE && ./$FILE $IMAGE_NAME $TAG $DOCKERFILE
+
+      - run:
+          name: Build 'zmq-python' Docker Image
+          command: |
+            # $CIRCLE_BUILD_NUM
+
+            IMAGE_NAME="yahmlevi/robo-car"
+            TAG=zmq-python
+            DOCKERFILE="./docker/dockerfiles/zmq-python.dockerfile"
+
+            FILE=docker-build.sh
+            cp ./ci/scripts/$FILE $FILE 
+            
+            chmod +x $FILE && ./$FILE $IMAGE_NAME $TAG $DOCKERFILE
