@@ -37,10 +37,9 @@ function connect_to_cluster() {
         --project $PROJECT
 }
 
-
 function deploy_to_cluster (){
-    
-
+    # we talk with the cluster using kubectl CLI
+    kubectl apply -f ./mysql.yaml
 }
 
 case $command in 
