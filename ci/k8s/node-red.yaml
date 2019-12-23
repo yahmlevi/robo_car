@@ -1,0 +1,104 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-red
+  namespace: default
+  labels:
+    service: node-red
+spec:
+  ports:
+  - name: node-red
+    port: 1880
+    protocol: TCP
+    targetPort: 1880
+    nodePort: 31880
+  selector:
+    service: node-red
+  sessionAffinity: None
+  type: NodePort
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: node-red-pv-claim
+  labels:
+    service: node-red
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: node-red
+  namespace: default
+  labels:
+    service: node-red
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: node-red
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        service: node-red
+    spec:
+      # initContainers:
+      # - name: busybox
+      #   image: arunvelsriram/utils
+      #   command: ["/bin/sh", "-c"]
+      #   args: 
+      #   - |
+      #     curl checkip.amazonaws.com
+          
+      containers:
+      - name: node-red
+        image: yahmlevi/robo-car:node-red
+        imagePullPolicy: Always
+        env:
+        - name: node-red_ROOT_PASSWORD
+          value: "pass1234"
+        livenessProbe:
+          exec:
+            command: 
+            - "sh"
+            - "-c"
+            - "node-redadmin ping -u root -p${node-red_ROOT_PASSWORD}"
+            
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command: 
+            - sh 
+            - -c
+            - "node-redadmin ping -u root -p${node-red_ROOT_PASSWORD}"
+          initialDelaySeconds: 30
+          periodSeconds: 2
+          timeoutSeconds: 1
+        ports:
+        - containerPort: 1880
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        volumeMounts:
+        - name: node-red-persistent-storage
+          mountPath: /var/lib/node-red
+          subPath: node-red
+        - name: node-red-initdb
+          mountPath: /docker-entrypoint-initdb.d
+      volumes:
+      - name: node-red-initdb
+        configMap:
+          name: node-red-initdb-config
+      - name: node-red-persistent-storage
+        persistentVolumeClaim:
+          claimName: node-red-pv-claim
