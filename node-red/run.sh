@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # IMAGE_NAME="nodered/node-red"
-IMAGE_NAME="tsadoklf/node-red"
+IMAGE_NAME="yahmlevi/robo-car:node-red"
 
 CONTAINER_NAME="mynodered"
-DATA_DIR="flows"
+DATA_DIR="data"
 
 # https://github.com/qoomon/docker-host
 # https://stackoverflow.com/questions/24319662/from-inside-of-a-docker-container-how-do-i-connect-to-the-localhost-of-the-mach

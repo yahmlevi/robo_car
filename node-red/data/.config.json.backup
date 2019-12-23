@@ -807,7 +807,7 @@
   "node-red-contrib-ffmpeg": {
    "name": "node-red-contrib-ffmpeg",
    "version": "0.1.1",
-   "local": true,
+   "local": false,
    "nodes": {
     "ffmpeg-stream": {
      "name": "ffmpeg-stream",
@@ -815,16 +815,16 @@
       "ffmpeg-stream"
      ],
      "enabled": true,
-     "local": true,
+     "local": false,
      "module": "node-red-contrib-ffmpeg",
-     "file": "/data/node_modules/node-red-contrib-ffmpeg/ffmpeg-stream.js"
+     "file": "/usr/src/node-red/node_modules/node-red-contrib-ffmpeg/ffmpeg-stream.js"
     }
    }
   },
   "node-red-contrib-pythonshell": {
    "name": "node-red-contrib-pythonshell",
    "version": "1.5.4",
-   "local": true,
+   "local": false,
    "nodes": {
     "pythonshell": {
      "name": "pythonshell",
@@ -832,16 +832,16 @@
       "pythonshell in"
      ],
      "enabled": true,
-     "local": true,
+     "local": false,
      "module": "node-red-contrib-pythonshell",
-     "file": "/data/node_modules/node-red-contrib-pythonshell/src/pythonshell.js"
+     "file": "/usr/src/node-red/node_modules/node-red-contrib-pythonshell/src/pythonshell.js"
     }
    }
   },
   "node-red-contrib-multipart-stream-decoder": {
    "name": "node-red-contrib-multipart-stream-decoder",
    "version": "0.0.4",
-   "local": true,
+   "local": false,
    "nodes": {
     "multipart-decoder": {
      "name": "multipart-decoder",
@@ -849,16 +849,16 @@
       "multipart-decoder"
      ],
      "enabled": true,
-     "local": true,
+     "local": false,
      "module": "node-red-contrib-multipart-stream-decoder",
-     "file": "/data/node_modules/node-red-contrib-multipart-stream-decoder/multipart_decoder.js"
+     "file": "/usr/src/node-red/node_modules/node-red-contrib-multipart-stream-decoder/multipart_decoder.js"
     }
    }
   },
   "node-red-node-base64": {
    "name": "node-red-node-base64",
    "version": "0.2.0",
-   "local": true,
+   "local": false,
    "nodes": {
     "base64": {
      "name": "base64",
@@ -866,16 +866,16 @@
       "base64"
      ],
      "enabled": true,
-     "local": true,
+     "local": false,
      "module": "node-red-node-base64",
-     "file": "/data/node_modules/node-red-node-base64/70-base64.js"
+     "file": "/usr/src/node-red/node_modules/node-red-node-base64/70-base64.js"
     }
    }
   },
   "node-red-contrib-nbrowser": {
    "name": "node-red-contrib-nbrowser",
    "version": "1.1.4",
-   "local": false,
+   "local": true,
    "nodes": {
     "nbrowser": {
      "name": "nbrowser",
