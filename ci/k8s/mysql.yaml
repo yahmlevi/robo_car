@@ -95,6 +95,7 @@ spec:
           subPath: mysql
         - name: mysql-initdb
           mountPath: /docker-entrypoint-initdb.d
+          
       volumes:
       - name: mysql-initdb
         configMap:

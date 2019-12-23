@@ -62,43 +62,39 @@ spec:
       - name: node-red
         image: yahmlevi/robo-car:node-red
         imagePullPolicy: Always
-        env:
-        - name: node-red_ROOT_PASSWORD
-          value: "pass1234"
-        livenessProbe:
-          exec:
-            command: 
-            - "sh"
-            - "-c"
-            - "node-redadmin ping -u root -p${node-red_ROOT_PASSWORD}"
-            
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          timeoutSeconds: 5
-        readinessProbe:
-          exec:
-            command: 
-            - sh 
-            - -c
-            - "node-redadmin ping -u root -p${node-red_ROOT_PASSWORD}"
-          initialDelaySeconds: 30
-          periodSeconds: 2
-          timeoutSeconds: 1
+        
+        # livenessProbe:
+        #   exec:
+        #     command: 
+        #     - "sh"
+        #     - "-c"
+        #     - ""
+        #   initialDelaySeconds: 30
+        #   periodSeconds: 10
+        #   timeoutSeconds: 5
+
+        # readinessProbe:
+        #   exec:
+        #     command: 
+        #     - sh 
+        #     - -c
+        #     - ""
+        #   initialDelaySeconds: 30
+        #   periodSeconds: 2
+        #   timeoutSeconds: 1
+
         ports:
         - containerPort: 1880
           protocol: TCP
         resources: {}
         terminationMessagePath: /dev/termination-log
+
         volumeMounts:
         - name: node-red-persistent-storage
           mountPath: /var/lib/node-red
           subPath: node-red
-        - name: node-red-initdb
-          mountPath: /docker-entrypoint-initdb.d
+
       volumes:
-      - name: node-red-initdb
-        configMap:
-          name: node-red-initdb-config
       - name: node-red-persistent-storage
         persistentVolumeClaim:
           claimName: node-red-pv-claim

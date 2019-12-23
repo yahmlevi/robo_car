@@ -6,6 +6,7 @@ command=$1
 PROJECT="video-python" 
 CLUSTER_NAME="robo-car"
 ZONE="europe-west1-b"
+NAMESPACE="default"
 
 function create_cluster(){
     gcloud beta container clusters create $CLUSTER_NAME \
@@ -30,6 +31,10 @@ function create_cluster(){
         --project $PROJECT
 }
 
+function delete_cluster(){
+    
+}
+
 function connect_to_cluster() {
     gcloud container clusters get-credentials $CLUSTER_NAME \
         --zone $ZONE \
@@ -43,6 +48,7 @@ function deploy_to_cluster (){
     kubectl apply -f ./mysql-initdb-config.yaml -n $NAMESPACE
     kubectl apply -f ./mysql.yaml -n $NAMESPACE 
 
+    kubectl apply -f ./node-red.yaml -n $NAMESPACE 
 }
 
 function get_info(){
@@ -51,6 +57,9 @@ function get_info(){
     echo "Cluster's Nodes"
     echo "------------------------------"
     kubectl get nodes
+
+    echo ""
+    get_node_ip_addresses
 
     echo ""
     echo "Namespaces"
@@ -71,8 +80,6 @@ function get_info(){
     echo "Pods"
     echo "------------------------------"
     kubectl get pods -n $NAMESPACE
-    
-    
 }
 
 function get_node_ip_addresses(){
@@ -89,8 +96,19 @@ function get_node_ip_addresses(){
                     --format='get(networkInterfaces[0].accessConfigs[0].natIP)' \
                     --zone $ZONE)
 
-    echo "EXTERNAL IP ADDRESS: $EXTERNAL_IP"
-    
+    echo "EXTERNAL IP ADDRESS: $EXTERNAL_IP"  
+}
+
+function exec_to_node_red(){
+    NODE_RED_POD=$(kubectl get pods -n $NAMESPACE --no-headers | grep node-red | awk '{print $1}')
+
+    kubectl exec -it $NODE_RED_POD bash
+}
+
+function log_to_node_red(){
+    NODE_RED_POD=$(kubectl get pods -n $NAMESPACE --no-headers | grep node-red | awk '{print $1}')
+
+    kubectl logs $NODE_RED_POD
 }
 
 case $command in 
@@ -108,6 +126,12 @@ case $command in
         ;;
     "node_ip" )
         get_node_ip_addresses
+        ;;
+    "exec-node-red" )
+        exec_to_node_red
+        ;;
+    "log-node-red" )
+        log_to_node_red
         ;;
 esac
 
