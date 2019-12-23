@@ -22,7 +22,7 @@ COPY /video-streamer-server /app
 
 # CMD ["python", "server.py --prototxt MobileNetSSD_deploy.prototxt --model MobileNetSSD_deploy.caffemodel --montageW 1 --montageH 1 --ip 0.0.0.0 --port 8000"]
 
-COPY video-streamer-server-entrypoint.sh entrypoint.sh
+COPY ./docker/dockerfiles/video-streamer-server-entrypoint.sh entrypoint.sh
 RUN chmod +x entrypoint.sh
 
 ENTRYPOINT ["/bin/sh", "/entrypoint.sh"]
