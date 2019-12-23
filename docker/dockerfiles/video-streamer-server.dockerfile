@@ -1,7 +1,9 @@
 # FROM schickling/opencv:latest
 # FROM mohaseeb/raspberrypi3-python-opencv
 # FROM yahmlevi/opencv:base
-FROM jjanzic/docker-python3-opencv
+# FROM jjanzic/docker-python3-opencv
+
+FROM yahmlevi/robo-car:base
 WORKDIR /app
 
 # RUN apt-get install software-properties-common && \
@@ -9,7 +11,7 @@ WORKDIR /app
 #     apt-get update && \
 #     apt-get install python3.6
 
-RUN pip install Flask
+# RUN pip install Flask
 
 COPY /video-streamer-server /app
 
@@ -22,8 +24,8 @@ COPY /video-streamer-server /app
 
 # CMD ["python", "server.py --prototxt MobileNetSSD_deploy.prototxt --model MobileNetSSD_deploy.caffemodel --montageW 1 --montageH 1 --ip 0.0.0.0 --port 8000"]
 
-COPY ./docker/dockerfiles/video-streamer-server-entrypoint.sh entrypoint.sh
-RUN chmod +x entrypoint.sh
+COPY ./docker/dockerfiles/video-streamer-server-entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/bin/sh", "/entrypoint.sh"]
 

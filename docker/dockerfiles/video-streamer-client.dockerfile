@@ -1,6 +1,5 @@
 # FROM schickling/opencv:latest
-# FROM mohaseeb/raspberrypi3-python-opencv
-FROM yahmlevi/robo-car:base
+FROM mohaseeb/raspberrypi3-python-opencv
 WORKDIR /app
 
 COPY /video-streamer-client /app
