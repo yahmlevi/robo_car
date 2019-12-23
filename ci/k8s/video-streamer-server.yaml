@@ -49,6 +49,7 @@ spec:
       containers:
       - name: video-streamer-server
         image: yahmlevi/robo-car:video-streamer-server
+        # image: yahmlevi/opencv:buildx-1
         imagePullPolicy: Always
         
         # livenessProbe:
@@ -76,4 +77,3 @@ spec:
           protocol: TCP
         resources: {}
         terminationMessagePath: /dev/termination-log
-        

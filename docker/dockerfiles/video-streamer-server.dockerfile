@@ -1,6 +1,7 @@
 # FROM schickling/opencv:latest
 # FROM mohaseeb/raspberrypi3-python-opencv
-FROM yahmlevi/opencv:base
+# FROM yahmlevi/opencv:base
+FROM jjanzic/docker-python3-opencv
 WORKDIR /app
 
 COPY /video-streamer-server /app
