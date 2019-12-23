@@ -114,25 +114,25 @@ jobs:
       #       docker push $IMAGE_NAME:$TAG
       #       docker push $IMAGE_NAME:latest
 
-      - run:
-          name: Build 'node-red' Docker Image 
-          command: |
-            IMAGE_NAME="yahmlevi/robo-car"
-            TAG=node-red
-            DOCKERFILE="./docker/dockerfiles/node-red.dockerfile"
+      # - run:
+      #     name: Build 'node-red' Docker Image 
+      #     command: |
+      #       IMAGE_NAME="yahmlevi/robo-car"
+      #       TAG=node-red
+      #       DOCKERFILE="./docker/dockerfiles/node-red.dockerfile"
 
-            # build docker image
-            docker build -t $IMAGE_NAME:$TAG -f $DOCKERFILE .
+      #       # build docker image
+      #       docker build -t $IMAGE_NAME:$TAG -f $DOCKERFILE .
 
-            # tag with "latest"
-            # docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest
+      #       # tag with "latest"
+      #       # docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest
 
-            # login to DockerHub
-            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+      #       # login to DockerHub
+      #       echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
 
-            # push to DockerHub (both with build number and latest)
-            docker push $IMAGE_NAME:$TAG
-            #docker push $IMAGE_NAME:latest
+      #       # push to DockerHub (both with build number and latest)
+      #       docker push $IMAGE_NAME:$TAG
+      #       #docker push $IMAGE_NAME:latest
 
       - run:
           name: Build 'node-red' Docker Image
