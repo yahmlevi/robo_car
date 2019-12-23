@@ -7,7 +7,6 @@ PROJECT="video-python"
 CLUSTER_NAME="robo-car"
 ZONE="europe-west1-b"
 
-
 function create_cluster(){
     gcloud beta container clusters create $CLUSTER_NAME \
         --zone $ZONE \
@@ -32,14 +31,64 @@ function create_cluster(){
 }
 
 function connect_to_cluster() {
-    gcloud container clusters get-credentials $CLUSTER_NAME /
-        --zone $ZONE /
+    gcloud container clusters get-credentials $CLUSTER_NAME \
+        --zone $ZONE \
         --project $PROJECT
 }
 
 function deploy_to_cluster (){
+    NAMESPACE="default"
+
     # we talk with the cluster using kubectl CLI
-    kubectl apply -f ./mysql.yaml
+    kubectl apply -f ./mysql.yaml -n $NAMESPACE
+}
+
+function get_info(){
+    NAMESPACE="default"
+
+    echo "Cluster's Nodes"
+    echo "------------------------------"
+    kubectl get nodes
+
+    echo ""
+    echo "Namespaces"
+    echo "------------------------------"
+    kubectl get ns
+
+    echo ""
+    echo "Services"
+    echo "------------------------------"
+    kubectl get svc -n $NAMESPACE
+
+    echo ""
+    echo "Deployments"
+    echo "------------------------------"
+    kubectl get deployments -n $NAMESPACE
+
+    echo ""
+    echo "Pods"
+    echo "------------------------------"
+    kubectl get pods -n $NAMESPACE
+    
+    
+}
+
+function get_node_ip_addresses(){
+    # cluster's node name
+    INSTANCE_NAME="gke-robo-car-default-pool-ecd0e422-zkbd"
+    echo "Getting the internal and external IP address of '$CLUSTER_NAME' cluster"
+
+    INTERNAL_IP=$(gcloud compute instances describe $INSTANCE_NAME \
+                    --format='get(networkInterfaces[0].networkIP)' \
+                    --zone $ZONE)
+    echo "INTERNAL IP ADDRESS: $INTERNAL_IP"
+
+    EXTERNAL_IP=$(gcloud compute instances describe $INSTANCE_NAME \
+                    --format='get(networkInterfaces[0].accessConfigs[0].natIP)' \
+                    --zone $ZONE)
+
+    echo "EXTERNAL IP ADDRESS: $EXTERNAL_IP"
+    
 }
 
 case $command in 
@@ -51,6 +100,12 @@ case $command in
         ;;
     "deploy" )
         deploy_to_cluster
+        ;;
+    "info" )
+        get_info
+        ;;
+    "node_ip" )
+        get_node_ip_addresses
         ;;
 esac
 
