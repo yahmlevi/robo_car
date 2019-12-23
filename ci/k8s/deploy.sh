@@ -69,8 +69,7 @@ function get_info(){
     echo "Pods"
     echo "------------------------------"
     kubectl get pods -n $NAMESPACE
-    
-    
+
 }
 
 function get_node_ip_addresses(){
