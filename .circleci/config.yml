@@ -134,22 +134,22 @@ jobs:
             docker push $IMAGE_NAME:$TAG
             #docker push $IMAGE_NAME:latest
 
-      # - run:
-      #     name: Build 'node-red' Docker Image
-      #     command: |
-      #       # $CIRCLE_BUILD_NUM
+      - run:
+          name: Build 'node-red' Docker Image
+          command: |
+            # $CIRCLE_BUILD_NUM
 
-      #       IMAGE_NAME="yahmlevi/robo-car"
-      #       TAG=node-red
-      #       DOCKERFILE="./docker/dockerfiles/node-red.dockerfile"
+            IMAGE_NAME="yahmlevi/robo-car"
+            TAG=node-red
+            DOCKERFILE="./docker/dockerfiles/node-red.dockerfile"
 
-      #       FILE=docker-build.sh
-      #       cp ./ci/scripts/$FILE $FILE 
+            FILE=docker-build.sh
+            cp ./ci/scripts/$FILE $FILE 
 
-      #       ls -l
+            ls -l
             
-      #       chmod +x $FILE 
-      #       ls -l
+            chmod +x $FILE 
+            ls -l
             
-      #       # /bin/bash ./docker-build.sh $IMAGE_NAME $TAG $DOCKERFILE
-      #       ./docker-build.sh $IMAGE_NAME $TAG $DOCKERFILE
+            # /bin/bash ./docker-build.sh $IMAGE_NAME $TAG $DOCKERFILE
+            ./docker-build.sh $IMAGE_NAME $TAG $DOCKERFILE
