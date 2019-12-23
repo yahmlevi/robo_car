@@ -32,7 +32,7 @@ function create_cluster(){
 }
 
 function delete_cluster(){
-    
+    gcloud container clusters delete $CLUSTER_NAME 
 }
 
 function connect_to_cluster() {
