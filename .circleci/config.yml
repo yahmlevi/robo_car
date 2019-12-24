@@ -112,31 +112,32 @@ jobs:
           command: |
             cp ./ci/scripts/$DOCKER_BUILD $DOCKER_BUILD && chmod +x $DOCKER_BUILD
 
-      - run:
-          name: Build 'base' Docker Images
-          command: |
-            IMAGE_NAME="$REGISTRY/base"
-            TAG=$CIRCLE_BUILD_NUM
-            DOCKERFILE="./docker/dockerfiles/base.dockerfile"
+      # - run:
+      #     name: Build 'base' Docker Images
+      #     command: |
+      #       IMAGE_NAME="$REGISTRY/base"
+      #       TAG=$CIRCLE_BUILD_NUM
+      #       DOCKERFILE="./docker/dockerfiles/base.dockerfile"
 
-            ./$DOCKER_BUILD $IMAGE_NAME $TAG $DOCKERFILE
+      #       ./$DOCKER_BUILD $IMAGE_NAME $TAG $DOCKERFILE
 
       - run:
           name: Build 'node-red' Docker Image
-          # working_directory: node-red
+          working_directory: node-red
           command: |
             IMAGE_NAME="$REGISTRY/node-red"
             TAG=$CIRCLE_BUILD_NUM
-            DOCKERFILE="./node-red/ci/node-red.dockerfile"
+            DOCKERFILE="./ci/node-red.dockerfile"
             
             cp ../$DOCKER_BUILD $DOCKER_BUILD && ./$DOCKER_BUILD $IMAGE_NAME $TAG $DOCKERFILE
 
       - run:
           name: Build 'zmq-python' Docker Image
+          working_directory: zero-mq
           command: |
             IMAGE_NAME="REGISTRY/zmq-python"
             TAG=$CIRCLE_BUILD_NUM
-            DOCKERFILE="./zero-mq/ci/zmq-python.dockerfile"
+            DOCKERFILE="./ci/zmq-python.dockerfile"
             
             cp ../$DOCKER_BUILD $DOCKER_BUILD && ./$DOCKER_BUILD $IMAGE_NAME $TAG $DOCKERFILE
 
@@ -157,9 +158,10 @@ jobs:
 
       - run:
           name: Build 'video-streamer-server' Docker Image
+          working_directory: video-streamer-server
           command: |
             IMAGE_NAME="$REGISTRY/video-streamer-server"
             TAG=$CIRCLE_BUILD_NUM
-            DOCKERFILE="./video-streamer-server/ci/video-streamer-server.dockerfile"
+            DOCKERFILE="./ci/video-streamer-server.dockerfile"
             
             cp ../$DOCKER_BUILD $DOCKER_BUILD && ./$DOCKER_BUILD $IMAGE_NAME $TAG $DOCKERFILE
