@@ -135,7 +135,7 @@ jobs:
           name: Build 'zmq-python' Docker Image
           working_directory: zero-mq
           command: |
-            IMAGE_NAME="REGISTRY/zmq-python"
+            IMAGE_NAME="$REGISTRY/zmq-python"
             TAG=$CIRCLE_BUILD_NUM
             DOCKERFILE="./ci/zmq-python.dockerfile"
             
