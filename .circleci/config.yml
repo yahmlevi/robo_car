@@ -146,6 +146,7 @@ jobs:
             
             chmod +x $FILE && ./$FILE $IMAGE_NAME $TAG $DOCKERFILE
 
+
       # - run:
       #     name: Build 'video-streamer-client' Docker Image
       #     command: |
