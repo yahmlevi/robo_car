@@ -113,12 +113,12 @@ jobs:
             cp ./ci/scripts/$DOCKER_BUILD $DOCKER_BUILD && chmod +x $DOCKER_BUILD
 
       - run:
-          name: Build 'base' Docker Image
+          name: Build 'base' Docker Images
           command: |
             IMAGE_NAME="$REGISTRY/base"
             TAG=$CIRCLE_BUILD_NUM
             DOCKERFILE="./docker/dockerfiles/base.dockerfile"
-            
+
             ./$DOCKER_BUILD $IMAGE_NAME $TAG $DOCKERFILE
 
       - run:
@@ -129,7 +129,7 @@ jobs:
             TAG=$CIRCLE_BUILD_NUM
             DOCKERFILE="./node-red/ci/node-red.dockerfile"
             
-            ./$DOCKER_BUILD $IMAGE_NAME $TAG $DOCKERFILE
+            cp ../$DOCKER_BUILD $DOCKER_BUILD && ./$DOCKER_BUILD $IMAGE_NAME $TAG $DOCKERFILE
 
       - run:
           name: Build 'zmq-python' Docker Image
@@ -138,7 +138,7 @@ jobs:
             TAG=$CIRCLE_BUILD_NUM
             DOCKERFILE="./zero-mq/ci/zmq-python.dockerfile"
             
-            ./$DOCKER_BUILD $IMAGE_NAME $TAG $DOCKERFILE
+            cp ../$DOCKER_BUILD $DOCKER_BUILD && ./$DOCKER_BUILD $IMAGE_NAME $TAG $DOCKERFILE
 
 
       # - run:
@@ -162,4 +162,4 @@ jobs:
             TAG=$CIRCLE_BUILD_NUM
             DOCKERFILE="./video-streamer-server/ci/video-streamer-server.dockerfile"
             
-            ./$DOCKER_BUILD $IMAGE_NAME $TAG $DOCKERFILE
+            cp ../$DOCKER_BUILD $DOCKER_BUILD && ./$DOCKER_BUILD $IMAGE_NAME $TAG $DOCKERFILE

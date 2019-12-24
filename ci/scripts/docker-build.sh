@@ -16,8 +16,8 @@ docker build -t $IMAGE_NAME:$TAG -f $DOCKERFILE .
 # tag with "latest"
 # docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest
 
-# login to DockerHub
-echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+# # login to DockerHub
+# echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
 
 # push to DockerHub (both with build number and latest)
 docker push $IMAGE_NAME:$TAG
