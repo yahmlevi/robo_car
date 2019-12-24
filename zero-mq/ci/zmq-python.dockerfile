@@ -1,8 +1,8 @@
 FROM python:3.8
 
 RUN pip install pyzmq
-COPY zero-mq zero-mq
+COPY ./src app
 
-WORKDIR /zero-mq
+WORKDIR /app
 CMD ["bash"]
 # CMD ["python", "test.py"]

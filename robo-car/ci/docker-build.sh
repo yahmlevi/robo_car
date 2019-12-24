@@ -2,9 +2,13 @@
 #!/bin/sh
 set -e
 
-IMAGE_NAME=$1
-TAG=$2
-DOCKERFILE=$3
+# docker run -it --rm yahmlevi/rob-car:robo-car
+
+source ../ci/scripts/docker-credentials.sh
+
+TAG=$1
+IMAGE_NAME=" yahmlevi/robo-car"
+DOCKERFILE="./ci/robo-car.dockerfile"
 
 echo "IMAGE_NAME: $IMAGE_NAME"
 echo "TAG: $TAG"

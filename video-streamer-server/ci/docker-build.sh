@@ -2,9 +2,11 @@
 #!/bin/sh
 set -e
 
-IMAGE_NAME=$1
-TAG=$2
-DOCKERFILE=$3
+source ../ci/scripts/docker-login.sh
+
+TAG=$1
+IMAGE_NAME="$REGISTRY/video-streamer-serever"
+DOCKERFILE="./ci/video-streamer-server.dockerfile"
 
 echo "IMAGE_NAME: $IMAGE_NAME"
 echo "TAG: $TAG"
@@ -16,8 +18,6 @@ docker build -t $IMAGE_NAME:$TAG -f $DOCKERFILE .
 # tag with "latest"
 # docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest
 
-# login to DockerHub
-echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
 
 # push to DockerHub (both with build number and latest)
 docker push $IMAGE_NAME:$TAG

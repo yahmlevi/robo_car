@@ -2,9 +2,11 @@
 #!/bin/sh
 set -e
 
-IMAGE_NAME=$1
-TAG=$2
-DOCKERFILE=$3
+source ../ci/scripts/docker-login.sh
+
+TAG=$1
+IMAGE_NAME="$REGISTRY/zmq-python"
+DOCKERFILE="./ci/zmq-python.dockerfile"
 
 echo "IMAGE_NAME: $IMAGE_NAME"
 echo "TAG: $TAG"

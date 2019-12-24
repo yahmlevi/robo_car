@@ -3,7 +3,7 @@
 # IMAGE_NAME="nodered/node-red"
 IMAGE_NAME="yahmlevi/robo-car:node-red"
 
-CONTAINER_NAME="mynodered"
+CONTAINER_NAME="my-node-red"
 DATA_DIR="data"
 
 # https://github.com/qoomon/docker-host

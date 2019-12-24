@@ -41,9 +41,10 @@ function run_video_streamer_client(){
         $IMAGE:$TAG
 }
 
+REGISTRY="video-python"
 function run_video_streamer_server(){
-    IMAGE="yahmlevi/robo-car"
-    TAG="video-streamer-server"
+    IMAGE="eu.gcr.io/$REGISTRY/video-streamer-server"
+    TAG="latest"
     
     docker run -it --rm \
         -p 5555:5555 \

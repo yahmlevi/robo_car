@@ -1,6 +1,5 @@
 FROM nodered/node-red
 
-
 RUN npm install \
     node-red-contrib-google-cloud \
     node-red-dashboard \
@@ -10,4 +9,4 @@ RUN npm install \
     node-red-contrib-ffmpeg \
     node-red-node-base64
 
-COPY ./node-red/data /data
+COPY ./src/data /data
