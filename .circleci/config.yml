@@ -129,7 +129,7 @@ jobs:
             DOCKERFILE="./ci/node-red.dockerfile"
 
             FILE=docker-build.sh
-            cp ./ci/scripts/$FILE $FILE 
+            cp ../ci/scripts/$FILE $FILE 
             
             chmod +x $FILE && ./$FILE $IMAGE_NAME $TAG $DOCKERFILE
 
@@ -142,7 +142,7 @@ jobs:
             DOCKERFILE="./ci/zmq-python.dockerfile"
 
             FILE=docker-build.sh
-            cp ./ci/scripts/$FILE $FILE 
+            cp ../ci/scripts/$FILE $FILE 
             
             chmod +x $FILE && ./$FILE $IMAGE_NAME $TAG $DOCKERFILE
 
@@ -169,6 +169,6 @@ jobs:
             DOCKERFILE="./ci/video-streamer-server.dockerfile"
 
             FILE=docker-build.sh
-            cp ./ci/scripts/$FILE $FILE 
+            cp ../ci/scripts/$FILE $FILE 
             
             chmod +x $FILE && ./$FILE $IMAGE_NAME $TAG $DOCKERFILE
