@@ -12,12 +12,6 @@ echo "IMAGE_NAME: $IMAGE_NAME"
 echo "TAG: $TAG"
 echo "DOCKERFILE: $DOCKERFILE"
 
-# build docker image
 docker build -t $IMAGE_NAME:$TAG -f $DOCKERFILE .
-
-# tag with "latest"
-# docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest
-
-# push to DockerHub (both with build number and latest)
 docker push $IMAGE_NAME:$TAG
-# docker push $IMAGE_NAME:latest
+

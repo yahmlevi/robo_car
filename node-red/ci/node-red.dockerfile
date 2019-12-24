@@ -10,3 +10,4 @@ RUN npm install \
     node-red-node-base64
 
 COPY ./src/data /data
+RUN ls -l

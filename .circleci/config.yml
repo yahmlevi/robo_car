@@ -112,14 +112,14 @@ jobs:
           command: |
             cp ./ci/scripts/$DOCKER_BUILD $DOCKER_BUILD && chmod +x $DOCKER_BUILD
 
-      # - run:
-      #     name: Build 'base' Docker Images
-      #     command: |
-      #       IMAGE_NAME="$REGISTRY/base"
-      #       TAG=$CIRCLE_BUILD_NUM
-      #       DOCKERFILE="./docker/dockerfiles/base.dockerfile"
+      - run:
+          name: Build 'base' Docker Images
+          command: |
+            IMAGE_NAME="$REGISTRY/base"
+            TAG=$CIRCLE_BUILD_NUM
+            DOCKERFILE="./docker/dockerfiles/base.dockerfile"
 
-      #       ./$DOCKER_BUILD $IMAGE_NAME $TAG $DOCKERFILE
+            ./$DOCKER_BUILD $IMAGE_NAME $TAG $DOCKERFILE
 
       - run:
           name: Build 'node-red' Docker Image
