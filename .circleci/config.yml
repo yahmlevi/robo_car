@@ -108,7 +108,7 @@ jobs:
 
       # working_directory: 
       - run:
-          name: Build 'base' Docker Image
+          name: Copy docker-build.sh script file
           command: |
             cp ./ci/scripts/$DOCKER_BUILD $DOCKER_BUILD && chmod +x $DOCKER_BUILD
 
@@ -123,30 +123,21 @@ jobs:
 
       - run:
           name: Build 'node-red' Docker Image
-          working_directory: node-red
+          # working_directory: node-red
           command: |
             IMAGE_NAME="$REGISTRY/node-red"
             TAG=$CIRCLE_BUILD_NUM
-            DOCKERFILE="./ci/node-red.dockerfile"
-
-            # FILE=docker-build.sh
-            # cp ../ci/scripts/$FILE $FILE 
+            DOCKERFILE="./node-red/ci/node-red.dockerfile"
             
-            # chmod +x $FILE && ./$FILE $IMAGE_NAME $TAG $DOCKERFILE
             ./$DOCKER_BUILD $IMAGE_NAME $TAG $DOCKERFILE
 
       - run:
           name: Build 'zmq-python' Docker Image
-          working_directory: zero-mq
           command: |
             IMAGE_NAME="REGISTRY/zmq-python"
             TAG=$CIRCLE_BUILD_NUM
-            DOCKERFILE="./ci/zmq-python.dockerfile"
-
-            # FILE=docker-build.sh
-            # cp ../ci/scripts/$FILE $FILE 
+            DOCKERFILE="./zero-mq/ci/zmq-python.dockerfile"
             
-            # chmod +x $FILE && ./$FILE $IMAGE_NAME $TAG $DOCKERFILE
             ./$DOCKER_BUILD $IMAGE_NAME $TAG $DOCKERFILE
 
 
@@ -166,14 +157,9 @@ jobs:
 
       - run:
           name: Build 'video-streamer-server' Docker Image
-          working_directory: video-streamer-server
           command: |
             IMAGE_NAME="$REGISTRY/video-streamer-server"
             TAG=$CIRCLE_BUILD_NUM
-            DOCKERFILE="./ci/video-streamer-server.dockerfile"
-
-            # FILE=docker-build.sh
-            # cp ../ci/scripts/$FILE $FILE 
+            DOCKERFILE="./video-streamer-server/ci/video-streamer-server.dockerfile"
             
-            # chmod +x $FILE && ./$FILE $IMAGE_NAME $TAG $DOCKERFILE
             ./$DOCKER_BUILD $IMAGE_NAME $TAG $DOCKERFILE
