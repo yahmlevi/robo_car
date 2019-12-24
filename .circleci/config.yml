@@ -124,7 +124,7 @@ jobs:
           name: Build 'node-red' Docker Image
           working_directory: node-red
           command: |
-            IMAGE_NAME="$REGISTRY/node-red
+            IMAGE_NAME="$REGISTRY/node-red"
             TAG=$CIRCLE_BUILD_NUM
             DOCKERFILE="./ci/node-red.dockerfile"
 
@@ -137,7 +137,7 @@ jobs:
           name: Build 'zmq-python' Docker Image
           working_directory: zero-mq
           command: |
-            IMAGE_NAME="REGISTRY/zmq-python
+            IMAGE_NAME="REGISTRY/zmq-python"
             TAG=$CIRCLE_BUILD_NUM
             DOCKERFILE="./ci/zmq-python.dockerfile"
 
@@ -164,7 +164,7 @@ jobs:
           name: Build 'video-streamer-server' Docker Image
           working_directory: video-streamer-server
           command: |
-            IMAGE_NAME="$REGISTRY/video-streamer-server
+            IMAGE_NAME="$REGISTRY/video-streamer-server"
             TAG=$CIRCLE_BUILD_NUM
             DOCKERFILE="./ci/video-streamer-server.dockerfile"
 
