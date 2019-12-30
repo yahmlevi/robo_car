@@ -1,7 +1,8 @@
 #! /bin/bash
 
-TAG=$1
 
+
+TAG=$1
 IMAGE="yahmlevi/opencv"
 # docker run --rm -it --privileged --device=//dev/video0:/dev/video0  $IMAGE:$VERSION
 # docker run --rm -it --privileged --device=/dev/video0:/dev/video0  $IMAGE:$VERSION
@@ -13,12 +14,12 @@ IMAGE="yahmlevi/opencv"
 # https://hub.docker.com/r/sgtwilko/rpi-raspbian-opencv/
 # execute 'xhost +' to allow access from the docker container to the host's display
 function ols(){
-docker run -it --rm \
-    -v `pwd`/videos:/videos \
-    -e DISPLAY=$DISPLAY \
-    -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
-    --device /dev/video0 \
-    $IMAGE:$TAG
+    docker run -it --rm \
+        -v `pwd`/videos:/videos \
+        -e DISPLAY=$DISPLAY \
+        -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
+        --device /dev/video0 \
+        $IMAGE:$TAG
 }
 
 # -v //dev/bus/usb:/dev/bus/usb
@@ -41,8 +42,9 @@ function run_video_streamer_client(){
         $IMAGE:$TAG
 }
 
-REGISTRY="video-python"
+
 function run_video_streamer_server(){
+    REGISTRY="video-python"
     IMAGE="eu.gcr.io/$REGISTRY/video-streamer-server"
     TAG="latest"
     
@@ -54,3 +56,5 @@ function run_video_streamer_server(){
 
     echo "Run the Video Streamer Client on RPI and then goto http://localhost:8001 to see the video stream"    
 }
+
+

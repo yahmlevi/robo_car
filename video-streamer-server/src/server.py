@@ -85,6 +85,8 @@ thread = threading.Thread(target=web_video_streamer.start, args=(args["ip"], arg
 thread.daemon = True
 thread.start()
 
+print ("Starting main loop")
+
 # start looping over all the frames
 while True:
 	# receive RPi name and frame from the RPi and acknowledge the receipt
@@ -155,10 +157,14 @@ while True:
 	# display the montage(s) on the screen
 	for (i, montage) in enumerate(montages):
 		# stream frame
-		web_video_streamer.show_frame(frame)
+		if web_video_streamer:
+			print ("Sending to web server")
+			web_video_streamer.show_frame(frame)
 
 		# show frame locally (on host)
-		# cv2.imshow("Home pet location monitor ({})".format(i), montage)
+		show_local = True
+		if show_local: 
+			cv2.imshow("Home pet location monitor ({})".format(i), montage)
 		
 	# detect any kepresses
 	key = cv2.waitKey(1) & 0xFF

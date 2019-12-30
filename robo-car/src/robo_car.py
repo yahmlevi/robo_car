@@ -7,6 +7,10 @@ import cv2
 import datetime
 from lane_follower import LaneFollower
 # from objects_on_road_processor import ObjectsOnRoadProcessor
+import platform
+
+from display_functions import show_image
+
 
 _SHOW_IMAGE = True
 
@@ -27,9 +31,14 @@ class RoboCar(object):
 
         # TODO: why use -1
         # self.camera = cv2.VideoCapture(-1)
-        self.camera = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+        # self.camera = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+        self.camera = self.get_camera()
         self.camera.set(3, self.__SCREEN_WIDTH)
         self.camera.set(4, self.__SCREEN_HEIGHT)
+
+        # TODO: implement Camera class in camera.py
+        # self.camera = Camera()
+
 
         # self.pan_servo = picar.Servo.Servo(1)
         # self.pan_servo.offset = -30  # calibrate servo to center
@@ -90,6 +99,13 @@ class RoboCar(object):
         # self.video_objs.release()
         cv2.destroyAllWindows()
 
+    def get_camera(self):
+        if platform.machine() == "AMD64":
+            # https://stackoverflow.com/questions/52043671/opencv-capturing-imagem-with-black-side-bars?rq=1
+            return cv2.VideoCapture(0, cv2.CAP_DSHOW)
+        else:
+            return cv2.VideoCapture(0)
+
     def drive(self, speed=__INITIAL_SPEED):
         """ Main entry point of the car, and put it in drive mode
         Keyword arguments:
@@ -125,10 +141,3 @@ class RoboCar(object):
         image = self.lane_follower.follow_lane(image)
         return image
 
-
-############################
-# Utility Functions
-############################
-def show_image(title, frame, show=_SHOW_IMAGE):
-    if show:
-        cv2.imshow(title, frame)

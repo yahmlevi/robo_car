@@ -18,10 +18,10 @@ DOCKERFILE="./docker/dockerfiles/$DOCKERFILE_PREFIX.dockerfile"
 echo "DOCKERFILE=$DOCKERFILE"
 
 IMAGE_NAME="yahmlevi/$IMAGE_NAME"
-if [[ $IMAGE_NAME == *"-base"* ]]; then
-    IMAGE_NAME="${IMAGE_NAME//-base/}"
-    TAG="base"
-fi
+# if [[ $IMAGE_NAME == *"-base"* ]]; then
+#     IMAGE_NAME="${IMAGE_NAME//-base/}"
+#     TAG="base"
+# fi
 echo "IMAGE_NAME=$IMAGE_NAME"
 echo "TAG=$TAG"
 echo "----------------------------------------------"
@@ -79,5 +79,5 @@ function docker_build_x(){
 }
 
 # Attention - using buildx
-# docker_build_x
-docker_build
+docker_build_x
+# docker_build
