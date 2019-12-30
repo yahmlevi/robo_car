@@ -38,7 +38,7 @@ class RoboCar(object):
         self.camera.set(4, self.__SCREEN_HEIGHT)
 
         # TODO: implement Camera class in camera.py
-        # self.camera = Camera()
+        # self.camera = Camera(self.__SCREEN_WIDTH, self.__SCREEN_HEIGHT)
 
 
         # self.pan_servo = picar.Servo.Servo(1)
@@ -66,12 +66,12 @@ class RoboCar(object):
 
         # ----------------------
         # self.fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        datestr = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
-        # self.video_orig = self.create_video_recorder('../data/tmp/car_video%s.avi' % datestr)
-        # self.video_lane = self.create_video_recorder('../data/tmp/car_video_lane%s.avi' % datestr)
-        # self.video_objs = self.create_video_recorder('../data/tmp/car_video_objs%s.avi' % datestr)
+        date_str = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
+        # self.video_orig = self.create_video_recorder('../data/tmp/car_video%s.avi' % date_str)
+        # self.video_lane = self.create_video_recorder('../data/tmp/car_video_lane%s.avi' % date_str)
+        # self.video_objs = self.create_video_recorder('../data/tmp/car_video_objs%s.avi' % date_str)
 
-        self.video_orig = VideoRecorder('../data/tmp/car_video%s.avi' % datestr, self.__SCREEN_WIDTH, self.__SCREEN_HEIGHT)
+        self.video_orig = VideoRecorder('../data/tmp/car_video%s.avi' % date_str, self.__SCREEN_WIDTH, self.__SCREEN_HEIGHT)
 
         logging.info('Created a RoboCar')
 
