@@ -2,7 +2,6 @@ import cv2
 import platform
 
 class Camera(object):
-    # TODO: init
 
     def __init__(self):
         if platform.machine() == "AMD64":
@@ -19,4 +18,7 @@ class Camera(object):
 
     def read (self):
         return self.camera_obj.read()
+
+    def release(self):
+        self.camera_obj.release()
         

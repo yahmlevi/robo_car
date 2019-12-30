@@ -10,6 +10,7 @@ from lane_follower import LaneFollower
 import platform
 
 from display_functions import show_image
+import VideoRecorder
 
 
 _SHOW_IMAGE = True
@@ -65,16 +66,18 @@ class RoboCar(object):
 
         # ----------------------
         # self.fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        # datestr = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
+        datestr = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
         # self.video_orig = self.create_video_recorder('../data/tmp/car_video%s.avi' % datestr)
         # self.video_lane = self.create_video_recorder('../data/tmp/car_video_lane%s.avi' % datestr)
         # self.video_objs = self.create_video_recorder('../data/tmp/car_video_objs%s.avi' % datestr)
 
+        self.video_orig = VideoRecorder('../data/tmp/car_video%s.avi' % datestr, self.__SCREEN_WIDTH, self.__SCREEN_HEIGHT)
+
         logging.info('Created a RoboCar')
 
 
-    def create_video_recorder(self, path):
-        return cv2.VideoWriter(path, self.fourcc, 20.0, (self.__SCREEN_WIDTH, self.__SCREEN_HEIGHT))
+    # def create_video_recorder(self, path):
+    #     return cv2.VideoWriter(path, self.fourcc, 20.0, (self.__SCREEN_WIDTH, self.__SCREEN_HEIGHT))
 
     def __enter__(self):
         """ Entering a with statement """
@@ -93,7 +96,8 @@ class RoboCar(object):
         logging.info('Stopping the car, resetting hardware.')
         # self.back_wheels.speed = 0
         # self.front_wheels.turn(90)
-        # self.camera.release()
+        
+        self.camera.release()
         # self.video_orig.release()
         # self.video_lane.release()
         # self.video_objs.release()
