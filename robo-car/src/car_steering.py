@@ -24,9 +24,10 @@ class CarSteering(object):
         new_steering_angle = compute_steering_angle(frame, lane_lines)
         self.curr_steering_angle = stabilize_steering_angle(self.curr_steering_angle, new_steering_angle, len(lane_lines))
 
-        # if self.car is not None:
-        #     self.car.front_wheels.turn(self.curr_steering_angle)
+        if self.car is not None:
+            self.car.front_wheels.turn(self.curr_steering_angle)
 
+        # TODO: use publisher instead of calling car.front_wheels dierctly
         # publish self.curr_steering_angle to `steering` queue
 
         curr_heading_image = display_heading_line(frame, self.curr_steering_angle)

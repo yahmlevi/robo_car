@@ -5,8 +5,8 @@ import math
 import datetime
 import sys
 
-from car_steering import CarSteering
 from display_functions import show_image, display_lines
+from car_steering import CarSteering
 from lane_detector import LaneDetector
 
 # HandCodedLaneFollower
