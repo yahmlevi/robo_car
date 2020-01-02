@@ -2,7 +2,7 @@
 
 # from .SunFounder_PCA9685 import Servo
 from servo import Servo
-from file_db import Filedb
+from file_db import FileDb
 
 class Front_Wheels(object):
 	''' Front wheels control class '''
@@ -13,7 +13,7 @@ class Front_Wheels(object):
 
 	def __init__(self, debug=False, db="config", bus_number=1, channel=FRONT_WHEEL_CHANNEL):
 		''' setup channels and basic stuff '''
-		self.db = Filedb.fileDB(db=db)
+		self.db = FileDb(db=db)
 		self._channel = channel
 		self._straight_angle = 90
 		self.turning_max = 45
@@ -34,17 +34,17 @@ class Front_Wheels(object):
 	def turn_left(self):
 		''' Turn the front wheels left '''
 		self._debug_("Turn left")
-		self.wheel.write(self._angle["left"])
+		# self.wheel.write(self._angle["left"])
 
 	def turn_straight(self):
 		''' Turn the front wheels back straight '''
 		self._debug_("Turn straight")
-		self.wheel.write(self._angle["straight"])
+		# self.wheel.write(self._angle["straight"])
 
 	def turn_right(self):
 		''' Turn the front wheels right '''
 		self._debug_("Turn right")
-		self.wheel.write(self._angle["right"])
+		# self.wheel.write(self._angle["right"])
 
 	def turn(self, angle):
 		''' Turn the front wheels to the giving angle '''
@@ -53,7 +53,11 @@ class Front_Wheels(object):
 			angle = self._angle["left"]
 		if angle > self._angle["right"]:
 			angle = self._angle["right"]
-		self.wheel.write(angle)
+
+		# self.wheel.write(angle)
+		self._debug_("Turn to %s " % angle)
+		
+
 
 	@property
 	def channel(self):
@@ -83,7 +87,7 @@ class Front_Wheels(object):
 			raise TypeError('"turning_offset" must be "int"')
 		self._turning_offset = value
 		self.db.set('turning_offset', value)
-		self.wheel.offset = value
+		# self.wheel.offset = value
 		self.turn_straight()
 
 	@property
@@ -100,16 +104,17 @@ class Front_Wheels(object):
 		if self._DEBUG:
 			print(self._DEBUG_INFO, "Set debug on")
 			print(self._DEBUG_INFO, "Set wheel debug on")
-			self.wheel.debug = True
+			
 		else:
 			print(self._DEBUG_INFO, "Set debug off")
 			print(self._DEBUG_INFO, "Set wheel debug off")
-			self.wheel.debug = False
+
+		# self.wheel.debug = debug
 
 	def ready(self):
 		''' Get the front wheels to the ready position. '''
 		self._debug_('Turn to "Ready" position')
-		self.wheel.offset = self.turning_offset
+		# self.wheel.offset = self.turning_offset
 		self.turn_straight()
 
 	def calibration(self):
@@ -121,13 +126,13 @@ class Front_Wheels(object):
 	def cali_left(self):
 		''' Calibrate the wheels to left '''
 		self.cali_turning_offset -= 1
-		self.wheel.offset = self.cali_turning_offset
+		# self.wheel.offset = self.cali_turning_offset
 		self.turn_straight()
 
 	def cali_right(self):
 		''' Calibrate the wheels to right '''
 		self.cali_turning_offset += 1
-		self.wheel.offset = self.cali_turning_offset
+		# self.wheel.offset = self.cali_turning_offset
 		self.turn_straight()
 
 	def cali_ok(self):

@@ -5,12 +5,12 @@ import math
 import datetime
 import sys
 
-_SHOW_IMAGE = False
+_SHOW_IMAGE = True
 
 def show_image(title, frame, show=_SHOW_IMAGE):
     if show:
-        print ("Running inside show_image()")
-        # cv2.imshow(title, frame)
+        # print ("Running inside show_image()")
+        cv2.imshow(title, frame)
 
 def display_lines(frame, lines, line_color=(0, 255, 0), line_width=10):
     line_image = np.zeros_like(frame)

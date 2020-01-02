@@ -37,8 +37,8 @@ class Servo(object):
 		if self._DEBUG:
 			print(self._DEBUG_INFO,message)
 
-	def setup(self):
-		# self.pwm.setup()
+	# def setup(self):
+	# 	self.pwm.setup()
 
 	# def _angle_to_analog(self, angle):
 	# 	''' Calculate 12-bit analog value from giving angle '''
@@ -131,4 +131,3 @@ if __name__ == '__main__':
 			install()
 	else:
 		test()
-

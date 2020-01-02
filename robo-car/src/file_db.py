@@ -1,12 +1,12 @@
 '''
 **********************************************************************
-* Filename    : filedb.py
+* Filename    : file_db.py
 * Description : A simple file based database.
 * Update      : 
 **********************************************************************
 '''
 
-class FileDB(object):
+class FileDb(object):
 	"""A file based database.
 
     A file based database, read and write arguements in the specific file.
