@@ -48,7 +48,7 @@ class Front_Wheels(object):
 
 	def turn(self, angle):
 		''' Turn the front wheels to the giving angle '''
-		self._debug_("Turn to %s " % angle)
+		# self._debug_("Turn to %s " % angle)
 		if angle < self._angle["left"]:
 			angle = self._angle["left"]
 		if angle > self._angle["right"]:

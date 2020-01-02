@@ -56,7 +56,7 @@ class RoboCar(object):
 
         logging.debug('Set up front wheels')
         # self.front_wheels = picar.front_wheels.Front_Wheels()
-        self.front_wheels = Front_Wheels( debug=True)
+        self.front_wheels = Front_Wheels(debug=True)
         self.front_wheels.turning_offset = -25  # calibrate servo to center
         self.front_wheels.turn(90)              # Steering Range is 45 (left), 90 (center), 135 (right)
 
