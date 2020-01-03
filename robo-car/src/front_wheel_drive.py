@@ -22,17 +22,13 @@ class FrontWheelDrive (object):
 
 	def __init__(self, debug=False, db="config"):
 		''' Init the direction channel and pwm channel '''
-		self.forward_A = True
-		self.forward_B = True
-
+		
 		self.db = FileDb(db=db)
 
 		self.forward = int(self.db.get('forward', default_value=1))
 
 		self.left_wheel = Motor(motor="LEFT")
 		self.right_wheel = Motor(motor="RIGHT")
-		
-		# self.right_wheel = TB6612.Motor(self.Motor_B, offset=self.forward_B)
 		
 		self._speed = 0
 
@@ -90,12 +86,12 @@ class FrontWheelDrive (object):
 			print(self._DEBUG_INFO, "Set debug on")
 			self.left_wheel.debug = True
 			self.right_wheel.debug = True
-			self.pwm.debug = True
+			# self.pwm.debug = True
 		else:
 			print(self._DEBUG_INFO, "Set debug off")
 			self.left_wheel.debug = False
 			self.right_wheel.debug = False
-			self.pwm.debug = False
+			# self.pwm.debug = False
 
 	# def ready(self):
 	# 	''' Get the back wheels to the ready position. (stop) '''

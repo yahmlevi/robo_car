@@ -7,7 +7,8 @@ def main():
     logging.info('Starting Car, system info: ' + sys.version)
     
     with RoboCar() as car:
-        car.drive(40)
+        # car.drive(40)
+        car.drive(1000)
     
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)

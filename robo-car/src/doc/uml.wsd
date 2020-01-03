@@ -19,8 +19,13 @@ end note
 class FrontWheelDrive {
     + forward()
     + backward()
-    + accelerate(target_speed, time_ms)
-    + decelerate(target_speed, time_ms)
+    + speed(speed)
+}
+
+class Motor {
+    + forward()
+    + backward()
+    + speed(speed)
 }
 
 class FrontWheelSteering {
@@ -33,6 +38,9 @@ note bottom of FrontWheelSteering
 subscribed to receiving steering angle
 end note
 
+class SteeringServo {
+    + write(angle)
+}
 
 class Camera {
     + read()
@@ -82,13 +90,13 @@ FrontWheelSteering -> SteeringServo
 SteeringServo --> FreeNoveDevice : use port Servo1
 
 
-FrontWheelDrive -> "2" DriveMotor: left & right
-note bottom of DriveMotor
+FrontWheelDrive -> "2" Motor: left & right
+note bottom of Motor
 We use 2 instances: 
-+ left motor 
-+ right motor
++ left motor - CMD_DIR1, CMD_PWM1
++ right motor - CMD_DIR2, CMD_PWM2
 end note
 
-DriveMotor --> FreeNoveDevice : use ports 
+Motor --> FreeNoveDevice
 
 @enduml

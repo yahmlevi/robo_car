@@ -22,19 +22,19 @@ class Motor(object):
 		self.debug = debug
 		self._debug_("Debug on")
 
+		self.mdev = mDev()
+
 		if motor == "LEFT": 
-			self.dir_command = mdev.CMD_DIR1
-			self.pwm_command = mdev.CMD_PWM1
+			self.dir_command = self.mdev.CMD_DIR1
+			self.pwm_command = self.mdev.CMD_PWM1
 		else:
-			self.dir_command = mdev.CMD_DIR2
-			self.pwm_command = mdev.CMD_PWM2
+			self.dir_command = self.mdev.CMD_DIR2
+			self.pwm_command = self.mdev.CMD_PWM2
 		
 		# self.lock = True
-
-		self.mdev = mDev()
 		
 		self.current_speed = 0
-		self.speed(0)
+		self.speed = 0
 	
 	def _debug_(self, message):
 		if self._DEBUG:
@@ -82,7 +82,7 @@ class Motor(object):
 			change = -10
 
 		for value in range(self.current_speed, speed, change):	
-			mdev.writeReg(pwm_command, value)
+			self.mdev.writeReg(self.pwm_command, value)
 			time.sleep(sleep_time)
 
 		self.current_speed = speed
