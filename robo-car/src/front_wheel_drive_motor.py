@@ -88,11 +88,6 @@ class Motor(object):
 		self.current_speed = speed
 
 
-	
-
-	
-
-
 	@property
 	def debug(self):
 		return self._DEBUG
