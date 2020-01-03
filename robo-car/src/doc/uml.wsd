@@ -1,0 +1,94 @@
+@startuml Test
+class Car {
+    + mode(autonomious=True/False)
+    + drive(speed)
+    + brake()
+}
+
+note top of Car
+The Car class is the <b>root</b>
+of the OOP tree
+end note
+
+note left of Car
+Car has 2 modes:
++ <b>autonomious</b>
++ <b>manual</b>
+end note
+
+class FrontWheelDrive {
+    + forward()
+    + backward()
+    + accelerate(target_speed, time_ms)
+    + decelerate(target_speed, time_ms)
+}
+
+class FrontWheelSteering {
+    + turn(angle)
+    + turn_left()
+    + turn_right()
+    + turn_straight()
+}
+note bottom of FrontWheelSteering
+subscribed to receiving steering angle
+end note
+
+
+class Camera {
+    + read()
+}
+
+class LaneFollower {
+    + follow()
+}
+
+class LaneDetector {
+    + detect()
+}
+
+class CarSteeringCalculator {
+    - stabilize_steering_angle()
+    + calc_Steering_angle()
+}
+note bottom of CarSteeringCalculator
+publishes steering angle
+end note
+
+class FreeNoveDevice {
+    + writeReg()
+    + readReg()
+}
+note bottom of FreeNoveDevice
+Communicates with FreeNove card
+over i2c bus
+end note
+
+
+
+Car *-- Camera: has 1 front >
+Car --> LaneFollower
+Car --> FrontWheelSteering
+Car --> FrontWheelDrive
+
+Camera .> LaneFollower : images
+
+LaneFollower --> LaneDetector
+LaneFollower --> CarSteeringCalculator
+
+
+
+FrontWheelSteering -> SteeringServo
+
+SteeringServo --> FreeNoveDevice : use port Servo1
+
+
+FrontWheelDrive -> "2" DriveMotor: left & right
+note bottom of DriveMotor
+We use 2 instances: 
++ left motor 
++ right motor
+end note
+
+DriveMotor --> FreeNoveDevice : use ports 
+
+@enduml

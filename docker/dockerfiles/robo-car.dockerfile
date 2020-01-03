@@ -2,6 +2,9 @@
 # FROM mohaseeb/raspberrypi3-python-opencv
 FROM yahmlevi/robo-car:base-rpi
 
+RUN apt-get update && apt-get install -y i2c-tools python-smbus 
+# python-pip
+
 WORKDIR /app
 
 COPY video-streamer-client/src /app

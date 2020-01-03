@@ -26,10 +26,13 @@ if __name__ == '__main__':
 			cnt = 3	
 			while (cnt != 0):		
 				cnt = cnt - 1
+				# turn from 50 to 140 by 1 every 0.005
 				for i in range(50, 140, 1):	
 					mdev.writeReg(mdev.CMD_SERVO1, numMap(i, 0, 180, 500, 2500))
 					time.sleep(0.005)
-				for i in range(140,50,-1):	
+
+				# turn from 140 to 50 every 0.005
+				for i in range(140, 50, -1):	
 					mdev.writeReg(mdev.CMD_SERVO1, numMap(i, 0, 180, 500, 2500))
 					time.sleep(0.005)
 			
@@ -82,6 +85,7 @@ if __name__ == '__main__':
 				mdev.writeReg(mdev.CMD_PWM2, i)
 				time.sleep(sleep_time)
 			time.sleep(1)
+
 			for i in range(1000,0,-10):	
 				mdev.writeReg(mdev.CMD_PWM1, i)
 				mdev.writeReg(mdev.CMD_PWM2, i)

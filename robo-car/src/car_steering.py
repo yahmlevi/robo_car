@@ -26,7 +26,7 @@ class CarSteering(object):
 
         # -------------------------------------------------------
         if self.car is not None:
-            self.car.front_wheels.turn(self.curr_steering_angle)
+            self.car.front_wheel_steering.turn(self.curr_steering_angle)
 
         # TODO: use publisher instead of calling car.front_wheels dierctly
         # publish self.curr_steering_angle to `steering` queue

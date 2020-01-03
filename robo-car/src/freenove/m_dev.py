@@ -5,8 +5,8 @@ import time
 import threading
 from threading import Lock
 
-def numMap(value,fromLow,fromHigh,toLow,toHigh):
-	return (toHigh-toLow)*(value-fromLow) / (fromHigh-fromLow) + toLow
+def numMap(value, fromLow, fromHigh, toLow, toHigh):
+	return (toHigh - toLow) * (value - fromLow) / (fromHigh - fromLow) + toLow
 	
 class mDev(object):
 	CMD_SERVO1 		= 	0
@@ -35,7 +35,7 @@ class mDev(object):
 	mutex = Lock()
 
 	def __init__(self, addr=0x18):
-		self.address = addr	#default address of mDEV
+		self.address = addr	# default address of mDEV
 		self.bus=smbus.SMBus(1)
 		self.bus.open(1)
 	
@@ -59,7 +59,7 @@ class mDev(object):
 		except Exception as e:
 			print ("I2C Error :", e)
 		
-	def readReg(self,cmd):		
+	def readReg(self, cmd):		
 		##################################################################################################
 		#Due to the update of SMBus, the communication between Pi and the shield board is not normal. 
 		#through the following code to improve the success rate of communication.
