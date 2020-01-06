@@ -2,6 +2,8 @@
 class Car {
     + mode(autonomious=True/False)
     + drive(speed)
+    + start()
+    + stop()
     + brake()
 }
 

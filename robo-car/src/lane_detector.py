@@ -100,6 +100,7 @@ def region_of_interest(canny):
     return masked_image
 
 def detect_line_segments(cropped_edges):
+    # TODO: Tune!!!
     # tuning min_threshold, minLineLength, maxLineGap is a trial and error process by hand
     rho = 1  # precision in pixel, i.e. 1 pixel
     angle = np.pi / 180  # degree in radian, i.e. 1 degree

@@ -11,26 +11,34 @@
 *               Cavon    2016-11-04    fix for submodules
 **********************************************************************
 '''
+import time
 from file_db import FileDb
 from front_wheel_drive_motor import Motor
+from freenove.m_dev import mDev
+
+
+device = mDev()
 
 class FrontWheelDrive (object):
 
 	''' Back wheels control class '''
 	_DEBUG = False
-	_DEBUG_INFO = 'DEBUG "back_wheels.py":'
+	_DEBUG_INFO = 'DEBUG "front_wheel_drive.py":'
 
 	def __init__(self, debug=False, db="config"):
 		''' Init the direction channel and pwm channel '''
 		
 		self.db = FileDb(db=db)
 
-		self.forward = int(self.db.get('forward', default_value=1))
+		# self.forward = int(self.db.get('forward', default_value=1))
 
-		self.left_wheel = Motor(motor="LEFT")
-		self.right_wheel = Motor(motor="RIGHT")
-		
+		self.mdev = device
+
+		self.left_wheel = Motor(motor="LEFT", device=self.mdev)
+		self.right_wheel = Motor(motor="RIGHT", device=self.mdev)
+
 		self._speed = 0
+		self.current_speed = 0
 
 		self.debug = debug
 		# self._debug_('Set left wheel to #%d, PWM channel to %d' % (self.Motor_A, self.PWM_A))
@@ -63,12 +71,41 @@ class FrontWheelDrive (object):
 
 	@speed.setter
 	def speed(self, speed):
+		self._debug_('Set speed to %s' % self._speed)
 		self._speed = speed
 		
 		''' Set moving speeds '''
-		self.left_wheel.speed = self._speed
-		self.right_wheel.speed = self._speed
-		self._debug_('Set speed to %s' % self._speed)
+		min_speed = 500
+		max_speed = 1000
+
+		if speed != 0 and speed < min_speed: 
+			speed = min_speed
+
+		if speed > max_speed:
+			speed = max_speed
+
+		speed_change = 10
+		sleep_time = 0.005
+
+		# TODO: accelerate & decelerate
+		self._debug_('Current speed is %s' % self.current_speed)
+		if speed > self.current_speed: 
+			speed_change = 10
+		else:
+			speed_change = -10
+
+		self._debug_('Set speed change to %s' % speed_change)
+
+		for value in range(self.current_speed, speed, speed_change):	
+			self._debug_('Changing speed to %s' % value)
+
+			self.left_wheel.speed = value
+			self.right_wheel.speed = value
+			
+			time.sleep(sleep_time)
+		
+		self.current_speed = speed
+
 
 	@property
 	def debug(self):

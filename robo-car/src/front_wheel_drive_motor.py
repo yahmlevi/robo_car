@@ -17,12 +17,12 @@ class Motor(object):
 	_DEBUG = False
 	_DEBUG_INFO = 'DEBUG "Motor.py":'
 
-	def __init__(self, debug=_DEBUG, motor = ""):
+	def __init__(self, debug=_DEBUG, motor = "", device=None):
 		
 		self.debug = debug
 		self._debug_("Debug on")
 
-		self.mdev = mDev()
+		self.mdev = device
 
 		if motor == "LEFT": 
 			self.dir_command = self.mdev.CMD_DIR1
@@ -43,12 +43,12 @@ class Motor(object):
 
 	def forward(self):
 		''' Move wheel forward '''
-		mdev.writeReg(self.dir_command, 0)
+		self.mdev.writeReg(self.dir_command, 0)
 		self._debug_('Running forward')
 
 	def backward(self):
 		''' Move wheel backward '''
-		mdev.writeReg(self.dir_command, 1)
+		self.mdev.writeReg(self.dir_command, 1)
 		self._debug_('Running backward')
 
 	def stop(self):
@@ -69,23 +69,31 @@ class Motor(object):
 		''' Set moving speed '''
 		self._debug_('Set speed to %s' % self._speed)
 
-		min_speed = 0
-		max_speed = 1000
-		speed_change = 10
+		self.mdev.writeReg(self.pwm_command, speed)
 
-		sleep_time = 0.005
+		# min_speed = 0
+		# max_speed = 1000
+		# speed_change = 10
 
-		# TODO: accelerate & decelerate
-		if speed > self.current_speed: 
-			change = 10
-		else:
-			change = -10
+		# # sleep_time = 0.005
+		# sleep_time = 0.005
 
-		for value in range(self.current_speed, speed, change):	
-			self.mdev.writeReg(self.pwm_command, value)
-			time.sleep(sleep_time)
+		# # TODO: accelerate & decelerate
+		# change = 10
+		# if speed > self.current_speed: 
+		# 	change = 10
+		# else:
+		# 	change = -10
 
-		self.current_speed = speed
+		# # for value in range(self.current_speed, speed, change):	
+		# for value in range(0, speed, change):	
+		# 	self._debug_('Changing speed to %s' % value)
+		# 	# self.mdev.writeReg(self.pwm_command, value)
+		# 	self.mdev.writeReg(mdev.CMD_PWM1, value)
+		# 	self.mdev.writeReg(mdev.CMD_PWM2, value)
+		# 	time.sleep(sleep_time)
+
+		# self.current_speed = speed
 
 
 	@property

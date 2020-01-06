@@ -5,6 +5,7 @@ import logging
 
 import cv2
 import datetime
+import time
 
 from lane_follower import LaneFollower
 # from objects_on_road_processor import ObjectsOnRoadProcessor
@@ -17,7 +18,6 @@ from front_wheel_drive import FrontWheelDrive
 from video_recorder import VideoRecorder
 
 _SHOW_IMAGE = True
-
 
 class RoboCar(object):
 
@@ -78,7 +78,9 @@ class RoboCar(object):
         # self.video_lane = self.create_video_recorder('../data/tmp/car_video_lane%s.avi' % date_str)
         # self.video_objs = self.create_video_recorder('../data/tmp/car_video_objs%s.avi' % date_str)
 
-        self.video_orig = VideoRecorder('../data/tmp/car_video%s.avi' % date_str, self.__SCREEN_WIDTH, self.__SCREEN_HEIGHT)
+        self.video_orig = VideoRecorder('videos/car_video%s.avi' % date_str, self.__SCREEN_WIDTH, self.__SCREEN_HEIGHT)
+        self.video_lane = VideoRecorder('videos/car_video_lane%s.avi' % date_str, self.__SCREEN_WIDTH, self.__SCREEN_HEIGHT)
+        self.video_objs = VideoRecorder('videos/car_video_objs%s.avi' % date_str, self.__SCREEN_WIDTH, self.__SCREEN_HEIGHT)
 
         logging.info('Created a RoboCar')
 
@@ -105,9 +107,11 @@ class RoboCar(object):
         # self.front_wheels.turn(90)
         
         self.camera.release()
-        # self.video_orig.release()
-        # self.video_lane.release()
-        # self.video_objs.release()
+
+        self.video_orig.release()
+        self.video_lane.release()
+        self.video_objs.release()
+
         cv2.destroyAllWindows()
 
     def get_camera(self):
@@ -117,6 +121,9 @@ class RoboCar(object):
         else:
             return cv2.VideoCapture(0)
 
+    def start(self):
+        pass
+
     def drive(self, speed=__INITIAL_SPEED):
         """ Main entry point of the car, and put it in drive mode
         Keyword arguments:
@@ -125,22 +132,33 @@ class RoboCar(object):
 
         logging.info('Starting to drive at speed %s...' % speed)
         # self.back_wheels.speed = speed
+        self.front_wheel_drive.forward()
         self.front_wheel_drive.speed = speed
-
+        
         i = 0
+
+        show_on_screen = True
+        record = False
+
         while self.camera.isOpened():
             _, image_lane = self.camera.read()
+            
             image_objs = image_lane.copy()
             i += 1
-            # self.video_orig.write(image_lane)
+            
+            if record:
+                self.video_orig.write(image_lane)
 
             # image_objs = self.process_objects_on_road(image_objs)
             # self.video_objs.write(image_objs)
-            # show_image('Detected Objects', image_objs)
+            # show_image('Detected Objects', image_objs, show=show_on_screen)
 
             image_lane = self.follow_lane(image_lane)
-            # self.video_lane.write(image_lane)
-            show_image('Lane Lines', image_lane, show=False)
+
+            if record:
+                self.video_lane.write(image_lane)
+
+            show_image('Lane Lines', image_lane, show=show_on_screen)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 self.cleanup()
