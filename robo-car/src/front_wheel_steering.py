@@ -4,16 +4,21 @@
 from steering_servo import SteeringServo
 from file_db import FileDb
 
-class FrontWheelSteering(object):
+from base_class import BaseClass
+
+class FrontWheelSteering(BaseClass):
+
 	''' Front wheels control class '''
 	FRONT_WHEEL_CHANNEL = 0
 
 	_DEBUG = False
 	_DEBUG_INFO = 'DEBUG "FrontWheelSteering.py":'
 
-	def __init__(self, debug=False, db="config", bus_number=1, channel=FRONT_WHEEL_CHANNEL):
+	def __init__(self, debug=False, db="file_db_data", bus_number=1, channel=FRONT_WHEEL_CHANNEL):
+
+		BaseClass.__init__(self, debug)
+
 		''' setup channels and basic stuff '''
-		self.debug = debug
 
 		self.db = FileDb(db=db)
 		# self._channel = channel
@@ -21,46 +26,42 @@ class FrontWheelSteering(object):
 		self.turning_max = 45
 		self._turning_offset = int(self.db.get('turning_offset', default_value=0))
 
-		self.servo = SteeringServo(debug=self.debug)
+		self.servo = SteeringServo(debug=debug)
 		
-		# self._debug_('Front wheel PWM channel: %s' % self._channel)
-		self._debug_('Front wheel offset value: %s ' % self.turning_offset)
+		#  self.debug('Front wheel PWM channel: %s' % self._channel)
+		self.debug('Front wheel offset value: %s ' % self.turning_offset)
 
 		self._angle = {"left":self._min_angle, "straight":self._straight_angle, "right":self._max_angle}
-		self._debug_('left angle: %s, straight angle: %s, right angle: %s' % (self._angle["left"], self._angle["straight"], self._angle["right"]))
+		self.debug('left angle: %s, straight angle: %s, right angle: %s' % (self._angle["left"], self._angle["straight"], self._angle["right"]))
 
-	def _debug_(self, message):
-		if self._DEBUG:
-			print(self._DEBUG_INFO,message)
+	
 
 	def turn_left(self):
 		''' Turn the front wheels left '''
-		self._debug_("Turn left")
+		self.debug("Turn left")
 		self.servo.write(self._angle["left"])
 
 	def turn_straight(self):
 		''' Turn the front wheels back straight '''
-		self._debug_("Turn straight")
+		self.debug("Turn straight")
 		self.servo.write(self._angle["straight"])
 
 	def turn_right(self):
 		''' Turn the front wheels right '''
-		self._debug_("Turn right")
+		self.debug("Turn right")
 		self.servo.write(self._angle["right"])
 
 	def turn(self, angle):
 		''' Turn the front wheels to the giving angle '''
-		# self._debug_("Turn to %s " % angle)
+		#  self.debug("Turn to %s " % angle)
 		if angle < self._angle["left"]:
 			angle = self._angle["left"]
 		if angle > self._angle["right"]:
 			angle = self._angle["right"]
 
 		self.servo.write(angle)
-		self._debug_("Turn to %s " % angle)
+		self.debug("Turn to %s " % angle)
 		
-
-
 	@property
 	def channel(self):
 		return self._channel
@@ -93,37 +94,37 @@ class FrontWheelSteering(object):
 		# self.servo.offset = value
 		self.turn_straight()
 
-	@property
-	def debug(self):
-		return self._DEBUG
+	# @property
+	# def debug(self):
+	# 	return self._DEBUG
 	
-	@debug.setter
-	def debug(self, debug):
-		''' Set if debug information shows '''
-		if debug in (True, False):
-			self._DEBUG = debug
-		else:
-			raise ValueError('debug must be "True" (Set debug on) or "False" (Set debug off), not "{0}"'.format(debug))
+	# @debug.setter
+	# def debug(self, debug):
+	# 	''' Set if debug information shows '''
+	# 	if debug in (True, False):
+	# 		self._DEBUG = debug
+	# 	else:
+	# 		raise ValueError('debug must be "True" (Set debug on) or "False" (Set debug off), not "{0}"'.format(debug))
 
-		if self._DEBUG:
-			print(self._DEBUG_INFO, "Set debug on")
-			print(self._DEBUG_INFO, "Set wheel debug on")
+	# 	if self._DEBUG:
+	# 		print(self._DEBUG_INFO, "Set debug on")
+	# 		print(self._DEBUG_INFO, "Set wheel debug on")
 			
-		else:
-			print(self._DEBUG_INFO, "Set debug off")
-			print(self._DEBUG_INFO, "Set wheel debug off")
+	# 	else:
+	# 		print(self._DEBUG_INFO, "Set debug off")
+	# 		print(self._DEBUG_INFO, "Set wheel debug off")
 
-		# self.servo.debug = debug
+	# 	# self.servo.debug = debug
 
 	def ready(self):
 		''' Get the front wheels to the ready position. '''
-		self._debug_('Turn to "Ready" position')
+		self.debug('Turn to "Ready" position')
 		self.servo.offset = self.turning_offset
 		self.turn_straight()
 
 	def calibration(self):
 		''' Get the front wheels to the calibration position. '''
-		self._debug_('Turn to "Calibration" position')
+		self.debug('Turn to "Calibration" position')
 		self.turn_straight()
 		self.cali_turning_offset = self.turning_offset
 

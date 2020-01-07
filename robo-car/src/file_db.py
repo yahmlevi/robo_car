@@ -18,7 +18,7 @@ class FileDb(object):
 		if db != None:
 			self.db = db
 		else:
-			self.db = "config"
+			self.db = "file_db_data"
 
 	def get(self, name, default_value=None):
 		"""Get value by data's name. Default value is for the arguemants do not exist"""

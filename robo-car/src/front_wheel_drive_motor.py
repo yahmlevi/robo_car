@@ -8,8 +8,9 @@
 '''
 import time
 from freenove.m_dev import mDev
+from base_class import BaseClass
 
-class Motor(object):
+class Motor(BaseClass):
 
 	'''SteeringServo driver class'''
 	_FREQUENCY = 60 
@@ -17,11 +18,9 @@ class Motor(object):
 	_DEBUG = False
 	_DEBUG_INFO = 'DEBUG "Motor.py":'
 
-	def __init__(self, debug=_DEBUG, motor = "", device=None):
+	def __init__(self, debug=False, motor = "", device=None):
+		BaseClass.__init__(self, debug)
 		
-		self.debug = debug
-		self._debug_("Debug on")
-
 		self.mdev = device
 
 		if motor == "LEFT": 
@@ -36,26 +35,22 @@ class Motor(object):
 		self.current_speed = 0
 		self.speed = 0
 	
-	def _debug_(self, message):
-		if self._DEBUG:
-			print(self._DEBUG_INFO, message)
-
 
 	def forward(self):
 		''' Move wheel forward '''
 		self.mdev.writeReg(self.dir_command, 0)
-		self._debug_('Running forward')
+		self.debug('Running forward')
 
 	def backward(self):
 		''' Move wheel backward '''
 		self.mdev.writeReg(self.dir_command, 1)
-		self._debug_('Running backward')
+		self.debug('Running backward')
 
 	def stop(self):
 		''' Stop wheel '''
 		# self.left_wheel.stop()
 		# self.right_wheel.stop()
-		self._debug_('Stop')
+		self.debug('Stop')
 
 	
 	@property
@@ -67,7 +62,7 @@ class Motor(object):
 		self._speed = speed
 		
 		''' Set moving speed '''
-		self._debug_('Set speed to %s' % self._speed)
+		self.debug('Set speed to %s' % self._speed)
 
 		self.mdev.writeReg(self.pwm_command, speed)
 
@@ -87,29 +82,10 @@ class Motor(object):
 
 		# # for value in range(self.current_speed, speed, change):	
 		# for value in range(0, speed, change):	
-		# 	self._debug_('Changing speed to %s' % value)
+		# 	self.debug('Changing speed to %s' % value)
 		# 	# self.mdev.writeReg(self.pwm_command, value)
 		# 	self.mdev.writeReg(mdev.CMD_PWM1, value)
 		# 	self.mdev.writeReg(mdev.CMD_PWM2, value)
 		# 	time.sleep(sleep_time)
 
 		# self.current_speed = speed
-
-
-	@property
-	def debug(self):
-		return self._DEBUG
-
-	@debug.setter
-	def debug(self, debug):
-		''' Set if debug information shows '''
-		if debug in (True, False):
-			self._DEBUG = debug
-		else:
-			raise ValueError('debug must be "True" (Set debug on) or "False" (Set debug off), not "{0}"'.format(debug))
-
-		if self._DEBUG:
-			print(self._DEBUG_INFO, "Set debug on")
-		else:
-			print(self._DEBUG_INFO, "Set debug off")
-

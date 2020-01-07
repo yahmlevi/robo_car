@@ -8,20 +8,16 @@
 '''
 import time
 from freenove.m_dev import mDev, numMap
-# import m_dev
+from base_class import BaseClass
 
-class SteeringServo(object):
+class SteeringServo(BaseClass):
 
 	'''SteeringServo driver class'''
 	_FREQUENCY = 60 
 
-	_DEBUG = False
-	_DEBUG_INFO = 'DEBUG "SteeringServo.py":'
-
-	def __init__(self, debug=_DEBUG):
+	def __init__(self, debug=False):
+		BaseClass.__init__(self, debug)
 		
-		self.debug = debug
-		self._debug_("Debug on")
 		
 		self.lock = True
 
@@ -33,9 +29,6 @@ class SteeringServo(object):
 		self.current_angle = 90
 		self.write(90)
 	
-	def _debug_(self, message):
-		if self._DEBUG:
-			print(self._DEBUG_INFO, message)
 
 	@property
 	def frequency(self):
@@ -61,7 +54,7 @@ class SteeringServo(object):
 		# val = self._angle_to_analog(angle)
 		# val += self.offset
 		# self.pwm.write(self.channel, 0, val)
-		self._debug_('Turn angle = %d' % angle)
+		self.debug('Turn angle = %d' % angle)
 
 		if angle > self.current_angle:
 			direction = 1
@@ -75,22 +68,3 @@ class SteeringServo(object):
 		
 		# save angle in self.current_angle for next call
 		self.current_angle = angle
-
-
-	@property
-	def debug(self):
-		return self._DEBUG
-
-	@debug.setter
-	def debug(self, debug):
-		''' Set if debug information shows '''
-		if debug in (True, False):
-			self._DEBUG = debug
-		else:
-			raise ValueError('debug must be "True" (Set debug on) or "False" (Set debug off), not "{0}"'.format(debug))
-
-		if self._DEBUG:
-			print(self._DEBUG_INFO, "Set debug on")
-		else:
-			print(self._DEBUG_INFO, "Set debug off")
-

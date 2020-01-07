@@ -16,16 +16,20 @@ from file_db import FileDb
 from front_wheel_drive_motor import Motor
 from freenove.m_dev import mDev
 
+from base_class import BaseClass
+
 
 device = mDev()
 
-class FrontWheelDrive (object):
+class FrontWheelDrive (BaseClass):
 
 	''' Back wheels control class '''
-	_DEBUG = False
-	_DEBUG_INFO = 'DEBUG "front_wheel_drive.py":'
+	# _DEBUG = False
+	# _DEBUG_INFO = 'DEBUG "front_wheel_drive.py":'
 
-	def __init__(self, debug=False, db="config"):
+	def __init__(self, debug=False, db="file_db_data"):
+		BaseClass.__init__(self, debug)
+
 		''' Init the direction channel and pwm channel '''
 		
 		self.db = FileDb(db=db)
@@ -40,30 +44,26 @@ class FrontWheelDrive (object):
 		self._speed = 0
 		self.current_speed = 0
 
-		self.debug = debug
-		# self._debug_('Set left wheel to #%d, PWM channel to %d' % (self.Motor_A, self.PWM_A))
-		# self._debug_('Set right wheel to #%d, PWM channel to %d' % (self.Motor_B, self.PWM_B))
+		# self.debug('Set left wheel to #%d, PWM channel to %d' % (self.Motor_A, self.PWM_A))
+		# self.debug('Set right wheel to #%d, PWM channel to %d' % (self.Motor_B, self.PWM_B))
 
-	def _debug_(self,message):
-		if self._DEBUG:
-			print(self._DEBUG_INFO,message)
 
 	def forward(self):
 		''' Move both wheels forward '''
 		self.left_wheel.forward()
 		self.right_wheel.forward()
-		self._debug_('Running forward')
+		self.debug('Running forward')
 
 	def backward(self):
 		''' Move both wheels backward '''
 		self.left_wheel.backward()
 		self.right_wheel.backward()
-		self._debug_('Running backward')
+		self.debug('Running backward')
 
 	def stop(self):
 		''' Stop both wheels '''
 		self.speed(0)
-		self._debug_('Stop')
+		self.debug('Stop')
 
 	@property
 	def speed(self, speed):
@@ -71,7 +71,7 @@ class FrontWheelDrive (object):
 
 	@speed.setter
 	def speed(self, speed):
-		self._debug_('Set speed to %s' % self._speed)
+		self.debug('Set speed to %s' % self._speed)
 		self._speed = speed
 		
 		''' Set moving speeds '''
@@ -88,16 +88,16 @@ class FrontWheelDrive (object):
 		sleep_time = 0.005
 
 		# TODO: accelerate & decelerate
-		self._debug_('Current speed is %s' % self.current_speed)
+		self.debug('Current speed is %s' % self.current_speed)
 		if speed > self.current_speed: 
 			speed_change = 10
 		else:
 			speed_change = -10
 
-		self._debug_('Set speed change to %s' % speed_change)
+		self.debug('Set speed change to %s' % speed_change)
 
 		for value in range(self.current_speed, speed, speed_change):	
-			self._debug_('Changing speed to %s' % value)
+			self.debug('Changing speed to %s' % value)
 
 			self.left_wheel.speed = value
 			self.right_wheel.speed = value
@@ -107,39 +107,41 @@ class FrontWheelDrive (object):
 		self.current_speed = speed
 
 
-	@property
-	def debug(self):
-		return self._DEBUG
+	# TODO: Should we override and set debug to child classes? (see below)
 
-	@debug.setter
-	def debug(self, debug):
-		''' Set if debug information shows '''
-		if debug in (True, False):
-			self._DEBUG = debug
-		else:
-			raise ValueError('debug must be "True" (Set debug on) or "False" (Set debug off), not "{0}"'.format(debug))
+	# @debug.setter
+	# def debug(self, debug):
+	# 	''' Set if debug information shows '''
+	# 	if debug in (True, False):
+	# 		self._DEBUG = debug
+	# 	else:
+	# 		raise ValueError('debug must be "True" (Set debug on) or "False" (Set debug off), not "{0}"'.format(debug))
 
-		if self._DEBUG:
-			print(self._DEBUG_INFO, "Set debug on")
-			self.left_wheel.debug = True
-			self.right_wheel.debug = True
-			# self.pwm.debug = True
-		else:
-			print(self._DEBUG_INFO, "Set debug off")
-			self.left_wheel.debug = False
-			self.right_wheel.debug = False
-			# self.pwm.debug = False
+	# 	if self._DEBUG:
+	# 		print(self._DEBUG_INFO, "Set debug on")
+	# 		self.left_wheel.debug = True
+	# 		self.right_wheel.debug = True
+	# 		# self.pwm.debug = True
+	# 	else:
+	# 		print(self._DEBUG_INFO, "Set debug off")
+	# 		self.left_wheel.debug = False
+	# 		self.right_wheel.debug = False
+	# 		# self.pwm.debug = False
+
+
+
+
 
 	# def ready(self):
 	# 	''' Get the back wheels to the ready position. (stop) '''
-	# 	self._debug_('Turn to "Ready" position')
+	# 	self.debug('Turn to "Ready" position')
 	# 	self.left_wheel.offset = self.forward_A
 	# 	self.right_wheel.offset = self.forward_B
 	# 	self.stop()
 
 	# def calibration(self):
 	# 	''' Get the front wheels to the calibration position. '''
-	# 	self._debug_('Turn to "Calibration" position')
+	# 	self.debug('Turn to "Calibration" position')
 	# 	self.speed = 50
 	# 	self.forward()
 	# 	self.cali_forward_A = self.forward_A

@@ -9,12 +9,14 @@ import yaml
 
 from display_functions import show_image, display_lines
 
-# HandCodedLaneFollower
-class LaneDetector(object):
-    
-    __DEBUG = False
+from base_class import BaseClass
 
-    def __init__(self, config=None):
+# HandCodedLaneFollower
+class LaneDetector(BaseClass):
+
+    def __init__(self, debug=False, config=None):
+        BaseClass.__init__(self, debug)
+
         logging.info('Creating a LaneDetector...')
 
         with open(r'data/config.yaml') as file:
@@ -30,16 +32,12 @@ class LaneDetector(object):
     def detect(self, frame):
         return self.detect_lane(frame)
 
-    ############################
-    # Frame processing steps
-    ############################
-    
-    def debug (self, message):
-        if self.__DEBUG == True:
-            logging.debug(message)
-
     def detect_lane(self, frame):
         self.debug('detecting lane lines...')
+
+        ########################################################
+        # Frame processing steps
+        ########################################################
 
         # 1. Detect edges
         edges = self.detect_edges(frame)
