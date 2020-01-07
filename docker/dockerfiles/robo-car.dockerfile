@@ -2,8 +2,12 @@
 # FROM mohaseeb/raspberrypi3-python-opencv
 FROM yahmlevi/robo-car:base-rpi
 
-RUN apt-get update && apt-get install -y i2c-tools python-smbus 
+RUN apt-get update && apt-get install -y i2c-tools python-smbus python-yaml 
 # python-pip
+
+# RUN pip install --upgrade pip pyyaml
+# RUN python -m pip install --upgrade pip
+# RUN pip install PyYAML
 
 WORKDIR /app
 

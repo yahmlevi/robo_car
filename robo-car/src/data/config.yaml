@@ -1,0 +1,14 @@
+
+debug: true
+
+camera:
+  resolution: 
+    width: 240
+    height: 320
+
+image_processing:
+    lane_detection:
+        hough_transform:
+            rho: 2                # precision in pixel, i.e. 1 pixel
+            min_line_length: 8
+            min_threshold: 10     # minimal of votes
