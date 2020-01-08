@@ -3,17 +3,17 @@ debug: true
 
 device:
   initialize:
-    servo2: 70
+    servo2: 90
     servo3: 20
 
 car_control:
   min_speed: 400
   max_speed: 1000
-  initial_speed: 450
+  initial_speed: 440
   
 camera:
   angles:
-    vertical: 70            # servo2
+    vertical: 84            # servo2
     horizontal: 20          # servo3
   resolution: 
     width: 240

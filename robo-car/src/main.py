@@ -13,11 +13,10 @@ def main():
     logging.info('Starting Car, system info: ' + sys.version)
 
     config = Config()
-
-    # TODO: move this to more appropriate place
-    camera_servos = CameraServos()
     
     with RoboCar() as car:
+        # car.show_webcam(False)
+        car.move_camera()
         car.start()
         car.drive(config.get_dict()['car_control']['initial_speed'])
     

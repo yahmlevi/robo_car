@@ -6,10 +6,12 @@
 * Update      : 
 **********************************************************************
 '''
+import logging
 import time
 from freenove.m_dev import mDev, numMap
 from config import Config
 from base_class import BaseClass
+
 
 class CameraServos(BaseClass):
 	'''CameraServo driver class'''
@@ -19,33 +21,52 @@ class CameraServos(BaseClass):
 		BaseClass.__init__(self, debug=debug )
 		
 		self.mdev = mDev()
+
+		self.vertical = 90
+		self.horizontal = 90
+
 		self.reset()
 
 	def reset(self):
 
 		config = Config()
-
+		
 		# camera:
 		# 	angles:
 		# 		vertical: 70            # servo2
 		# 		horizontal: 20          # servo3
 
+		self.vertical = config.get_dict()['camera']['angles']['vertical']
+		self.horizontal = config.get_dict()['camera']['angles']['horizontal']
+
+		logging.info('Resetting to initial values: vertical %d, horizontal %d', self.vertical, self.horizontal)
+
 		servo = self.mdev.CMD_SERVO2
-		value = config.get_dict()['camera']['angles']['vertical']
-		self.mdev.writeReg(servo, numMap(value, 0, 180, 500, 2500))
+		self.mdev.writeReg(servo, numMap(self.vertical, 0, 180, 500, 2500))
 
 		servo = self.mdev.CMD_SERVO3
-		value = config.get_dict()['camera']['angles']['horizontal']
-		self.mdev.writeReg(servo, numMap(value, 0, 180, 500, 2500))
+		self.mdev.writeReg(servo, numMap(self.horizontal, 0, 180, 500, 2500))
 
-	def up_down(self, angle):
-		servo = mdev.CMD_SERVO2
+	def up(self, change = 1):
+		servo = self.mdev.CMD_SERVO2
+		
+		self.vertical += change
+		self.mdev.writeReg(servo, numMap(self.vertical, 0, 180, 500, 2500))
 
-		# TODO: use offset (from init)
-		mdev.writeReg(servo, numMap(angle, 0, 180, 500, 2500))
+	def down(self, change = 1):
+		servo = self.mdev.CMD_SERVO2
+
+		self.vertical -= change
+		self.mdev.writeReg(servo, numMap(self.vertical, 0, 180, 500, 2500))
 	
-	def left_right(self, angle):
-		servo = mdev.CMD_SERVO3
+	def left(self, change = 1):
+		servo = self.mdev.CMD_SERVO3
+		
+		self.horizontal += change
+		self.mdev.writeReg(servo, numMap(self.horizontal, 0, 180, 500, 2500))
 
-		# TODO: use offset (from init)
-		mdev.writeReg(servo, numMap(angle, 0, 180, 500, 2500))
+	def right(self, change = 1):
+		servo = self.mdev.CMD_SERVO3
+		
+		self.horizontal -= change
+		self.mdev.writeReg(servo, numMap(self.horizontal, 0, 180, 500, 2500))

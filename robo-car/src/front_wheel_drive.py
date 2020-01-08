@@ -73,6 +73,10 @@ class FrontWheelDrive (BaseClass):
 	def speed(self, speed):
 		self.debug('Set speed to %s' % self._speed)
 		self._speed = speed
+
+		if speed == self.current_speed:
+			self.debug('Current speed is equals the requested speed')
+			return
 		
 		''' Set moving speeds '''
 		min_speed = 500

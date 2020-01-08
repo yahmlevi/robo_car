@@ -124,22 +124,24 @@ class RoboCar(object):
     def start(self):
         pass
 
-    def drive(self, speed=__INITIAL_SPEED):
+
+    # Autonomious drive
+    # auto_drive
+    def drive(self, speed=__INITIAL_SPEED, forward=True):
         """ Main entry point of the car, and put it in drive mode
         Keyword arguments:
         speed -- speed of back wheel, range is 0 (stop) - 100 (fastest)
         """
 
         logging.info('Starting to drive at speed %s...' % speed)
-        # self.back_wheels.speed = speed
-        self.front_wheel_drive.forward()
-        self.front_wheel_drive.speed = speed
         
-        i = 0
+        self.front_wheel_drive.forward()
+        # self.front_wheel_drive.speed = speed
 
         show_on_screen = True
         record = False
 
+        i = 0
         while self.camera.isOpened():
             _, image_lane = self.camera.read()
             
@@ -154,6 +156,10 @@ class RoboCar(object):
             # show_image('Detected Objects', image_objs, show=show_on_screen)
 
             image_lane = self.follow_lane(image_lane)
+
+            # wait 200/20 = seconds before driving
+            if image_lane is not None and i >= 200: 
+                self.front_wheel_drive.speed = speed
 
             if record:
                 self.video_lane.write(image_lane)
@@ -172,3 +178,93 @@ class RoboCar(object):
         image = self.lane_follower.follow_lane(image)
         return image
 
+
+
+    def show_webcam(self, mirror=False):
+        scale = 1
+
+        while self.camera.isOpened():
+            logging.info('Camera is opened')
+
+            ret_val, image = self.camera.read()
+
+            if mirror: 
+                image = cv2.flip(image, 1)
+
+            #get the webcam size
+            height, width, channels = image.shape
+
+            #prepare the crop
+            centerX, centerY = int(height / 2), int(width / 2)
+            radiusX, radiusY = int(scale * height / 100), int(scale * width / 100)
+
+            minX, maxX = centerX - radiusX, centerX + radiusX
+            minY, maxY = centerY - radiusY, centerY + radiusY
+
+            logging.info('Cropping image to width %d and height %s', width, height)
+            cropped = image[minX:maxX, minY:maxY]
+            resized_cropped = cv2.resize(cropped, (width, height)) 
+            
+            cv2.imshow('my webcam', resized_cropped)
+
+            key = cv2.waitKey(1)
+            logging.info('Pressed key %s', key)
+
+            if key == 27: 
+                break  # esc to quit
+
+            #add + or - 5 % to zoom
+
+            # right arrow key
+            if key == 83: 
+                scale += 5  # +5
+
+            # left arrow key
+            if key == 81: 
+                scale -= 5  # -5
+
+        cv2.destroyAllWindows()
+
+
+    def move_camera(self):
+        from camera_servos import CameraServos
+
+        # TODO: move this to more appropriate place
+        camera_servos = CameraServos()
+
+        while self.camera.isOpened():
+            ret_val, image = self.camera.read()
+            
+            # logging.info('Move camera %d and height %s', width, height)
+            cv2.imshow('Car Cam', image)
+
+            key = cv2.waitKey(1)
+
+            if key == 27: 
+                break  # esc to quit
+
+            if cv2.waitKey(1) & 0xFF == ord('r'):
+                logging.info('Resetting to initial values')
+                camera_servos.reset()
+            
+            # right arrow key
+            if key == 83: 
+                logging.info('Pressed key %s', key)
+                camera_servos.right()
+
+            # left arrow key
+            if key == 81: 
+                logging.info('Pressed key %s', key)
+                camera_servos.left()
+
+            # up arrow key
+            if key == 82: 
+                logging.info('Pressed key %s', key)
+                camera_servos.up()
+
+            # down arrow key
+            if key == 84: 
+                logging.info('Pressed key %s', key)
+                camera_servos.down()
+            
+        cv2.destroyAllWindows()
