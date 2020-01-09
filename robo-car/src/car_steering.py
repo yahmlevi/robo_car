@@ -62,7 +62,8 @@ class CarSteering(object):
             #  0.00: car is pointing to center, 
             # -0.03: car is centered to left, 
             # +0.03: car is pointing to right
-            camera_mid_offset_percent = 0.02 
+            # camera_mid_offset_percent = 0.02 
+            camera_mid_offset_percent = 0 
 
             mid = int(width / 2 * (1 + camera_mid_offset_percent))
             x_offset = (left_x2 + right_x2) / 2 - mid
