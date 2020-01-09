@@ -18,6 +18,9 @@ camera:
   resolution: 
     width: 240
     height: 320
+  
+front_wheel_steering:
+  turning_offset: 0
 
 image_processing:
     lane_detection:

@@ -18,7 +18,6 @@ class SteeringServo(BaseClass):
 	def __init__(self, debug=False):
 		BaseClass.__init__(self, debug)
 		
-		
 		self.lock = True
 
 		# TODO: How do we use it (in write())?
@@ -27,6 +26,7 @@ class SteeringServo(BaseClass):
 		self.mdev = mDev()
 
 		self.current_angle = 90
+		self.offset = 0
 		self.write(90)
 	
 
@@ -63,6 +63,12 @@ class SteeringServo(BaseClass):
 
 		# turn from 50 to 140 by 1 every 0.005
 		for value in range(self.current_angle, angle, direction):	
+
+			# Add the the offset value to value
+			value = value + self.offset
+			self.debug('Turn angle (with offset) = %d' % value)
+
+
 			self.mdev.writeReg(self.mdev.CMD_SERVO1, numMap(value, 0, 180, 500, 2500))
 			time.sleep(0.005)
 		

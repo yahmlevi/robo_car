@@ -8,13 +8,7 @@ from base_class import BaseClass
 
 class FrontWheelSteering(BaseClass):
 
-	''' Front wheels control class '''
-	FRONT_WHEEL_CHANNEL = 0
-
-	_DEBUG = False
-	_DEBUG_INFO = 'DEBUG "FrontWheelSteering.py":'
-
-	def __init__(self, debug=False, db="file_db_data", bus_number=1, channel=FRONT_WHEEL_CHANNEL):
+	def __init__(self, debug=False, db="file_db_data"):
 
 		BaseClass.__init__(self, debug)
 
@@ -26,7 +20,7 @@ class FrontWheelSteering(BaseClass):
 		self.turning_max = 45
 		self._turning_offset = int(self.db.get('turning_offset', default_value=0))
 
-		self.servo = SteeringServo(debug=debug)
+		self.servo = SteeringServo(debug=True)
 		
 		#  self.debug('Front wheel PWM channel: %s' % self._channel)
 		self.debug('Front wheel offset value: %s ' % self.turning_offset)
@@ -34,7 +28,8 @@ class FrontWheelSteering(BaseClass):
 		self._angle = {"left":self._min_angle, "straight":self._straight_angle, "right":self._max_angle}
 		self.debug('left angle: %s, straight angle: %s, right angle: %s' % (self._angle["left"], self._angle["straight"], self._angle["right"]))
 
-	
+	def listen(self):
+		pass
 
 	def turn_left(self):
 		''' Turn the front wheels left '''
@@ -89,9 +84,10 @@ class FrontWheelSteering(BaseClass):
 	def turning_offset(self, value):
 		if not isinstance(value, int):
 			raise TypeError('"turning_offset" must be "int"')
+
 		self._turning_offset = value
 		self.db.set('turning_offset', value)
-		# self.servo.offset = value
+		self.servo.offset = value
 		self.turn_straight()
 
 	# @property

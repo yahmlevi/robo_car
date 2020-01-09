@@ -40,3 +40,8 @@ https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_imgproc/py_houghlines/py_ho
 [Meet the 26-Year-Old Hacker Who Built a Self-Driving Car... in His Garage](https://www.youtube.com/watch?v=KTrgRYa2wbI)
 
 [How to Simulate a Self-Driving Car](https://www.youtube.com/watch?v=EaY5QiZwSP4)
+
+
+##### ZMQ
+[Publish/Subscribe](https://learning-0mq-with-pyzmq.readthedocs.io/en/latest/pyzmq/patterns/pubsub.html)
+

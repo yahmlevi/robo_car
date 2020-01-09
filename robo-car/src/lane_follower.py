@@ -18,9 +18,8 @@ class LaneFollower(object):
 
         self.lane_detector = LaneDetector()
         self.steering = CarSteering(car)
-        
 
-    def follow_lane(self, frame):
+    def follow_lane(self, frame, self_drive):
         # Main entry point of the lane follower
         show_image("orig", frame)
 

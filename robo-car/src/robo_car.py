@@ -124,11 +124,9 @@ class RoboCar(object):
     def start(self):
         pass
 
-
-    # Autonomious drive
-    # auto_drive
-    def drive(self, speed=__INITIAL_SPEED, forward=True):
-        """ Main entry point of the car, and put it in drive mode
+    
+    def drive(self, self_drive=False, speed=__INITIAL_SPEED, forward=True):
+        """ Main entrypoint of the car, and put it in drive mode
         Keyword arguments:
         speed -- speed of back wheel, range is 0 (stop) - 100 (fastest)
         """
@@ -155,10 +153,13 @@ class RoboCar(object):
             # self.video_objs.write(image_objs)
             # show_image('Detected Objects', image_objs, show=show_on_screen)
 
-            image_lane = self.follow_lane(image_lane)
+            # image_lane = self.lane_follower.follow_lane(image, self_drive)
 
             # wait 200/20 = seconds before driving
-            if image_lane is not None and i >= 200: 
+            # if image_lane is not None and i >= 200: 
+            #     self.front_wheel_drive.speed = speed
+
+            if i >= 200: 
                 self.front_wheel_drive.speed = speed
 
             if record:
@@ -173,11 +174,6 @@ class RoboCar(object):
     # def process_objects_on_road(self, image):
     #     image = self.traffic_sign_processor.process_objects_on_road(image)
     #     return image
-
-    def follow_lane(self, image):
-        image = self.lane_follower.follow_lane(image)
-        return image
-
 
 
     def show_webcam(self, mirror=False):
@@ -268,3 +264,59 @@ class RoboCar(object):
                 camera_servos.down()
             
         cv2.destroyAllWindows()
+
+
+    def calibrate_steering(self):
+        from front_wheel_steering import FrontWheelSteering
+        
+        steering = FrontWheelSteering()
+
+        # 1st - turn to 90
+        steering.turn_straight()
+        current_angle = 90
+
+        logging.info('Front wheel current steering angle: %s' % current_angle)
+        
+        while self.camera.isOpened():
+            ret_val, image = self.camera.read()
+            cv2.imshow('Car Cam', image)
+            
+            key = cv2.waitKey(1)
+            if key == 27: 
+                break  # esc to quit
+
+            if cv2.waitKey(1) & 0xFF == ord('r'):
+                logging.info('Resetting to initial values')
+                # steering.reset()
+
+            # right arrow key
+            if key == 83: 
+                logging.info('Pressed key %s', key)
+                current_angle += 1
+                steering.turn(current_angle)
+
+                logging.info('Front wheel current steering angle: %s' % current_angle)
+                logging.info('Front wheel current turning offset: %s' % steering.turning_offset)
+
+            # left arrow key
+            if key == 81: 
+                logging.info('Pressed key %s', key)
+                current_angle -= 1
+                steering.turn(current_angle)
+
+                logging.info('Front wheel current steering angle: %s' % current_angle)
+                logging.info('Front wheel current turning offset: %s' % steering.turning_offset)
+
+            # up arrow key 
+            if key == 82: 
+                logging.info('Pressed key %s', key)
+                steering.turn_straight()
+                current_angle = 90
+
+                logging.info('Front wheel current steering angle: %s' % current_angle)
+                logging.info('Front wheel current turning offset: %s' % steering.turning_offset)
+
+            
+
+        cv2.destroyAllWindows()
+            

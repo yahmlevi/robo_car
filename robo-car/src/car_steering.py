@@ -32,6 +32,7 @@ class CarSteering(object):
 
         # TODO: use publisher instead of calling car.front_wheels dierctly
         # publish self.curr_steering_angle to `steering` queue
+        # self.publisher.publish(self.curr_steering_angle)
         # -------------------------------------------------------
 
         curr_heading_image = display_heading_line(frame, self.curr_steering_angle)
