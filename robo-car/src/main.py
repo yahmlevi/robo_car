@@ -15,11 +15,13 @@ def main():
     config = Config()
     
     with RoboCar() as car:
+        car.start()
+        
         # car.show_webcam(False)
         car.move_camera()
-        car.calibrate_steering()
-        car.start()
-        car.drive(config.get_dict()['car_control']['initial_speed'])
+        # car.calibrate_steering()
+        
+        car.drive(config.get('car_control.initial_speed'))
     
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)

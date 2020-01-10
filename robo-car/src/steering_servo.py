@@ -12,37 +12,25 @@ from base_class import BaseClass
 
 class SteeringServo(BaseClass):
 
-	'''SteeringServo driver class'''
-	_FREQUENCY = 60 
-
 	def __init__(self, debug=False):
 		BaseClass.__init__(self, debug)
 		
-		self.lock = True
+		# TODO: do we neeed lock?
+		# self.lock = True
 
-		# TODO: How do we use it (in write())?
-		self.frequency = self._FREQUENCY
-
+	
 		self.mdev = mDev()
 
 		self.current_angle = 90
 		self.offset = 0
 		self.write(90)
 	
-
-	@property
-	def frequency(self):
-		return self._frequency
-
-	@frequency.setter
-	def frequency(self, value):
-		self._frequency = value
-		# self.pwm.frequency = value
-
+	
 	def write(self, angle):
 		''' Turn the servo with giving angle. '''
 
-		if self.lock:
+		# if self.lock:
+		if True:
 			if angle > 180:
 				angle = 180
 			if angle < 0:
@@ -56,21 +44,29 @@ class SteeringServo(BaseClass):
 		# self.pwm.write(self.channel, 0, val)
 		self.debug('Turn angle = %d' % angle)
 
-		if angle > self.current_angle:
-			direction = 1
-		else: 
-			direction = -1
+		adjust = False
+		if adjust:
+			if angle > self.current_angle:
+				direction = 1
+			else: 
+				direction = -1
 
-		# turn from 50 to 140 by 1 every 0.005
-		for value in range(self.current_angle, angle, direction):	
+			# turn from 50 to 140 by 1 every 0.005
+			for value in range(self.current_angle, angle, direction):	
 
-			# Add the the offset value to value
-			value = value + self.offset
+				# Add the the offset value to value
+				value = value + self.offset
+				self.debug('Turn angle (with offset) = %d' % value)
+
+				self.mdev.writeReg(self.mdev.CMD_SERVO1, numMap(value, 0, 180, 500, 2500))
+				time.sleep(0.005)
+			
+			# save angle in self.current_angle for next call
+			self.current_angle = angle
+
+		else:
+			value = angle + self.offset
+
 			self.debug('Turn angle (with offset) = %d' % value)
-
-
 			self.mdev.writeReg(self.mdev.CMD_SERVO1, numMap(value, 0, 180, 500, 2500))
-			time.sleep(0.005)
-		
-		# save angle in self.current_angle for next call
-		self.current_angle = angle
+

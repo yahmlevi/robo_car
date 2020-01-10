@@ -36,8 +36,8 @@ class CameraServos(BaseClass):
 		# 		vertical: 70            # servo2
 		# 		horizontal: 20          # servo3
 
-		self.vertical = config.get_dict()['camera']['angles']['vertical']
-		self.horizontal = config.get_dict()['camera']['angles']['horizontal']
+		self.vertical = config.get('camera.angles.vertical')
+		self.horizontal = config.get('camera.angles.horizontal')
 
 		logging.info('Resetting to initial values: vertical %d, horizontal %d', self.vertical, self.horizontal)
 

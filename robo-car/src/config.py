@@ -15,8 +15,18 @@ class Config(object):
 
             self.config_dict = yaml.load(file)
 
-    def get_dict(self):
-        return self.config_dict
+    # def get_dict(self):
+    #     return self.config_dict
+
+    def get(self, key):
+        result = self.config_dict
+        
+        arr = key.split(".")
+        for k in arr:
+            result = result[k]
+
+        return result
+            
 
     def save(self):
         with open(r'data/config.yaml', 'w') as file:

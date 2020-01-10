@@ -15,9 +15,10 @@ class FrontWheelSteering(BaseClass):
 		''' setup channels and basic stuff '''
 
 		self.db = FileDb(db=db)
-		# self._channel = channel
+
 		self._straight_angle = 90
 		self.turning_max = 45
+
 		self._turning_offset = int(self.db.get('turning_offset', default_value=0))
 
 		self.servo = SteeringServo(debug=True)
@@ -74,7 +75,12 @@ class FrontWheelSteering(BaseClass):
 		self._turning_max = angle
 		self._min_angle = self._straight_angle - angle
 		self._max_angle = self._straight_angle + angle
-		self._angle = {"left":self._min_angle, "straight":self._straight_angle, "right":self._max_angle}
+
+		self._angle = {
+			"left":self._min_angle, 
+			"straight":self._straight_angle, 
+			"right":self._max_angle
+			}
 
 	@property
 	def turning_offset(self):
@@ -86,31 +92,10 @@ class FrontWheelSteering(BaseClass):
 			raise TypeError('"turning_offset" must be "int"')
 
 		self._turning_offset = value
-		self.db.set('turning_offset', value)
+		# self.db.set('turning_offset', value)
 		self.servo.offset = value
 		self.turn_straight()
 
-	# @property
-	# def debug(self):
-	# 	return self._DEBUG
-	
-	# @debug.setter
-	# def debug(self, debug):
-	# 	''' Set if debug information shows '''
-	# 	if debug in (True, False):
-	# 		self._DEBUG = debug
-	# 	else:
-	# 		raise ValueError('debug must be "True" (Set debug on) or "False" (Set debug off), not "{0}"'.format(debug))
-
-	# 	if self._DEBUG:
-	# 		print(self._DEBUG_INFO, "Set debug on")
-	# 		print(self._DEBUG_INFO, "Set wheel debug on")
-			
-	# 	else:
-	# 		print(self._DEBUG_INFO, "Set debug off")
-	# 		print(self._DEBUG_INFO, "Set wheel debug off")
-
-	# 	# self.servo.debug = debug
 
 	def ready(self):
 		''' Get the front wheels to the ready position. '''

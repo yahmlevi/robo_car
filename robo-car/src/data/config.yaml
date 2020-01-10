@@ -1,5 +1,5 @@
 
-debug: true
+debug: ["RoboCar", "LaneDetector", "FrontWheelDrive"]
 
 device:
   initialize:
@@ -20,7 +20,7 @@ camera:
     height: 320
   
 front_wheel_steering:
-  turning_offset: 0
+  turning_offset: -13
 
 image_processing:
     lane_detection:

@@ -17,15 +17,25 @@ from front_wheel_steering import FrontWheelSteering
 from front_wheel_drive import FrontWheelDrive
 from video_recorder import VideoRecorder
 
+from camera import Camera
+from visualizer import Visualizer
+from config import Config
+
+from base_class import BaseClass
+
 _SHOW_IMAGE = True
 
-class RoboCar(object):
+class RoboCar(BaseClass):
 
     __INITIAL_SPEED = 0
     __SCREEN_WIDTH = 320
     __SCREEN_HEIGHT = 240
 
     def __init__(self):
+        BaseClass.__init__(self, debug=False)
+
+        self.config = Config()
+        
         """ Init camera and wheels"""
         logging.info('Creating a DeepPiCar...')
 
@@ -36,13 +46,14 @@ class RoboCar(object):
         # TODO: why use -1
         # self.camera = cv2.VideoCapture(-1)
         # self.camera = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-        self.camera = self.get_camera()
-        self.camera.set(3, self.__SCREEN_WIDTH)
-        self.camera.set(4, self.__SCREEN_HEIGHT)
+
+        # self.camera = self.get_camera()
+        # self.camera.set(3, self.__SCREEN_WIDTH)
+        # self.camera.set(4, self.__SCREEN_HEIGHT)
 
         # TODO: implement Camera class in camera.py
-        # self.camera = Camera(self.__SCREEN_WIDTH, self.__SCREEN_HEIGHT)
-
+        self.camera = Camera(self.__SCREEN_WIDTH, self.__SCREEN_HEIGHT)
+        self.visualizer = Visualizer()
 
         # self.pan_servo = picar.Servo.Servo(1)
         # self.pan_servo.offset = -30  # calibrate servo to center
@@ -57,12 +68,17 @@ class RoboCar(object):
         # self.back_wheels.speed = 0  # Speed Range is 0 (stop) - 100 (fastest)
 
         logging.debug('Set up fron wheel drive')
-        self.front_wheel_drive = FrontWheelDrive(debug=True)
+        self.front_wheel_drive = FrontWheelDrive()
         self.front_wheel_drive.speed = 0  # Speed Range is 0 (stop) - 100 (fastest)
 
         logging.debug('Set up front wheel steering')
-        self.front_wheel_steering = FrontWheelSteering(debug=True)
-        self.front_wheel_steering.turning_offset = -25  # calibrate servo to center
+        self.front_wheel_steering = FrontWheelSteering()
+        
+        # self.front_wheel_steering.turning_offset = -25  # calibrate servo to center
+
+        temp = self.config.get("front_wheel_steering.turning_offset")
+        logging.debug('Turning offset %d' % temp)
+        self.front_wheel_steering.turning_offset = temp
         self.front_wheel_steering.turn(90)              # Steering Range is 45 (left), 90 (center), 135 (right)
 
         # HandCodedLaneFollower(self)
@@ -122,10 +138,12 @@ class RoboCar(object):
             return cv2.VideoCapture(0)
 
     def start(self):
-        pass
-
+        # start the camera thread
+        self.camera.start()
+        self.visualizer.start()
     
-    def drive(self, self_drive=False, speed=__INITIAL_SPEED, forward=True):
+    # def drive(self, self_drive=False, speed=__INITIAL_SPEED, forward=True):
+    def drive(self, speed=__INITIAL_SPEED, forward=True):
         """ Main entrypoint of the car, and put it in drive mode
         Keyword arguments:
         speed -- speed of back wheel, range is 0 (stop) - 100 (fastest)
@@ -136,12 +154,13 @@ class RoboCar(object):
         self.front_wheel_drive.forward()
         # self.front_wheel_drive.speed = speed
 
-        show_on_screen = True
+        show_on_screen = False
         record = False
 
         i = 0
         while self.camera.isOpened():
-            _, image_lane = self.camera.read()
+            # _, image_lane = self.camera.read()
+            image_lane = self.camera.read()
             
             image_objs = image_lane.copy()
             i += 1
@@ -153,19 +172,20 @@ class RoboCar(object):
             # self.video_objs.write(image_objs)
             # show_image('Detected Objects', image_objs, show=show_on_screen)
 
-            # image_lane = self.lane_follower.follow_lane(image, self_drive)
+            image_lane = self.lane_follower.follow_lane(image_lane)
 
-            # wait 200/20 = seconds before driving
-            # if image_lane is not None and i >= 200: 
-            #     self.front_wheel_drive.speed = speed
-
-            if i >= 200: 
+            # wait 100/20 = seconds before driving
+            if image_lane is not None and i >= 100: 
                 self.front_wheel_drive.speed = speed
+
+            # if i >= 200: 
+            #     self.front_wheel_drive.speed = speed
 
             if record:
                 self.video_lane.write(image_lane)
 
             show_image('Lane Lines', image_lane, show=show_on_screen)
+            # self.visualizer.show(title = "Lane Lines", frame = image_lane)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 self.cleanup()
@@ -182,7 +202,8 @@ class RoboCar(object):
         while self.camera.isOpened():
             logging.info('Camera is opened')
 
-            ret_val, image = self.camera.read()
+            # ret_val, image = self.camera.read()
+            image = self.camera.read()
 
             if mirror: 
                 image = cv2.flip(image, 1)
@@ -229,7 +250,8 @@ class RoboCar(object):
         camera_servos = CameraServos()
 
         while self.camera.isOpened():
-            ret_val, image = self.camera.read()
+            # ret_val, image = self.camera.read()
+            image = self.camera.read()
             
             # logging.info('Move camera %d and height %s', width, height)
             cv2.imshow('Car Cam', image)
@@ -278,7 +300,8 @@ class RoboCar(object):
         logging.info('Front wheel current steering angle: %s' % current_angle)
         
         while self.camera.isOpened():
-            ret_val, image = self.camera.read()
+            # ret_val, image = self.camera.read()
+            image = self.camera.read()
             cv2.imshow('Car Cam', image)
             
             key = cv2.waitKey(1)

@@ -7,6 +7,8 @@
 **********************************************************************
 '''
 
+from config import Config
+
 class BaseClass(object):
 
 	_DEBUG = False
@@ -15,8 +17,13 @@ class BaseClass(object):
 		
 		class_name = type(self).__name__ 
 
+
 		self._DEBUG_INFO = 'DEBUG "{}":'.format(class_name)
-		self.is_debuggable = debug
+
+		self.config = Config()
+		
+		self.is_debuggable = debug or class_name in self.config.get("debug")
+		
 
 	def debug(self, message):
 		if self._DEBUG:

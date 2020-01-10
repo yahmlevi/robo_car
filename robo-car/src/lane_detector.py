@@ -17,7 +17,8 @@ class LaneDetector(BaseClass):
     def __init__(self, debug=False, config=None):
         BaseClass.__init__(self, debug)
 
-        logging.info('Creating a LaneDetector...')
+        # logging.info('Creating a LaneDetector...')
+        self.debug('Creating a LaneDetector...')
 
         with open(r'data/config.yaml') as file:
             # The FullLoader parameter handles the conversion from YAML
@@ -161,7 +162,8 @@ class LaneDetector(BaseClass):
         """
         lane_lines = []
         if line_segments is None:
-            logging.info('No line_segment segments detected')
+            # logging.info('No line_segment segments detected')
+            self.debug('No line_segment segments detected')
             return lane_lines
 
         height, width, _ = frame.shape
@@ -175,7 +177,8 @@ class LaneDetector(BaseClass):
         for line_segment in line_segments:
             for x1, y1, x2, y2 in line_segment:
                 if x1 == x2:
-                    logging.info('skipping vertical line segment (slope=inf): %s' % line_segment)
+                    # logging.info('skipping vertical line segment (slope=inf): %s' % line_segment)
+                    self.debug('skipping vertical line segment (slope=inf): %s' % line_segment)
                     continue
                 fit = np.polyfit((x1, x2), (y1, y2), 1)
                 slope = fit[0]

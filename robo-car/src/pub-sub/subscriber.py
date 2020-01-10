@@ -21,7 +21,6 @@ class Subscriber(object):
         if topic is not None:
             # self.socket.setsockopt(zmq.SUBSCRIBE, self.topic)
             self.socket.setsockopt_string(zmq.SUBSCRIBE, self.topic)
-            
 
         # self.socket.bind("tcp://*:%s" % self.port)
         self.socket.connect ("tcp://localhost:%s" % self.port)
@@ -34,12 +33,24 @@ class Subscriber(object):
             # self.socket.setsockopt(zmq.SUBSCRIBE, self.topic)
             self.socket.setsockopt_string(zmq.SUBSCRIBE, self.topic)
 
-        print ("Trying to receive")
-        data = self.socket.recv()
+        # https://stackoverflow.com/questions/7538988/zeromq-how-to-prevent-infinite-wait
+        receive_timeout_ms = 50
+        self.socket.setsockopt(zmq.RCVTIMEO, receive_timeout_ms)
+        self.socket.setsockopt(zmq.LINGER, 0) 
 
-        # setting the maxsplit parameter to 1, will return a list with 2 elements
-        # topic, message = data.split(":", 1)
-        topic, message = data.split()
+        data = None
+        try: 
+            data = self.socket.recv()
+        except  zmq.ZMQError as e:
+            if e.errno == zmq.ETERM:
+                print (e.errno)
+                # break  # Interrupted
+
+        message = None
+        if data is not None:
+            # setting the maxsplit parameter to 1, will return a list with 2 elements
+            # topic, message = data.split(":", 1)
+            topic, message = data.split()
 
         return message
 
