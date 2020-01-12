@@ -1,6 +1,12 @@
 
 debug: ["RoboCar", "LaneDetector", "FrontWheelDrive"]
 
+logging:
+  - class: "RoboCar"
+    level: info
+  - class: "LaneDetector"
+    level: info
+  
 device:
   initialize:
     servo2: 90
@@ -28,3 +34,8 @@ image_processing:
             rho: 2                # precision in pixel, i.e. 1 pixel
             min_line_length: 8
             min_threshold: 10     # minimal of votes
+        canny:
+          min_val: 200             # 2nd argument in cv2.Canny function
+          max_val: 400            # 3rd argument in cv2.Canny function
+        lower_color: [30, 40, 0]
+        upper_color: [150, 255, 255]

@@ -9,7 +9,6 @@
 import logging
 import time
 from freenove.m_dev import mDev, numMap
-from config import Config
 from base_class import BaseClass
 
 
@@ -28,16 +27,14 @@ class CameraServos(BaseClass):
 		self.reset()
 
 	def reset(self):
-
-		config = Config()
 		
 		# camera:
 		# 	angles:
 		# 		vertical: 70            # servo2
 		# 		horizontal: 20          # servo3
 
-		self.vertical = config.get('camera.angles.vertical')
-		self.horizontal = config.get('camera.angles.horizontal')
+		self.vertical = self.config.get('camera.angles.vertical')
+		self.horizontal = self.config.get('camera.angles.horizontal')
 
 		logging.info('Resetting to initial values: vertical %d, horizontal %d', self.vertical, self.horizontal)
 

@@ -20,16 +20,6 @@ class LaneDetector(BaseClass):
         # logging.info('Creating a LaneDetector...')
         self.debug('Creating a LaneDetector...')
 
-        with open(r'data/config.yaml') as file:
-            # The FullLoader parameter handles the conversion from YAML
-            # scalar values to Python the dictionary format
-            # config = yaml.load(file, Loader=yaml.FullLoader)
-
-            all_config = yaml.load(file)
-
-            self.config = all_config['image_processing']['lane_detection']
-
-
     def detect(self, frame):
         return self.detect_lane(frame)
 
@@ -67,13 +57,28 @@ class LaneDetector(BaseClass):
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         show_image("hsv", hsv)
 
-        lower_blue = np.array([30, 40, 0])
-        upper_blue = np.array([150, 255, 255])
+        # lower_blue = np.array([30, 40, 0])
+        # upper_blue = np.array([150, 255, 255])
+
+        base_key = "image_processing.lane_detection"
+
+        print("--------------------------------------------------")
+        print(self.config.get("lower_color", base_key))
+        print(self.config.get("upper_color", base_key))
+        print("--------------------------------------------------")
+
+        lower_blue = self.config.get("lower_color", base_key)
+        upper_blue = self.config.get("upper_color", base_key)
+
         mask = cv2.inRange(hsv, lower_blue, upper_blue)
         show_image("blue mask", mask)
 
         # detect edges
-        edges = cv2.Canny(mask, 200, 400)
+        # edges = cv2.Canny(mask, 200, 400)
+        min_val = self.config.get("canny.min_val", base_key)
+        max_val = self.config.get("canny.max_val", base_key)
+
+        edges = cv2.Canny(mask, min_val, max)
 
         return edges
 
@@ -129,16 +134,18 @@ class LaneDetector(BaseClass):
         # os.getenv is equivalent, and can also give a default value instead of `None`
         
         # rho = 1  # precision in pixel, i.e. 1 pixel
-        rho = self.config["hough_transform"]['rho']
+
+        base_key = "image_processing.lane_detection.hough_transform"
+        rho = self.config.get("rho", base_key)
 
         # degree in radian, i.e. 1 degree
         angle = np.pi / 180             
 
         # minimal of votes
-        min_threshold = self.config["hough_transform"]['min_threshold']    
+        min_threshold = self.config.get('min_threshold', base_key)    
         
         # 8
-        min_line_length = self.config["hough_transform"]['min_line_length']     
+        min_line_length = self.config.get("min_line_length", base_key)     
         min_line_gap = 4
 
         # Use "Hough Line Transform" to detect lines in 'cropped_edges' image

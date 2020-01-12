@@ -18,8 +18,11 @@ class Config(object):
     # def get_dict(self):
     #     return self.config_dict
 
-    def get(self, key):
+    def get(self, key, base_key = None):
         result = self.config_dict
+
+        if base_key is not None:
+            key = base_key + "." + key
         
         arr = key.split(".")
         for k in arr:

@@ -33,8 +33,6 @@ class RoboCar(BaseClass):
 
     def __init__(self):
         BaseClass.__init__(self, debug=False)
-
-        self.config = Config()
         
         """ Init camera and wheels"""
         logging.info('Creating a DeepPiCar...')
