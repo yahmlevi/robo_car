@@ -36,51 +36,57 @@ class LaneDetector(BaseClass):
 
         # 2. Leave only the region of interest (crop the upper part of the image)
         cropped_edges = self.region_of_interest(edges)
-        show_image('edges cropped', cropped_edges)
+        show_image('edges_cropped', cropped_edges)
 
         # 3. Detect line segments
         line_segments = self.detect_line_segments(cropped_edges)
         line_segment_image = display_lines(frame, line_segments)
-        show_image("line segments", line_segment_image)
+        show_image("line_segments", line_segment_image)
 
         # 4. Average the 'slope' (=a) and 'intercept' (=b) of the linear equation (y=a*x+b)
         #    that describe the lane line(s)
         lane_lines = self.average_slope_intercept(frame, line_segments)
         lane_lines_image = display_lines(frame, lane_lines)
-        show_image("lane lines", lane_lines_image)
+        show_image("lane_lines", lane_lines_image)
 
         return lane_lines, lane_lines_image
 
 
     def detect_edges(self, frame):
-        # filter for blue lane lines
-        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-        show_image("hsv", hsv)
-
-        # lower_blue = np.array([30, 40, 0])
-        # upper_blue = np.array([150, 255, 255])
 
         base_key = "image_processing.lane_detection"
 
-        print("--------------------------------------------------")
-        print(self.config.get("lower_color", base_key))
-        print(self.config.get("upper_color", base_key))
-        print("--------------------------------------------------")
+        filter_type = self.config.get("filter_type", base_key)
+        
+        # filter
+        if filter_type == "HSV":
 
-        lower_blue = self.config.get("lower_color", base_key)
-        upper_blue = self.config.get("upper_color", base_key)
+            # filter for blue lane lines
+            hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+            show_image("hsv", hsv)
 
-        mask = cv2.inRange(hsv, lower_blue, upper_blue)
-        show_image("blue mask", mask)
+            # lower_blue = np.array([30, 40, 0])
+            # upper_blue = np.array([150, 255, 255])
 
-        # detect edges
-        # edges = cv2.Canny(mask, 200, 400)
-        min_val = self.config.get("canny.min_val", base_key)
-        max_val = self.config.get("canny.max_val", base_key)
+            lower_blue = self.config.get("lower_color", base_key)
+            upper_blue = self.config.get("upper_color", base_key)
 
-        edges = cv2.Canny(mask, min_val, max)
+            mask = cv2.inRange(hsv, np.array(lower_blue), np.array(upper_blue))
+            show_image("blue_mask", mask)
 
-        return edges
+            # detect edges
+            # edges = cv2.Canny(mask, 200, 400)
+            min_val = self.config.get("canny.min_val", base_key)
+            max_val = self.config.get("canny.max_val", base_key)
+
+            edges_image = cv2.Canny(mask, min_val, max_val)
+        
+        else:
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            blur = cv2.GaussianBlur(gray, (5, 5), 0)
+            edges_image = cv2.Canny(blur, 50, 150)
+
+        return edges_image
 
     def detect_edges_old(self, frame):
         # filter for blue lane lines

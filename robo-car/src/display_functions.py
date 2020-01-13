@@ -7,9 +7,13 @@ import sys
 
 _SHOW_IMAGE = False
 
-def show_image(title, frame, show=_SHOW_IMAGE):
-    if show:
-        cv2.imshow(title, frame)
+def show_image(title, frame):
+    if title in self.config.get("display"):
+        cv2.imshow(self.title, self.frame)
+
+# def show_image(frame, title, key, show=_SHOW_IMAGE):
+#     if show:
+#         cv2.imshow(title, frame)
 
 def display_lines(frame, lines, line_color=(0, 255, 0), line_width=10):
     line_image = np.zeros_like(frame)

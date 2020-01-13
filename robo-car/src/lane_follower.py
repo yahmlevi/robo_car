@@ -21,7 +21,7 @@ class LaneFollower(object):
 
     def follow_lane(self, frame):
         # Main entry point of the lane follower
-        show_image("orig", frame)
+        show_image("original", frame)
 
         #lane_lines, frame = detect_lane(frame)
         lane_lines, frame = self.lane_detector.detect(frame)

@@ -1,11 +1,13 @@
 import cv2
 import platform
 from threading import Thread
+from base_class import BaseClass
 
-class Visualizer(object):
+class Visualizer(BaseClass):
 		
 
     def __init__(self, name="WebcamVideoVisualizer"):
+        BaseClass.__init__(self)
         
         # initialize the thread name
         self.name = name
@@ -33,7 +35,7 @@ class Visualizer(object):
 
     # don't call this method - it's being called from start()
     def show_worker(self):
-        
+
         # keep looping infinitely until the thread is stopped
         while True:
 		    # if the thread indicator variable is set, stop the thread
@@ -54,3 +56,5 @@ class Visualizer(object):
         # indicate that the thread should be stopped
         self.stopped = True        
         
+
+    

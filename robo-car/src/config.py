@@ -30,6 +30,8 @@ class Config(object):
 
         return result
             
+    def get_bool(self, key, base_key = None):
+        return self.get(key, base_key).upper() == "TRUE"
 
     def save(self):
         with open(r'data/config.yaml', 'w') as file:

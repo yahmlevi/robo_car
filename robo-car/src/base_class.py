@@ -13,10 +13,9 @@ class BaseClass(object):
 
 	_DEBUG = False
 
-	def __init__(self, debug):
+	def __init__(self, debug=False):
 		
 		class_name = type(self).__name__ 
-
 
 		self._DEBUG_INFO = 'DEBUG "{}":'.format(class_name)
 

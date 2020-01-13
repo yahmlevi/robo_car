@@ -6,6 +6,10 @@ logging:
     level: info
   - class: "LaneDetector"
     level: info
+
+display: 
+  - lane_lines
+  - blue_mask
   
 device:
   initialize:
@@ -34,6 +38,7 @@ image_processing:
             rho: 2                # precision in pixel, i.e. 1 pixel
             min_line_length: 8
             min_threshold: 10     # minimal of votes
+        filter_type: "GRAY"
         canny:
           min_val: 200             # 2nd argument in cv2.Canny function
           max_val: 400            # 3rd argument in cv2.Canny function
