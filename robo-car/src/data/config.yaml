@@ -18,7 +18,7 @@ device:
 
 car_control:
   min_speed: 400
-  max_speed: 1000
+  max_speed: 1000`
   initial_speed: 440
   
 camera:
@@ -33,14 +33,15 @@ front_wheel_steering:
   turning_offset: -13
 
 image_processing:
-    lane_detection:
-        hough_transform:
-            rho: 2                # precision in pixel, i.e. 1 pixel
-            min_line_length: 8
-            min_threshold: 10     # minimal of votes
-        filter_type: "GRAY"
-        canny:
-          min_val: 200             # 2nd argument in cv2.Canny function
-          max_val: 400            # 3rd argument in cv2.Canny function
-        lower_color: [30, 40, 0]
-        upper_color: [150, 255, 255]
+  lane_detection:
+    hough_transform:
+      rho: 2                # precision in pixel, i.e. 1 pixel
+      min_line_length: 8
+      min_threshold: 10     # minimal of votes
+    filter_type: "HSV"
+    canny:
+      min_val: 200             # 2nd argument in cv2.Canny function
+      max_val: 400            # 3rd argument in cv2.Canny function
+    # lower_color: [30, 40, 0]
+    lower_color: [110, 60, 0]
+    upper_color: [150, 255, 255]

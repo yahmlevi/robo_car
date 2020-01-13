@@ -4,12 +4,15 @@ import logging
 import math
 import datetime
 import sys
+from config import Config
 
 _SHOW_IMAGE = False
 
-def show_image(title, frame):
-    if title in self.config.get("display"):
-        cv2.imshow(self.title, self.frame)
+config = Config()
+
+def show_image(title, frame, show=False):
+    if show or title in config.get("display"):
+        cv2.imshow(title, frame)
 
 # def show_image(frame, title, key, show=_SHOW_IMAGE):
 #     if show:

@@ -52,8 +52,8 @@ function docker_build_x(){
     
     # PLATFORMS="linux/amd64,linux/arm64,linux/arm/v7"
     # PLATFORMS="linux/amd64,linux/arm64"
-    PLATFORMS="linux/amd64,linux/arm/v7"
-    # PLATFORMS="linux/arm/v7"
+    # PLATFORMS="linux/amd64,linux/arm/v7"
+    PLATFORMS="linux/arm/v7"
 
     echo "First we make sure that we have a suitable builder"
     echo ""

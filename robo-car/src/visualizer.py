@@ -5,7 +5,6 @@ from base_class import BaseClass
 
 class Visualizer(BaseClass):
 		
-
     def __init__(self, name="WebcamVideoVisualizer"):
         BaseClass.__init__(self)
         
@@ -43,9 +42,12 @@ class Visualizer(BaseClass):
                 return
                 
             # otherwise, show the image
-            if self.frame is not None and self.frame != self.frame_prev:
-                self.frame_prev = self.frame
-                cv2.imshow(self.title, self.frame)
+            cv2.imshow(self.title, self.frame)
+
+            # if self.frame is not None and self.frame != self.frame_prev:
+            #     print("SHOW IMAGE")
+            #     self.frame_prev = self.frame
+            #     cv2.imshow(self.title, self.frame)
                 
 
     def show(self, title, frame):

@@ -152,6 +152,7 @@ class RoboCar(BaseClass):
         self.front_wheel_drive.forward()
         # self.front_wheel_drive.speed = speed
 
+        display_video =  "lane_lines" in self.config.get("display")
         record = False
 
         i = 0
@@ -181,7 +182,7 @@ class RoboCar(BaseClass):
             if record:
                 self.video_lane.write(image_lane)
 
-            show_image('lane_lines', image_lane)
+            show_image('lane_lines', image_lane, display_video)
             # self.visualizer.show(title = "Lane Lines", frame = image_lane)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
