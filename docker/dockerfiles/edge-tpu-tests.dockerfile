@@ -6,4 +6,4 @@ RUN git clone https://github.com/google-coral/tflite.git && \
     cd tflite/python/examples/classification && \
     bash install_requirements.sh
 
-COPY edge-tpu-tests.sh edge-tpu-tests.sh 
+COPY ./docker/dockerfiles/edge-tpu-tests.sh edge-tpu-tests.sh 
