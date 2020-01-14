@@ -1,29 +1,34 @@
 #! /bin/bash 
 set -e
 
+command=$1
+
 DOCKER_USER="yahmlevi"
 DOCKER_PASS="211367909"
 
-IMAGE_NAME=$1
-TAG=$2
-DOCKERFILE_PREFIX=$3
+IMAGE_NAME=$2
+TAG=$3
+DOCKERFILE=$4
 
 if [ $# -eq 0 ]; then
     echo "No arguments supplied"
     exit 0
 fi
 
-echo "----------------------------------------------"
-DOCKERFILE="./docker/dockerfiles/$DOCKERFILE_PREFIX.dockerfile"
-echo "DOCKERFILE=$DOCKERFILE"
-
 IMAGE_NAME="yahmlevi/$IMAGE_NAME"
 # if [[ $IMAGE_NAME == *"-base"* ]]; then
 #     IMAGE_NAME="${IMAGE_NAME//-base/}"
 #     TAG="base"
 # fi
+
+if [[ $DOCKERFILE != *".dockerfile"* ]]; then
+    DOCKERFILE="./docker/dockerfiles/$DOCKERFILE.dockerfile"
+fi
+
+echo "----------------------------------------------"
 echo "IMAGE_NAME=$IMAGE_NAME"
 echo "TAG=$TAG"
+echo "DOCKERFILE=$DOCKERFILE"
 echo "----------------------------------------------"
 
 function docker_login(){
@@ -78,6 +83,13 @@ function docker_build_x(){
     docker-buildx imagetools inspect $IMAGE_NAME
 }
 
-# Attention - using buildx
-docker_build_x
-# docker_build
+case $command in 
+    "build" )
+        docker_build
+        ;;
+    "build-x" )
+        docker_build_x
+        ;;
+    * )
+        echo "Please specify a command - 'build' or 'build-x'"
+esac
