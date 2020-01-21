@@ -34,8 +34,8 @@ def test_stop_sign():
     # this simulates a car at stop sign
     object_processor = ObjectsOnRoadProcessor()
 
-    stop_sign_file = '/tests/data/objects/stop_sign.jpg'
-    green_light_file = '/tests/data/objects/green_light.jpg'
+    stop_sign_file = './tests/data/objects/stop_sign.jpg'
+    green_light_file = './tests/data/objects/green_light.jpg'
 
     frame = cv2.imread(stop_sign_file)
     combo_image = object_processor.process_objects_on_road(frame)
@@ -92,12 +92,12 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG, format='%(levelname)-5s:%(asctime)s: %(message)s')
 
     # These processors contains no state
-    test_photo('/tests/data/objects/red_light.jpg')
-    test_photo('/tests/data/objects/person.jpg')
-    test_photo('/tests/data/objects/limit_40.jpg')
-    test_photo('/tests/data/objects/limit_25.jpg')
-    test_photo('/tests/data/objects/green_light.jpg')
-    test_photo('/tests/data/objects/no_obj.jpg')
+    test_photo('./tests/data/objects/red_light.jpg')
+    test_photo('./tests/data/objects/person.jpg')
+    test_photo('./tests/data/objects/limit_40.jpg')
+    test_photo('./tests/data/objects/limit_25.jpg')
+    test_photo('./tests/data/objects/green_light.jpg')
+    test_photo('./tests/data/objects/no_obj.jpg')
 
     # test stop sign, which carries state
     test_stop_sign()
