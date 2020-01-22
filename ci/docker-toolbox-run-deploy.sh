@@ -1,8 +1,9 @@
 #! /bin/bash
 
 IMAGE="yahmlevi/devops-tools:latest"
+DOCKERFILE="./devops-tools/devops-tools.dockerfile"
 
-docker build .......
+docker build -t $IMAGE -f $DOCKERFILE .
 
 docker run -it --rm \
     -w /k8s \
