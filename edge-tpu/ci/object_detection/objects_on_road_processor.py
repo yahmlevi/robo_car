@@ -19,8 +19,8 @@ class ObjectsOnRoadProcessor(object):
     def __init__(self,
                  car=None,
                  speed_limit=40,
-                 model='/tests/data/road_signs_quantized_edgetpu.tflite',
-                 label='/tests/data/road_sign_labels.txt',
+                 model='./tests/data/road_signs_quantized_edgetpu.tflite',
+                 label='./tests/data/road_sign_labels.txt',
                  width=640,
                  height=480):
 
