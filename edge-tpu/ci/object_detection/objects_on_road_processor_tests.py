@@ -4,8 +4,8 @@ import datetime
 import time
 import edgetpu.detection.engine
 from PIL import Image
-from traffic_objects import *
-from objects_on_road_processor import *
+# from traffic_objects import *
+from objects_on_road_processor import ObjectsOnRoadProcessor
 
 _SHOW_IMAGE = True
 

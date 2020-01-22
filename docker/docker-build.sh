@@ -64,23 +64,23 @@ function docker_build_x(){
     echo ""
     BUILDER_NAME="multibuilder"
     
-    exists=$(docker-buildx ls | grep -qzw $BUILDER_NAME && echo 'true' || echo 'false')
+    exists=$(docker buildx ls | grep -qzw $BUILDER_NAME && echo 'true' || echo 'false')
     if [[ "${exists}" == 'false' ]]; then
         echo "Creating builder"
-        docker-buildx create --name $BUILDER_NAME
+        docker buildx create --name $BUILDER_NAME
     fi
-    docker-buildx inspect $BUILDER_NAME --bootstrap
-    docker-buildx use $BUILDER_NAME
+    docker buildx inspect $BUILDER_NAME --bootstrap
+    docker buildx use $BUILDER_NAME
 
     # login to DockerHub
     docker_login
 
     echo "Now we can build using the builder '$BUILDER_NAME'"
     echo ""
-    docker-buildx build --platform $PLATFORMS -t $IMAGE_NAME:$TAG -f $DOCKERFILE --push .
+    docker buildx build --platform $PLATFORMS -t $IMAGE_NAME:$TAG -f $DOCKERFILE --push .
 
     echo ""
-    docker-buildx imagetools inspect $IMAGE_NAME
+    docker buildx imagetools inspect $IMAGE_NAME
 }
 
 case $command in 

@@ -1,12 +1,9 @@
 #! /bin/bash
 
-TAG=$1
-IMAGE="google/cloud-sdk"
+IMAGE="google/cloud-sdk:latest"
 
 docker run -it --rm \
-    -v ${pwd}/k8s:/k8s \
-    $IMAGE:$TAG
-    # --volume //c/Users/projects/video-analysis/ci/k8s: /k8s \
-    # $IMAGE:$TAG
-    
+    -w /k8s \
+    -v `pwd`/k8s:/k8s \
+    $IMAGE
     
