@@ -1,6 +1,8 @@
 #! /bin/bash
 
-IMAGE="google/cloud-sdk:latest"
+IMAGE="yahmlevi/devops-tools:latest"
+
+docker build .......
 
 docker run -it --rm \
     -w /k8s \
