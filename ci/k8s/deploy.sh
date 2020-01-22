@@ -32,7 +32,9 @@ function create_cluster(){
 }
 
 function delete_cluster(){
-    gcloud container clusters delete $CLUSTER_NAME 
+    gcloud container clusters delete $CLUSTER_NAME \
+        --zone $ZONE \
+        --project $PROJECT
 }
 
 function connect_to_cluster() {
@@ -56,6 +58,7 @@ function deploy_to_cluster (){
 function get_info(){
     NAMESPACE="default"
 
+    echo ""
     echo "Cluster's Nodes"
     echo "------------------------------"
     kubectl get nodes
@@ -82,19 +85,29 @@ function get_info(){
     echo "Pods"
     echo "------------------------------"
     kubectl get pods -n $NAMESPACE
+    
+    echo ""
+    
+    NODE_RED_PORT=$(kubectl describe service -n default | grep node-red | grep NodePort | awk '{print $3}' | sed -e "s/\/TCP//")
+    echo "Node-RED url = http://$EXTERNAL_IP:$NODE_RED_PORT"
+    echo ""
+
 }
 
 function get_node_ip_addresses(){
     # cluster's node name
-    INSTANCE_NAME="gke-robo-car-default-pool-ecd0e422-zkbd"
+    # INSTANCE_NAME="gke-robo-car-default-pool-ecd0e422-zkbd"
+
+    INSTANCE_NAME=$(kubectl get nodes --no-headers | awk '{print $1}')
     echo "Getting the internal and external IP address of '$CLUSTER_NAME' cluster"
 
     INTERNAL_IP=$(gcloud compute instances describe $INSTANCE_NAME \
                     --format='get(networkInterfaces[0].networkIP)' \
                     --zone $ZONE)
+
     echo "INTERNAL IP ADDRESS: $INTERNAL_IP"
 
-    EXTERNAL_IP=$(gcloud compute instances describe $INSTANCE_NAME \
+    export EXTERNAL_IP=$(gcloud compute instances describe $INSTANCE_NAME \
                     --format='get(networkInterfaces[0].accessConfigs[0].natIP)' \
                     --zone $ZONE)
 
@@ -117,6 +130,9 @@ case $command in
     "create" )
         create_cluster
         ;;
+    "delete_cluster" )
+        delete_cluster
+        ;;
     "connect" )
         connect_to_cluster
         ;;
@@ -135,5 +151,7 @@ case $command in
     "log-node-red" )
         log_to_node_red
         ;;
+    * )
+        echo "'$command' is not a valid command"
 esac
 
