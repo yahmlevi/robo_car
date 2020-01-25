@@ -64,7 +64,7 @@ function docker_build_x(){
     echo ""
     BUILDER_NAME="multibuilder"
     
-    exists=$(docker buildx ls | grep -qzw $BUILDER_NAME && echo 'true' || echo 'false')
+    exists=$(docker buildx ls | grep -qZw $BUILDER_NAME && echo 'true' || echo 'false')
     if [[ "${exists}" == 'false' ]]; then
         echo "Creating builder"
         docker buildx create --name $BUILDER_NAME
