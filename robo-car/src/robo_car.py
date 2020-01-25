@@ -8,7 +8,8 @@ import datetime
 import time
 
 from lane_follower import LaneFollower
-# from objects_on_road_processor import ObjectsOnRoadProcessor
+from object_detection import ObjectsOnRoadProcessor
+
 import platform
 
 from display_functions import show_image
@@ -82,8 +83,9 @@ class RoboCar(BaseClass):
         # HandCodedLaneFollower(self)
 
         self.lane_follower = LaneFollower(self)
-        # self.traffic_sign_processor = ObjectsOnRoadProcessor(self)
         # lane_follower = DeepLearningLaneFollower()
+
+        self.traffic_sign_processor = ObjectsOnRoadProcessor(self)
 
         # ----------------------
         # self.fourcc = cv2.VideoWriter_fourcc(*'XVID')
@@ -167,8 +169,10 @@ class RoboCar(BaseClass):
                 self.video_orig.write(image_lane)
 
             # image_objs = self.process_objects_on_road(image_objs)
+            image_objs = self.traffic_sign_processor.process_objects_on_road(image_objs)
+            
             # self.video_objs.write(image_objs)
-            # show_image('Detected Objects', image_objs, show=show_on_screen)
+            show_image('Detected Objects', image_objs, show=display_video)
 
             image_lane = self.lane_follower.follow_lane(image_lane)
 
@@ -182,16 +186,14 @@ class RoboCar(BaseClass):
             if record:
                 self.video_lane.write(image_lane)
 
-            show_image('lane_lines', image_lane, display_video)
+            show_image('lane_lines', image_lane, show=display_video)
             # self.visualizer.show(title = "Lane Lines", frame = image_lane)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 self.cleanup()
                 break
 
-    # def process_objects_on_road(self, image):
-    #     image = self.traffic_sign_processor.process_objects_on_road(image)
-    #     return image
+   
 
 
     def show_webcam(self, mirror=False):

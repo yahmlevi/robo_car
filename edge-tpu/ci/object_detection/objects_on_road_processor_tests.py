@@ -110,7 +110,7 @@ def test_video(video_file, video_file_extension):
 
     video_type = cv2.VideoWriter_fourcc(*'XVID')
     date_str = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
-    video_overlay = cv2.VideoWriter("%s_overlay_%s." + video_file_extension % (video_file, date_str), video_type, 20.0, (320, 240))
+    video_overlay = cv2.VideoWriter("%s_overlay_%s.%s" % (video_file, date_str, video_file_extension), video_type, 20.0, (320, 240))
     try:
         i = 0
         while cap.isOpened():
@@ -133,7 +133,8 @@ def test_video(video_file, video_file_extension):
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG, format='%(levelname)-5s:%(asctime)s: %(message)s')
+    # logging.basicConfig(level=logging.DEBUG, format='%(levelname)-5s:%(asctime)s: %(message)s')
+    logging.basicConfig(level=logging.INFO, format='%(levelname)-5s:%(asctime)s: %(message)s')
 
     test_camera()
     test_video("./tests/data/traffic_sign_detection_pov", "mp4")
