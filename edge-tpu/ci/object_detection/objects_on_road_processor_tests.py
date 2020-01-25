@@ -4,6 +4,7 @@ import datetime
 import time
 import edgetpu.detection.engine
 from PIL import Image
+import platform
 # from traffic_objects import *
 from objects_on_road_processor import ObjectsOnRoadProcessor
 
@@ -56,6 +57,14 @@ def test_stop_sign():
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
+ def get_camera():
+        if platform.machine() == "AMD64":
+            # https://stackoverflow.com/questions/52043671/opencv-capturing-imagem-with-black-side-bars?rq=1
+            return cv2.VideoCapture(0, cv2.CAP_DSHOW).isOpened()
+        else:
+            return cv2.VideoCapture(0).isOpened()
+
+
 def test_video(video_file):
     object_processor = ObjectsOnRoadProcessor()
     cap = cv2.VideoCapture(video_file + '.avi')
@@ -91,6 +100,8 @@ def test_video(video_file):
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG, format='%(levelname)-5s:%(asctime)s: %(message)s')
 
+    get_camera()
+    test_video(./tests)
     # These processors contains no state
     test_photo('./tests/data/objects/red_light.jpg')
     test_photo('./tests/data/objects/person.jpg')
