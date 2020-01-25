@@ -57,28 +57,34 @@ def test_stop_sign():
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
- def test_camera():
+def test_camera():
+    print ("")
+    print ("Testing camera")
+    print ("=============================================")
+
+    object_processor = ObjectsOnRoadProcessor()
+
     if platform.machine() == "AMD64":
         # https://stackoverflow.com/questions/52043671/opencv-capturing-imagem-with-black-side-bars?rq=1
         cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
     else:
         cap = cv2.VideoCapture(0)
 
-    for i in range(3):
-        _, frame = cap.read()
+    # video_file
+    # video_file_extension
 
-    video_type = cv2.VideoWriter_fourcc(*'XVID')
-    date_str = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
-    video_overlay = cv2.VideoWriter("%s_overlay_%s." + video_file_extension % (video_file, date_str), video_type, 20.0, (320, 240))
+    # video_type = cv2.VideoWriter_fourcc(*'XVID')
+    # date_str = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
+    # video_overlay = cv2.VideoWriter("%s_overlay_%s.%s" % (video_file, date_str, video_file_extension), video_type, 20.0, (320, 240))
     try:
         i = 0
         while cap.isOpened():
             _, frame = cap.read()
-            cv2.imwrite("%s_%03d.png" % (video_file, i), frame)
+            # cv2.imwrite("%s_%03d.png" % (video_file, i), frame)
 
             combo_image = object_processor.process_objects_on_road(frame)
-            cv2.imwrite("%s_overlay_%03d.png" % (video_file, i), combo_image)
-            video_overlay.write(combo_image)
+            # cv2.imwrite("%s_overlay_%03d.png" % (video_file, i), combo_image)
+            # video_overlay.write(combo_image)
 
             cv2.imshow("Detected Objects", combo_image)
 
@@ -87,10 +93,13 @@ def test_stop_sign():
                 break
     finally:
         cap.release()
-        video_overlay.release()
+        # video_overlay.release()
         cv2.destroyAllWindows()
 
 def test_video(video_file, video_file_extension):
+    print ("")
+    print ("Testing video")
+    print ("=============================================")
 
     object_processor = ObjectsOnRoadProcessor()
     cap = cv2.VideoCapture(video_file + '.' + video_file_extension)
