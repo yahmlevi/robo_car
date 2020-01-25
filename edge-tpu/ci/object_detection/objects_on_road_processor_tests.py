@@ -57,17 +57,43 @@ def test_stop_sign():
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
- def get_camera():
-        if platform.machine() == "AMD64":
-            # https://stackoverflow.com/questions/52043671/opencv-capturing-imagem-with-black-side-bars?rq=1
-            return cv2.VideoCapture(0, cv2.CAP_DSHOW).isOpened()
-        else:
-            return cv2.VideoCapture(0).isOpened()
+ def test_camera():
+    if platform.machine() == "AMD64":
+        # https://stackoverflow.com/questions/52043671/opencv-capturing-imagem-with-black-side-bars?rq=1
+        cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+    else:
+        cap = cv2.VideoCapture(0)
 
+    for i in range(3):
+        _, frame = cap.read()
 
-def test_video(video_file):
+    video_type = cv2.VideoWriter_fourcc(*'XVID')
+    date_str = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
+    video_overlay = cv2.VideoWriter("%s_overlay_%s." + video_file_extension % (video_file, date_str), video_type, 20.0, (320, 240))
+    try:
+        i = 0
+        while cap.isOpened():
+            _, frame = cap.read()
+            cv2.imwrite("%s_%03d.png" % (video_file, i), frame)
+
+            combo_image = object_processor.process_objects_on_road(frame)
+            cv2.imwrite("%s_overlay_%03d.png" % (video_file, i), combo_image)
+            video_overlay.write(combo_image)
+
+            cv2.imshow("Detected Objects", combo_image)
+
+            i += 1
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+    finally:
+        cap.release()
+        video_overlay.release()
+        cv2.destroyAllWindows()
+
+def test_video(video_file, video_file_extension):
+
     object_processor = ObjectsOnRoadProcessor()
-    cap = cv2.VideoCapture(video_file + '.avi')
+    cap = cv2.VideoCapture(video_file + '.' + video_file_extension)
 
     # skip first second of video.
     for i in range(3):
@@ -75,7 +101,7 @@ def test_video(video_file):
 
     video_type = cv2.VideoWriter_fourcc(*'XVID')
     date_str = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
-    video_overlay = cv2.VideoWriter("%s_overlay_%s.avi" % (video_file, date_str), video_type, 20.0, (320, 240))
+    video_overlay = cv2.VideoWriter("%s_overlay_%s." + video_file_extension % (video_file, date_str), video_type, 20.0, (320, 240))
     try:
         i = 0
         while cap.isOpened():
@@ -100,8 +126,9 @@ def test_video(video_file):
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG, format='%(levelname)-5s:%(asctime)s: %(message)s')
 
-    get_camera()
-    test_video(./tests)
+    test_camera()
+    test_video("./tests/data/traffic_sign_detection_pov", "mp4")
+
     # These processors contains no state
     test_photo('./tests/data/objects/red_light.jpg')
     test_photo('./tests/data/objects/person.jpg')
