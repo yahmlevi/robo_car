@@ -56,9 +56,9 @@ def test_stop_sign():
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-def test_video(video_file):
+def test_video(video_file, video_file_extension):
     object_processor = ObjectsOnRoadProcessor()
-    cap = cv2.VideoCapture(video_file + '.avi')
+    cap = cv2.VideoCapture(video_file + '.' + video_file_extension)
 
     # skip first second of video.
     for i in range(3):
@@ -66,7 +66,7 @@ def test_video(video_file):
 
     video_type = cv2.VideoWriter_fourcc(*'XVID')
     date_str = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
-    video_overlay = cv2.VideoWriter("%s_overlay_%s.avi" % (video_file, date_str), video_type, 20.0, (320, 240))
+    video_overlay = cv2.VideoWriter("%s_overlay_%s." + video_file_extension % (video_file, date_str), video_type, 20.0, (320, 240))
     try:
         i = 0
         while cap.isOpened():
@@ -90,6 +90,8 @@ def test_video(video_file):
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG, format='%(levelname)-5s:%(asctime)s: %(message)s')
+
+    test_video("./tests/data/traffic_sign_detection_pov", "mp4")
 
     # These processors contains no state
     test_photo('./tests/data/objects/red_light.jpg')
