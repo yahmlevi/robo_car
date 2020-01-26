@@ -4,7 +4,15 @@ set -e
 
 source ../ci/scripts/docker-login.sh
 
-TAG=$1
+# If DockerHub registry is used
+# IMAGE_NAME="yahmlevi/robo-car:node-red"
+
+# If GCR is used
+# TAG=$1
+# IMAGE_NAME="$REGISTRY/node-red"
+# 
+
+TAG="latest"
 IMAGE_NAME="$REGISTRY/node-red"
 DOCKERFILE="./ci/node-red.dockerfile"
 

@@ -1,11 +1,14 @@
 # FROM schickling/opencv:latest
-FROM python:latest
+# FROM python:latest
+FROM yahmlevi/robo-car:python-opencv-base
+
 WORKDIR /source
 
 RUN apt-get update && \
     apt-get install -y net-tools i2c-tools python-smbus python-yaml nano
 
-RUN pip install --upgrade pip opencv-contrib-python zmq imutils paho-mqtt
+# RUN pip install --upgrade pip opencv-contrib-python zmq imutils paho-mqtt
+RUN pip install --upgrade pip zmq imutils paho-mqtt
 
 RUN apt update && \
     apt install curl gnupg ca-certificates zlib1g-dev libjpeg-dev -y
