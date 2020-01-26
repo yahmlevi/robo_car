@@ -2,7 +2,7 @@
 #!/bin/sh
 set -e
 
-source ../ci/scripts/docker-login.sh
+source ../../ci/scripts/docker-login.sh
 
 # If DockerHub registry is used
 # IMAGE_NAME="yahmlevi/robo-car:node-red"

@@ -1,4 +1,6 @@
- import paho.mqtt.client as mqtt
+import paho.mqtt.client as mqtt
+
+broker_host = "broker.hivemq.com"
  
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
@@ -13,7 +15,7 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
 
-    if msg.payload == "Hello":
+    if msg.payload == b"Hello":
         print("Received message #1, do something")
         # Do something
 
@@ -27,7 +29,8 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
  
-client.connect("test.mosquitto.org", 1883, 60)
+# client.connect("test.mosquitto.org", 1883, 60)
+client.connect(broker_host, 1883, 60)
  
 # Process network traffic and dispatch callbacks. This will also handle
 # reconnecting. Check the documentation at
