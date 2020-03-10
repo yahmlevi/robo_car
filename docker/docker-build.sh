@@ -1,6 +1,8 @@
 #! /bin/bash 
 set -e
 
+# ./docker/docker-build.sh build-x robo-car python-opencv-base-1 python-opencv
+
 command=$1
 
 DOCKER_USER="yahmlevi"

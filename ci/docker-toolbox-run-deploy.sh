@@ -6,7 +6,7 @@ DOCKERFILE="./devops-tools/devops-tools.dockerfile"
 
 echo "Building DevOps-Tools Docker image"
 echo "-------------------------------------------"
-docker build -t $IMAGE -f $DOCKERFILE .
+# docker build -t $IMAGE -f $DOCKERFILE .
 
 echo ""
 echo "Running DevOps-Tools container"

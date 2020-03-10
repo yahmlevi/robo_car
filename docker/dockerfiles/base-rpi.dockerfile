@@ -1,6 +1,8 @@
 # FROM schickling/opencv:latest
 # FROM python:latest
+
 FROM yahmlevi/robo-car:python-opencv-base
+# FROM jjanzic/docker-python3-opencv
 
 WORKDIR /source
 
@@ -19,8 +21,15 @@ RUN update-ca-certificates -f
 RUN echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | tee /etc/apt/sources.list.d/coral-edgetpu.list && \
     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 
-RUN apt update && \
-    apt install libedgetpu1-std python3 python3-pip python3-edgetpu  -y
+# RUN apt update && \
+#     apt install libedgetpu1-std python3 python3-pip python3-edgetpu  -y
+
+# RUN apt update && \
+#     apt install -y apt-transport-https 
+    
+    # && \
+    # apt-get install -y libedgetpu1-std python3-edgetpu
+
 
 # troubleshooting: "libdc1394 error: Failed to initialize libdc1394"
 # https://hub.docker.com/r/ekazakov/python-opencv
