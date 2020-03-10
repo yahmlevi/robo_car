@@ -2,6 +2,12 @@ version: 2
 jobs:
   build:
     machine: true
+
+    # environment:
+    #   DOCKER_HOST: tcp://docker:2375/
+    #   REGISTRY: eu.gcr.io/video-python
+    #   DOCKER_BUILD: docker-build.sh 
+          
     steps:
       - checkout
       #- run:
@@ -10,15 +16,27 @@ jobs:
       - run:
           name: Enabling qemu
           command: docker run --rm --privileged multiarch/qemu-user-static:register --reset
+      
       - run:
-          name: Building arm based image.
+          name: Building ARM-based robo-car:base-rpi image
           command: |
             IMAGE="yahmlevi/robo-car:base-rpi"
             docker build -t $IMAGE -f ./docker/dockerfiles/base-rpi.dockerfile .
+            
+      - run:
+          name: Push robo-car:base-rpi image
+          command: |
+            IMAGE="yahmlevi/robo-car:base-rpi"
+          
+            echo "Login to $DOCKER_USER"
+            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+
             docker push $IMAGE 
+
       - run:
           name: Listing built images
           command: docker images
+
       - run:
           name: Running arm based image.
           command: |
