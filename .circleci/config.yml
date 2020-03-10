@@ -12,10 +12,15 @@ jobs:
           command: docker run --rm --privileged multiarch/qemu-user-static:register --reset
       - run:
           name: Building arm based image.
-          command: docker build -t arm-test -f ./docker/dockerfiles/base-rpi.dockerfile .
+          command: |
+            IMAGE="yahmlevi/robo-car:base-rpi"
+            docker build -t $IMAGE -f ./docker/dockerfiles/base-rpi.dockerfile .
+            docker push $IMAGE 
       - run:
           name: Listing built images
           command: docker images
       - run:
           name: Running arm based image.
-          command: docker run --rm arm-test 
+          command: |
+            IMAGE="yahmlevi/robo-car:base-rpi"
+            docker run --rm $IMAGE
