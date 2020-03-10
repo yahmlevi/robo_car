@@ -24,11 +24,9 @@ RUN echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" |
 # RUN apt update && \
 #     apt install libedgetpu1-std python3 python3-pip python3-edgetpu  -y
 
-# RUN apt update && \
-#     apt install -y apt-transport-https 
-    
-    # && \
-    # apt-get install -y libedgetpu1-std python3-edgetpu
+RUN apt update && \
+    apt install -y apt-transport-https && \
+    apt-get install -y libedgetpu1-std python3-edgetpu
 
 
 # troubleshooting: "libdc1394 error: Failed to initialize libdc1394"
