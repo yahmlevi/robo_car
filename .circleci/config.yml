@@ -16,20 +16,25 @@ jobs:
       - run:
           name: Enabling qemu
           command: docker run --rm --privileged multiarch/qemu-user-static:register --reset
-      
+
+      - run:
+          name: Docker login
+          command: |
+            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+
       - run:
           name: Building ARM-based robo-car:base-rpi image
           command: |
             IMAGE="yahmlevi/robo-car:base-rpi"
             docker build -t $IMAGE -f ./docker/dockerfiles/base-rpi.dockerfile .
-            
+
       - run:
           name: Push robo-car:base-rpi image
           command: |
             IMAGE="yahmlevi/robo-car:base-rpi"
           
-            echo "Login to $DOCKER_USER"
-            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+            # echo "Login to $DOCKER_USER"
+            # echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
 
             docker push $IMAGE 
 
