@@ -1,0 +1,94 @@
+version: 2
+jobs:
+  build:
+    # machine: true
+
+    # environment:
+    #   DOCKER_HOST: tcp://docker:2375/
+    #   REGISTRY: eu.gcr.io/video-python
+    #   DOCKER_BUILD: docker-build.sh 
+
+    docker:
+      - image: jonoh/docker-buildx-qemu
+
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: false
+      #- run:
+      #    name : Getting docker
+      #    command: curl https://get.docker.com | sh
+      # - run:
+      #     name: Enabling qemu
+      #     command: docker run --rm --privileged multiarch/qemu-user-static:register --reset
+
+      - run:
+          name: Docker login
+          command: |
+            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+
+      - run: 
+          name: install docker build-x
+          command: |
+            # docker buildx create --driver docker-container --use
+            # docker buildx inspect --bootstrap
+
+            # ==> could not create a builder instance with TLS data loaded from environment. Please use `docker context create <context-name>` to create a context for current environment and then create a builder instance with `docker buildx create <context-name>`
+
+            BUILDER_NAME="multibuilder"
+            CONTEXT_NAME="buildx"
+
+            docker context create $CONTEXT_NAME
+            docker buildx create $CONTEXT_NAME --name $BUILDER_NAME
+            docker buildx inspect $BUILDER_NAME --bootstrap
+            docker buildx use $BUILDER_NAME
+
+            docker buildx ls
+
+            # Important: Ensures execution of other binary formats is enabled in the kernel
+            # update-binfmts --enable 
+
+      - run:
+          name: Building ARM-based robo-car:base-rpi image
+          command: |
+            
+            TAG=$CIRCLE_BUILD_NUM
+            IMAGE="yahmlevi/robo-car:base-rpi-$TAG"
+            DOCKERFILE="./docker/dockerfiles/base-rpi.dockerfile"
+
+            # linux/arm/v7,local
+            PLATFORMS="linux/arm/v7"
+            # PLATFORMS="linux/amd64"
+
+            # docker buildx build --platform $PLATFORMS --pull -t $IMAGE --push -f $DOCKERFILE .
+            docker buildx build --platform $PLATFORMS -t $IMAGE -f $DOCKERFILE --push .
+
+            docker buildx imagetools inspect $IMAGE_NAME      
+
+      # - run:
+      #     name: Building ARM-based robo-car:base-rpi image
+      #     command: |
+      #       IMAGE="yahmlevi/robo-car:base-rpi"
+      #       docker build -t $IMAGE -f ./docker/dockerfiles/base-rpi.dockerfile .
+
+      #       docker buildx build --platform linux/arm/v7,local --pull -t "$CI_REGISTRY_IMAGE" --push .
+
+      # - run:
+      #     name: Push robo-car:base-rpi image
+      #     command: |
+      #       IMAGE="yahmlevi/robo-car:base-rpi"
+          
+      #       # echo "Login to $DOCKER_USER"
+      #       # echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+
+      #       docker push $IMAGE 
+
+      # - run:
+      #     name: Listing built images
+      #     command: docker images
+
+      # - run:
+      #     name: Running arm based image.
+      #     command: |
+      #       IMAGE="yahmlevi/robo-car:base-rpi"
+      #       docker run --rm $IMAGE
