@@ -7,15 +7,18 @@ jobs:
     #   DOCKER_HOST: tcp://docker:2375/
     #   REGISTRY: eu.gcr.io/video-python
     #   DOCKER_BUILD: docker-build.sh 
-          
+
+    docker:
+      - image: jonoh/docker-buildx-qemu
+
     steps:
       - checkout
       #- run:
       #    name : Getting docker
       #    command: curl https://get.docker.com | sh
-      - run:
-          name: Enabling qemu
-          command: docker run --rm --privileged multiarch/qemu-user-static:register --reset
+      # - run:
+      #     name: Enabling qemu
+      #     command: docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
       - run:
           name: Docker login
