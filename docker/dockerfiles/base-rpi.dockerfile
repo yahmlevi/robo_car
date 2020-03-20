@@ -6,16 +6,12 @@
 # FROM resin/rpi-raspbian:stretch
 FROM balenalib/raspberry-pi
 
-RUN apt-get update && apt-get install -y curl
+# RUN apt-get update && apt-get install -y curl
 
+WORKDIR /source
 
-
-
-
-# WORKDIR /source
-
-# RUN apt-get update && \
-#     apt-get install -y net-tools i2c-tools python-smbus python-yaml nano
+RUN apt-get update && \
+    apt-get install -y net-tools i2c-tools python-smbus python-yaml nano
 
 # # RUN pip install --upgrade pip opencv-contrib-python zmq imutils paho-mqtt
 # RUN pip install --upgrade pip zmq imutils paho-mqtt

@@ -43,8 +43,8 @@ jobs:
           name: Listing built images
           command: docker images
 
-      - run:
-          name: Running arm based image.
-          command: |
-            IMAGE="yahmlevi/robo-car:base-rpi"
-            docker run --rm $IMAGE
+      # - run:
+      #     name: Running arm based image.
+      #     command: |
+      #       IMAGE="yahmlevi/robo-car:base-rpi"
+      #       docker run --rm $IMAGE
