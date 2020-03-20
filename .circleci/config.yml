@@ -57,8 +57,8 @@ jobs:
             DOCKERFILE="./docker/dockerfiles/base-rpi.dockerfile"
 
             # linux/arm/v7,local
-            # PLATFORMS="linux/arm/v7"
-            PLATFORMS="linux/amd64"
+            PLATFORMS="linux/arm/v7"
+            # PLATFORMS="linux/amd64"
 
             # docker buildx build --platform $PLATFORMS --pull -t $IMAGE --push -f $DOCKERFILE .
             docker buildx build --platform $PLATFORMS -t $IMAGE -f $DOCKERFILE --push .
