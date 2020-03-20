@@ -63,7 +63,7 @@ jobs:
             # docker buildx build --platform $PLATFORMS --pull -t $IMAGE --push -f $DOCKERFILE .
             docker buildx build --platform $PLATFORMS -t $IMAGE -f $DOCKERFILE --push .
 
-      
+            docker buildx imagetools inspect $IMAGE_NAME      
 
       # - run:
       #     name: Building ARM-based robo-car:base-rpi image
