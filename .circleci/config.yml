@@ -50,7 +50,7 @@ jobs:
             IMAGE="yahmlevi/robo-car:base-rpi-$TAG"
             DOCKERFILE="./docker/dockerfiles/base-rpi.dockerfile"
 
-            docker buildx build --platform linux/arm/v7,local --pull -t $IMAGE_NAME:$TAG --push -f $DOCKERFILE .
+            docker buildx build --platform linux/arm/v7,local --pull -t $IMAGE --push -f $DOCKERFILE .
       
 
       # - run:
