@@ -23,22 +23,35 @@ jobs:
           command: |
             echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
 
+
+
+
       - run:
           name: Building ARM-based robo-car:base-rpi image
           command: |
-            IMAGE="yahmlevi/robo-car:base-rpi"
-            docker build -t $IMAGE -f ./docker/dockerfiles/base-rpi.dockerfile .
+            IMAGE="yahmlevi/robo-car:python-opencv-base"
+            DOCKERFILE="./docker/dockerfiles/python-opencv.dockerfile"
 
-      - run:
-          name: Push robo-car:base-rpi image
-          command: |
-            IMAGE="yahmlevi/robo-car:base-rpi"
-          
+            docker build -t $IMAGE -f $DOCKERFILE .
+
             # echo "Login to $DOCKER_USER"
             echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
 
             docker push $IMAGE 
 
+      - run:
+          name: Building ARM-based robo-car:base-rpi image
+          command: |
+            IMAGE="yahmlevi/robo-car:base-rpi"
+            DOCKERFILE="./docker/dockerfiles/base-rpi.dockerfile"
+
+            docker build -t $IMAGE -f $DOCKERFILE .
+
+            # echo "Login to $DOCKER_USER"
+            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+
+            docker push $IMAGE 
+            
       - run:
           name: Listing built images
           command: docker images
