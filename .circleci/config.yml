@@ -44,7 +44,7 @@ jobs:
             docker buildx use $BUILDER_NAME
 
             # Important: Ensures execution of other binary formats is enabled in the kernel
-            update-binfmts --enable 
+            # update-binfmts --enable 
 
             TAG=$CIRCLE_BUILD_NUM
             IMAGE="yahmlevi/robo-car:base-rpi-$TAG"
