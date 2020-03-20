@@ -4,8 +4,9 @@
 # FROM yahmlevi/robo-car:python-opencv-base
 # FROM jjanzic/docker-python3-opencv
 # FROM resin/rpi-raspbian:stretch
-FROM alpine
-RUN apk --no-cache add curl
+FROM balenalib/raspberry-pi
+
+# RUN apk --no-cache add curl
 
 
 
