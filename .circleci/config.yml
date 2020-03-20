@@ -35,7 +35,7 @@ jobs:
             IMAGE="yahmlevi/robo-car:base-rpi"
           
             # echo "Login to $DOCKER_USER"
-            # echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
 
             docker push $IMAGE 
 
