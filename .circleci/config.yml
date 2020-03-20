@@ -43,9 +43,15 @@ jobs:
             docker buildx inspect $BUILDER_NAME --bootstrap
             docker buildx use $BUILDER_NAME
 
+            docker buildx ls
+
             # Important: Ensures execution of other binary formats is enabled in the kernel
             # update-binfmts --enable 
 
+      - run:
+          name: Building ARM-based robo-car:base-rpi image
+          command: |
+            
             TAG=$CIRCLE_BUILD_NUM
             IMAGE="yahmlevi/robo-car:base-rpi-$TAG"
             DOCKERFILE="./docker/dockerfiles/base-rpi.dockerfile"
