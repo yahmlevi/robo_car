@@ -6,7 +6,7 @@
 # FROM resin/rpi-raspbian:stretch
 FROM balenalib/raspberry-pi
 
-RUN apk --no-cache add curl
+RUN apt-get update && apt-get install -y curl
 
 
 
